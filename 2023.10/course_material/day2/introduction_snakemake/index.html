@@ -1,0 +1,891 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+    
+    
+      
+        <title>Introduction to Snakemake - Introduction to Containers and Snakemake</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../../.."> 
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to Containers and Snakemake
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction to Snakemake
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to Containers and Snakemake
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../precourse/" class="md-nav__link">
+        Precourse preparations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../course_schedule/" class="md-nav__link">
+        Course schedule
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Day 1 - Containers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Day 1 - Containers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Day 1 - Containers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction_containers/" class="md-nav__link">
+        Introduction to containers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../managing_docker/" class="md-nav__link">
+        Managing containers and images
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dockerfiles/" class="md-nav__link">
+        Working with dockerfiles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../singularity/" class="md-nav__link">
+        Running containers with singularity
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Day 2 - Snakemake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Day 2 - Snakemake" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Day 2 - Snakemake
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guidelines/" class="md-nav__link">
+        General guidelines
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Introduction to Snakemake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Introduction to Snakemake
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-structure" class="md-nav__link">
+    Workflow structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-basic-rule" class="md-nav__link">
+    Creating a basic rule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-a-workflow-with-a-precise-output" class="md-nav__link">
+    Executing a workflow with a precise output
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-input-directive" class="md-nav__link">
+    Using the input directive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-several-rules-in-a-workflow" class="md-nav__link">
+    Using several rules in a workflow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chaining-rules" class="md-nav__link">
+    Chaining rules
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes-on-chaining-rules" class="md-nav__link">
+    Important notes on chaining rules
+  </a>
+  
+    <nav class="md-nav" aria-label="Important notes on chaining rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rules-produce-unique-outputs" class="md-nav__link">
+    Rules produce unique outputs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rules-dependency-can-be-written-more-easily" class="md-nav__link">
+    Rules dependency can be written more easily
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-structure" class="md-nav__link">
+    Workflow structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-basic-rule" class="md-nav__link">
+    Creating a basic rule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-a-workflow-with-a-precise-output" class="md-nav__link">
+    Executing a workflow with a precise output
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-input-directive" class="md-nav__link">
+    Using the input directive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-several-rules-in-a-workflow" class="md-nav__link">
+    Using several rules in a workflow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chaining-rules" class="md-nav__link">
+    Chaining rules
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes-on-chaining-rules" class="md-nav__link">
+    Important notes on chaining rules
+  </a>
+  
+    <nav class="md-nav" aria-label="Important notes on chaining rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rules-produce-unique-outputs" class="md-nav__link">
+    Rules produce unique outputs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rules-dependency-can-be-written-more-easily" class="md-nav__link">
+    Rules dependency can be written more easily
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/sib-swiss/containers-snakemake-training/edit/main/docs/course_material/day2/introduction_snakemake.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>Introduction to Snakemake</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Understand the structure of a Snakemake workflow</li>
+<li>Write rules and Snakefiles to produce the desired outputs</li>
+<li>Chain rules together</li>
+<li>Run a Snakemake workflow</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<div class="admonition note">
+<p class="admonition-title">Command &lt;cmd_name&gt; not found</p>
+<p>If you try to run a command and get an error such as <code>Command 'snakemake' not found</code>, you are probably not in the right environment. To list them, use <code>mamba env list</code>. Then activate the right environment with <code>mamba activate &lt;env_name&gt;</code>. You can deactivate an environment with <code>mamba deactivate</code>.</p>
+</div>
+<h3 id="workflow-structure">Workflow structure</h3>
+<p>It is strongly advised to implement your answers in a directory called <code>workflow</code> (the reason for this will be explained later). You are free to chose the names and location of files for the different steps of your workflow, but we recommend that you at least group all outputs from the workflow in a <code>results</code> directory within the <code>workflow</code> directory.</p>
+<h3 id="creating-a-basic-rule">Creating a basic rule</h3>
+<p>Rules are the basic blocks of a Snakemake workflow. A <strong>rule</strong> is like a recipe indicating how to produce a specific <strong>output</strong>; the actual application of a rule to create an output is called a <strong>job</strong>. A rule is defined in a Snakefile with the <em>keyword</em> <code>rule</code>, and contains <em>directives</em> which indicate the rule&rsquo;s properties. We will learn about other directives later in the course.</p>
+<p>To create the simplest rule possible, we need at least two <em>directives</em>:
+- <code>output</code>: path of the output file for this rule
+- <code>shell</code>: shell commands to execute in order to generate the output</p>
+<p><strong>Exercise:</strong> The following example shows the minimal syntax to implement a rule. What do you think it does? Does it create a file? If so, how is it called?</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+</code></pre></div>
+<details class="done">
+<summary>Answer</summary>
+<p>This rule uses the <code>echo</code> shell command to print the line &ldquo;snakemake&rdquo; in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder</p>
+</details>
+<p>Rules are defined and written in a file called <strong>Snakefile</strong> (note the capital <code>S</code> and the absence of extension in the filename). This file should be located at the root of the workflow directory (here, <code>workflow/Snakefile</code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Paths in Snakemake</p>
+<p>All the paths in Snakefile are relative to the directory containing the Snakefile.</p>
+</div>
+<p><strong>Exercise:</strong> Create a Snakefile and copy the rule in it. Because the Snakemake language is basically Python, <em>do not forget to keep the indentation as is and use space characters in the indents instead of tabs.</em></p>
+<h3 id="executing-a-workflow-with-a-precise-output">Executing a workflow with a precise output</h3>
+<p>It is now time to execute your first worklow! To do this, you need to tell Snakemake what is your target, <em>i.e.</em> what is the output that you want to generate.</p>
+<p><strong>Exercise:</strong> Execute the workflow with <code>snakemake --cores 1 &lt;target&gt;</code>. What value should you use for &lt;target&gt;? Once Snakemake execution is finished, can you locate the output file?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Execute the workflow: <code>snakemake --cores 1 results/first_step.txt</code>
+Visualise your directory content: <code>ls -alh results/</code>
+Check the output content with <code>cat results/first_step.txt</code></p>
+</details>
+<p>Note that during the execution of the workflow, Snakemake automatically created the <strong>missing folder</strong> (<code>results/</code>) in the output path. If several folders are missing (for example, here, <code>test1/test2/test3/first_step.txt</code>), Snakemake will create <strong>all of them</strong>.</p>
+<p><strong>Exercise:</strong> Rerun the exact same command. What happens?</p>
+<details class="done">
+<summary>Answer</summary>
+</details>
+<!-- AT. Check how this looks -->
+<div class="codehilite"><pre><span></span><code>Nothing! You get a message saying that Snakemake did not do anything:
+
+```
+Building DAG of jobs...
+Nothing to be done (all requested files are present and up to date).
+```
+
+By default, existing outputs are only generated again if the input of the rule that generates them is newer than them, based on file modification dates. You can change this behaviour and force the rerun by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or the `-F` option to force recreate ALL the outputs of the workflow.
+</code></pre></div>
+
+<p>In the previous example, values for these two directives are <strong>strings</strong>. For the <code>shell</code> directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;echo &quot;I want to print a very very very very very very &#39;</span>
+        <span class="s1">&#39;very very very very long string in my output&quot; &gt; results/first_step.txt&#39;</span>
+</code></pre></div>
+<h3 id="using-the-input-directive">Using the input directive</h3>
+<p>The next directive used by most rules is <code>input</code>. Like <code>output</code>, <code>input</code> indicates the path to a file that is required by the rule to generate the output. In the following example, we modified the previous rule to use the file previously created <code>results/first_step.tsv</code> as an input and copy this file to <code>results/second_step.txt</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/second_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
+</code></pre></div>
+<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>data/first_step.tsv</code> does not exist!</p>
+<p><strong>Exercise:</strong> Modify your first rule to add an input and execute the workflow. Check that the output was created and that the files are identical.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code>
+Visualise your directory content: <code>ls -alh results/</code>
+Check that the files are identical <code>diff results/first_step.txt results/second_step.txt</code></p>
+</details>
+<h3 id="using-several-rules-in-a-workflow">Using several rules in a workflow</h3>
+<p>Creating one Snakefile per rule does not seem like a good solution, so let&rsquo;s try to improve this.</p>
+<p><strong>Exercise:</strong> Delete the <code>results/</code> folder, gather the two previous rules in the same Snakefile (place the <code>first_step</code> rule first) and try to run the workflow <strong>without specifying an output</strong>. What happens?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Execute the workflow without outputs: <code>snakemake --cores 1</code>.
+When executed, Snakemake tries to generate a specific output called <strong>target</strong>, and resolves all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here <code>results/first_step.txt</code>. If you had placed the <code>second_step</code> rule in first position, Snakemake would have crashed because the input for this rule does not exist. If you have enough time, feel free to try it!</p>
+</details>
+<p><strong>Exercise:</strong> With this in mind, use a space-separated list of targets (instead of one filename) in your command to generate multiple targets. Use the <code>-F</code> to force the rerun of the whole workflow or delete your <code>results/</code> folder beforehand.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Execute the workflow with multiple targets: <code>snakemake --cores 1 -F results/first_step.txt results/second_step.txt</code>
+You should now see Snakemake execute the 2 rules and produce both targets/outputs.</p>
+</details>
+<h3 id="chaining-rules">Chaining rules</h3>
+<p>Once again, writing all the outputs in the <code>snakemake</code> command does not look like a good solution: it is very time-consuming, error-prone and annoying! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency. The core principle of Snakemake&rsquo;s execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all inputs and outputs required to generate the final desired output. For each job, starting from the jobs generating the final output, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates the input. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a &lsquo;bottom-up&rsquo; approach: it starts from the last outputs and go back to the first inputs.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Your Snakefile should look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+
+<span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/second_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
+</code></pre></div>
+</div>
+<p><strong>Exercise:</strong> Delete the <code>results/</code> folder, identify your final output and execute the workflow <strong>specifying only this output</strong> in the command.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code>
+Visualise your directory content: <code>ls -alh results/</code>
+You should now see Snakemake execute the 2 rules and produce both outputs. To generate the output <code>results/second_step.txt</code>, Snakemake requires the input <code>results/first_step.txt</code>. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates <code>results/first_step.txt</code>, in this case the first defined rule <code>first_step</code>. The process is then repeated for <code>first_step</code>. In this case, the rule does not require an input, so all dependencies are resolved, and Snakemake can generate the DAG.</p>
+</details>
+<h3 id="important-notes-on-chaining-rules">Important notes on chaining rules</h3>
+<h4 id="rules-produce-unique-outputs">Rules produce unique outputs</h4>
+<p>Because of the rules dependency process, by default, an output can only be generated by a single rule. Otherwise, Snakemake cannot decide which rule to use to generate this output, and the rules are considered <strong>ambiguous</strong>. In practice, there are ways to deal with ambiguous rules, but we will not cover them in this course (see <a href="https://snakemake.readthedocs.io/en/v7.32.3/snakefiles/rules.html#handling-ambiguous-rules">the relevant section in the official documentation</a>).</p>
+<h4 id="rules-dependency-can-be-written-more-easily">Rules dependency can be written more easily</h4>
+<p>It is possible to refer to the output of a rule directly in another rule with the syntax <code>rules.&lt;rule_name&gt;.output</code>. Note that you don&rsquo;t need quotes around this statement, because it is a Snakemake object. The following example implements this syntax for the two rule defined above:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/first_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+
+<span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">rules</span><span class="o">.</span><span class="n">first_step</span><span class="o">.</span><span class="n">output</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/second_step.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
+</code></pre></div>
+<p>This method has several advantages, among which:
+* It limits the risk of error because you do not have to write the same filename at several locations
+* A change in output name will be automatically propagated to rules that depend on it, <em>i.e.</em> the name only has to be changed once
+* This makes the code much clearer and easier to understand: with this syntax, you instantly know the object type (<code>rule</code>), how it is created (<code>first_step</code>) and what it is (<code>output</code>)</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../guidelines/" class="md-footer__link md-footer__link--prev" aria-label="Previous: General guidelines" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              General guidelines
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.8492ddcf.min.js"></script>
+      
+    
+  </body>
+</html>
