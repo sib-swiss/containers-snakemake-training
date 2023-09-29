@@ -677,7 +677,7 @@
 <h2 id="exercises">Exercises</h2>
 <div class="admonition note">
 <p class="admonition-title">Command &lt;cmd_name&gt; not found</p>
-<p>If you try to run a command and get an error such as <code>Command 'snakemake' not found</code>, you are probably not in the right environment. To list them, use <code>mamba env list</code>. Then activate the right environment with <code>mamba activate &lt;env_name&gt;</code>. You can deactivate an environment with <code>mamba deactivate</code>.</p>
+<p>If you try to run a command and get an error such as <code>Command 'snakemake' not found</code>, you are probably not in the right environment. To list them, use <code>mamba env list</code>. Then activate the right environment with <code>mamba activate &lt;env_name&gt;</code>. You can deactivate an environment with <code>mamba deactivate</code>. To list the packages installed in an environment, activate it and use <code>mamba list</code>.</p>
 </div>
 <h3 id="workflow-structure">Workflow structure</h3>
 <p>It is strongly advised to implement your answers in a directory called <code>workflow</code> (the reason for this will be explained later). You are free to chose the names and location of files for the different steps of your workflow, but we recommend that you at least group all outputs from the workflow in a <code>results</code> directory within the <code>workflow</code> directory.</p>
@@ -695,7 +695,7 @@
 </code></pre></div>
 <details class="done">
 <summary>Answer</summary>
-<p>This rule uses the <code>echo</code> shell command to print the line &ldquo;snakemake&rdquo; in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder</p>
+<p>This rule uses the <code>echo</code> shell command to print the line &ldquo;snakemake&rdquo; in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder.</p>
 </details>
 <p>Rules are defined and written in a file called <strong>Snakefile</strong> (note the capital <code>S</code> and the absence of extension in the filename). This file should be located at the root of the workflow directory (here, <code>workflow/Snakefile</code>).</p>
 <div class="admonition note">
@@ -713,7 +713,7 @@ Visualise your directory content: <code>ls -alh results/</code>
 Check the output content with <code>cat results/first_step.txt</code></p>
 </details>
 <p>Note that during the execution of the workflow, Snakemake automatically created the <strong>missing folder</strong> (<code>results/</code>) in the output path. If several folders are missing (for example, here, <code>test1/test2/test3/first_step.txt</code>), Snakemake will create <strong>all of them</strong>.</p>
-<p><strong>Exercise:</strong> Rerun the exact same command. What happens?</p>
+<p><strong>Exercise:</strong> Re-run the exact same command. What happens?</p>
 <details class="done">
 <summary>Answer</summary>
 </details>
@@ -725,7 +725,11 @@ Building DAG of jobs...
 Nothing to be done (all requested files are present and up to date).
 ```
 
-By default, existing outputs are only generated again if the input of the rule that generates them is newer than them, based on file modification dates. You can change this behaviour and force the rerun by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or the `-F` option to force recreate ALL the outputs of the workflow.
+By default, Snakemake only runs a job if:
+* A target file explicitly requested in the `snakemake` command is missing
+* An intermediate file is missing and is required produce a target file
+* It notices input file newer than an output file, based on file modification dates. In this case, Snakemake will generate again the existing outputs.
+You can change this behaviour and force the re-run of a specific target by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or force recreate ALL the outputs of the workflow using the `-F` option: `snakemake --cores 1 -F`. In practice, you can also alter Snakemake re-run policy, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/stable/executing/cli.html) in Snakemake&#39;s CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 </code></pre></div>
 
 <p>In the previous example, values for these two directives are <strong>strings</strong>. For the <code>shell</code> directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:</p>
@@ -746,7 +750,7 @@ By default, existing outputs are only generated again if the input of the rule t
     <span class="n">shell</span><span class="p">:</span>
         <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
 </code></pre></div>
-<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>data/first_step.tsv</code> does not exist!</p>
+<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>results/first_step.tsv</code> does not exist!</p>
 <p><strong>Exercise:</strong> Modify your first rule to add an input and execute the workflow. Check that the output was created and that the files are identical.</p>
 <details class="done">
 <summary>Answer</summary>
@@ -762,7 +766,7 @@ Check that the files are identical <code>diff results/first_step.txt results/sec
 <p>Execute the workflow without outputs: <code>snakemake --cores 1</code>.
 When executed, Snakemake tries to generate a specific output called <strong>target</strong>, and resolves all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here <code>results/first_step.txt</code>. If you had placed the <code>second_step</code> rule in first position, Snakemake would have crashed because the input for this rule does not exist. If you have enough time, feel free to try it!</p>
 </details>
-<p><strong>Exercise:</strong> With this in mind, use a space-separated list of targets (instead of one filename) in your command to generate multiple targets. Use the <code>-F</code> to force the rerun of the whole workflow or delete your <code>results/</code> folder beforehand.</p>
+<p><strong>Exercise:</strong> With this in mind, use a space-separated list of targets (instead of one filename) in your command to generate multiple targets. Use the <code>-F</code> to force the re run of the whole workflow or delete your <code>results/</code> folder beforehand.</p>
 <details class="done">
 <summary>Answer</summary>
 <p>Execute the workflow with multiple targets: <code>snakemake --cores 1 -F results/first_step.txt results/second_step.txt</code>

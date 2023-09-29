@@ -649,7 +649,7 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">On writing reproducible <code>Dockerfiles</code></p>
-<p>At the <code>FROM</code> statement in the the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>jammy-20230308</code>). We could also have written:</p>
+<p>At the <code>FROM</code> statement in the above <code>Dockerfile</code> you see that we have added a specific tag to the image (i.e. <code>jammy-20230308</code>). We could also have written:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu</span>
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update
 <span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>figlet
@@ -788,12 +788,41 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 </details>
 <h3 id="build-an-image-for-your-own-script">Build an image for your own script</h3>
 <p>Often containers are built for a specific purpose. For example, you can use a container to ship all dependencies together with your developed set of scripts/programs. For that you will need to add your scripts to the container. That is quite easily done with the instruction <code>COPY</code>. However, in order to make your container more user-friendly, there are several additional instructions that can come in useful. We will treat the most frequently used ones below. Depending on your preference, either choose <strong>R</strong> or <strong>Python</strong> below. </p>
-<p>In the exercises will use a simple script called <code>test_deseq2.R</code>. You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R">here</a>, or copy-paste it:</p>
+<p>In the exercises will use a script called <code>test_deseq2.R</code>. This script will:</p>
+<ul>
+<li>Load the <code>DESeq2</code> and <code>optparse</code> packages</li>
+<li>Load some additional packages to test their installations. We will use those packages later on in the course.</li>
+<li>Create and parse an option called <code>--rows</code> with <code>optparse</code></li>
+<li>Create a dummy count matrix</li>
+<li>Run DESeq2 on the dummy count matrix</li>
+<li>Print the results to stdout</li>
+</ul>
+<p>You can download it <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/docker/exercise_dockerfile_deseq2/test_deseq2.R">here</a>, or copy-paste it:</p>
 <div class="highlight"><span class="filename">test_deseq2.R</span><pre><span></span><code><span class="c1">#!/usr/bin/env Rscript</span>
 
-<span class="nf">library</span><span class="p">(</span><span class="n">DESeq2</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
+<span class="c1"># load packages required for this script</span>
+<span class="nf">write</span><span class="p">(</span><span class="s">&quot;Loading packages required for this script&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">stderr</span><span class="p">())</span>
+<span class="nf">suppressPackageStartupMessages</span><span class="p">({</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">DESeq2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">optparse</span><span class="p">)</span>
+<span class="p">})</span>
 
+<span class="c1"># load dependency packages for testing installations</span>
+<span class="nf">write</span><span class="p">(</span><span class="s">&quot;Loading dependency packages for testing installations&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">stderr</span><span class="p">())</span>
+<span class="nf">suppressPackageStartupMessages</span><span class="p">({</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">apeglm</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">IHW</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">limma</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">ggrepel</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">pheatmap</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">RColorBrewer</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">scales</span><span class="p">)</span>
+<span class="w">    </span><span class="nf">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="c1"># parse options with optparse</span>
 <span class="n">option_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
 <span class="w">    </span><span class="nf">make_option</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;--rows&quot;</span><span class="p">),</span>
 <span class="w">        </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;integer&quot;</span><span class="p">,</span>
@@ -808,10 +837,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="p">)</span>
 <span class="n">opt</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">(</span><span class="n">opt_parser</span><span class="p">)</span>
 
-
-
-<span class="c1"># see vignette for suggestions on generating</span>
-<span class="c1"># count tables from RNA-Seq data</span>
+<span class="c1"># create a random dummy count matrix</span>
 <span class="n">cnts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">rnbinom</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">opt</span><span class="o">$</span><span class="n">row</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">0.5</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span>
 <span class="n">cond</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">))</span>
 
@@ -822,15 +848,16 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="n">dds</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">DESeq</span><span class="p">(</span><span class="n">dds</span><span class="p">)</span>
 <span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">results</span><span class="p">(</span><span class="n">dds</span><span class="p">)</span>
 
+<span class="c1"># print results to stdout</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </code></pre></div>
 <p>After you have downloaded it, make sure to set the permissions to executable:</p>
 <p><div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>test_deseq2.R
 </code></pre></div>
-It is a relatively simple script that searches for datasets in ensembl with <code>biomaRt</code> based on a pattern that is specified by the user. An example for execution would be:</p>
-<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>
+It is a relatively simple script that runs DESeq2 on a dummy dataset. An example for execution would be:</p>
+<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">100</span>
 </code></pre></div>
-<p>Returning a bunch of messages and at the end an overview of differential gene expression analysis results:</p>
+<p>Here, <code>--rows</code> is a optional arguments that specifies the number of rows generated in the input count matrix. When running the script, it will return a bunch of messages and at the end an overview of differential gene expression analysis results:</p>
 <div class="highlight"><pre><span></span><code>     baseMean log2FoldChange     lfcSE         stat    pvalue      padj
     &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
 1     66.1249       0.281757  0.727668     0.387206  0.698604  0.989804
@@ -845,27 +872,24 @@ It is a relatively simple script that searches for datasets in ensembl with <cod
 99    92.6614    0.563514308  0.716109  0.786910869  0.431334  0.939106
 100   96.4410   -0.155268696  0.534400 -0.290547708  0.771397  0.989804
 </code></pre></div>
-<p>From the script you can see it has <code>DESeq2</code> and <code>optparse</code> as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the <code>Dockerfile</code> below. We give the the following instructions:</p>
+<p>From the script you can see it has <code>DESeq2</code> and <code>optparse</code> as dependencies. If we want to run the script inside a container, we would have to install them. We do this in the <code>Dockerfile</code> below. We give it the following instructions:</p>
 <ul>
-<li>use the <a href="https://hub.docker.com/rocker/r2u">r2u base image</a> version jammy</li>
-<li>install the package <code>DESeq2</code>, <code>optparse</code> and some additional packages we will need later on with <code>install2.r</code> </li>
+<li>use the <a href="https://hub.docker.com/r/rocker/r2u">r2u base image</a> version jammy</li>
+<li>install the package <code>DESeq2</code>, <code>optparse</code> and some additional packages we will need later on. We perform the installations with <code>install2.r</code>, which is a helper command that is present inside most rocker images. More info <a href="https://rocker-project.org/use/extending.html#install2.r">here</a>. </li>
 <li>copy the script <code>test_deseq2.R</code> to <code>/opt</code> inside the container:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
 <span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
-DESeq2<span class="w"> </span><span class="se">\</span>
-optparse<span class="w"> </span><span class="se">\</span>
-apeglm<span class="w"> </span><span class="se">\</span>
-IHW<span class="w"> </span><span class="se">\</span>
-limma<span class="w"> </span><span class="se">\</span>
-data.table<span class="w"> </span><span class="se">\</span>
-ggplot2<span class="w"> </span><span class="se">\</span>
-ggrepel<span class="w"> </span><span class="se">\</span>
-pheatmap<span class="w"> </span><span class="se">\</span>
-RColorBrewer<span class="w"> </span><span class="se">\</span>
-scales<span class="w"> </span><span class="se">\</span>
-stringr
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 </code></pre></div>
@@ -877,7 +901,7 @@ stringr
 <p class="admonition-title">R image stack</p>
 <p>The most used R image stack is from the <a href="https://rocker-project.org/">rocker project</a>. It contains many different base images (e.g. with shiny, Rstudio, tidyverse etc.). It depends on the type of image whether installations with <code>apt-get</code> or <code>install2.r</code> are possible. To understand more about how to install R packages in different containers, check it this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
 </div>
-<p><strong>Exercise:</strong> Download the <code>test_deseq2.R</code> and build the image with <code>docker build</code>. After that, execute the script inside the container. </p>
+<p><strong>Exercise:</strong> Download the <code>test_deseq2.R</code> and build the image with <code>docker build</code>. Name the image <code>deseq2</code>. After that, start an interactive session and execute the script inside the container. </p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Make an interactive session with the options <code>-i</code> and <code>-t</code> and use <code>/bin/bash</code> as the command. </p>
@@ -888,17 +912,17 @@ stringr
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">x86_64 / AMD64</label><label for="__tabbed_4_2">ARM64 (MacOS M1 chip)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>test_deseq2<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>deseq2<span class="w"> </span>.
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>amd64<span class="w"> </span>-t<span class="w"> </span>test_deseq2<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>amd64<span class="w"> </span>-t<span class="w"> </span>deseq2<span class="w"> </span>.
 </code></pre></div>
 </div>
 </div>
 </div>
 <p>Run the container:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>test_deseq2<span class="w"> </span>/bin/bash
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>/bin/bash
 </code></pre></div>
 <p>Inside the container we look up the script:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/opt
@@ -906,7 +930,7 @@ ls
 </code></pre></div>
 <p>This should return <code>test_deseq2.R</code>. </p>
 <p>Now you can execute it from inside the container:</p>
-<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>
+<div class="highlight"><pre><span></span><code>./test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">100</span>
 </code></pre></div>
 </details>
 <p>That&rsquo;s kind of nice. We can ship our R script inside our container. However, we don&rsquo;t want to run it interactively every time. So let&rsquo;s make some changes to make it easy to run it as an executable. For example, we can add <code>/opt</code> to the global <code>$PATH</code> variable with <code>ENV</code>. </p>
@@ -917,18 +941,15 @@ ls
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
 <span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
-DESeq2<span class="w"> </span><span class="se">\</span>
-optparse<span class="w"> </span><span class="se">\</span>
-apeglm<span class="w"> </span><span class="se">\</span>
-IHW<span class="w"> </span><span class="se">\</span>
-limma<span class="w"> </span><span class="se">\</span>
-data.table<span class="w"> </span><span class="se">\</span>
-ggplot2<span class="w"> </span><span class="se">\</span>
-ggrepel<span class="w"> </span><span class="se">\</span>
-pheatmap<span class="w"> </span><span class="se">\</span>
-RColorBrewer<span class="w"> </span><span class="se">\</span>
-scales<span class="w"> </span><span class="se">\</span>
-stringr
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 
@@ -942,7 +963,7 @@ stringr
 <details class="done">
 <summary>Answer</summary>
 <p>After re-building we start an interactive session:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>test_deseq2<span class="w"> </span>/bin/bash
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>/bin/bash
 </code></pre></div>
 <p>The path is upated, <code>/opt</code> is appended to the beginning of the variable:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="nv">$PATH</span>
@@ -955,7 +976,7 @@ stringr
 </code></pre></div>
 </details>
 <p>Instead of starting an interactive session with <code>/bin/bash</code> we can now more easily run the script non-interactively:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>test_deseq2<span class="w"> </span>test_deseq2.R
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>test_deseq2.R<span class="w"> </span>--rows<span class="w"> </span><span class="m">100</span>
 </code></pre></div>
 <p>Now it will directly print the output of <code>test_deseq2.R</code> to stdout. </p>
 <p>In the case you want to pack your script inside a container, you are building a container specifically for your script, meaning you almost want the container to behave as the program itself. In order to do that, you can use <code>ENTRYPOINT</code>. <code>ENTRYPOINT</code> is similar to <code>CMD</code>, but has two important differences:</p>
@@ -967,18 +988,15 @@ stringr
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
 <span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
-DESeq2<span class="w"> </span><span class="se">\</span>
-optparse<span class="w"> </span><span class="se">\</span>
-apeglm<span class="w"> </span><span class="se">\</span>
-IHW<span class="w"> </span><span class="se">\</span>
-limma<span class="w"> </span><span class="se">\</span>
-data.table<span class="w"> </span><span class="se">\</span>
-ggplot2<span class="w"> </span><span class="se">\</span>
-ggrepel<span class="w"> </span><span class="se">\</span>
-pheatmap<span class="w"> </span><span class="se">\</span>
-RColorBrewer<span class="w"> </span><span class="se">\</span>
-scales<span class="w"> </span><span class="se">\</span>
-stringr
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">COPY</span><span class="w"> </span>test_deseq2.R<span class="w"> </span>/opt<span class="w"> </span>
 
@@ -995,10 +1013,10 @@ stringr
 <details class="done">
 <summary>Answer</summary>
 <p>Just running the container non-interactively would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>test_deseq2
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2
 </code></pre></div>
 <p>Passing a different argument (i.e. overwriting <code>CMD</code>) would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>test_deseq2<span class="w"> </span>--rows<span class="w"> </span><span class="m">200</span>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>deseq2<span class="w"> </span>--rows<span class="w"> </span><span class="m">200</span>
 </code></pre></div>
 <p>Here, the container behaves as the executable itself to which you can pass arguments. </p>
 </details>
@@ -1006,18 +1024,15 @@ stringr
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/r2u:jammy</span>
 
 <span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
-DESeq2<span class="w"> </span><span class="se">\</span>
-optparse<span class="w"> </span><span class="se">\</span>
-apeglm<span class="w"> </span><span class="se">\</span>
-IHW<span class="w"> </span><span class="se">\</span>
-limma<span class="w"> </span><span class="se">\</span>
-data.table<span class="w"> </span><span class="se">\</span>
-ggplot2<span class="w"> </span><span class="se">\</span>
-ggrepel<span class="w"> </span><span class="se">\</span>
-pheatmap<span class="w"> </span><span class="se">\</span>
-RColorBrewer<span class="w"> </span><span class="se">\</span>
-scales<span class="w"> </span><span class="se">\</span>
-stringr
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/opt</span>
 
@@ -1040,54 +1055,55 @@ stringr
 <details class="done">
 <summary>Answer</summary>
 <p>Running the container interactively would be:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>/bin/bash<span class="w"> </span>test_deseq2
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--entrypoint<span class="w"> </span>/bin/bash<span class="w"> </span>deseq2
 </code></pre></div>
 <p>Which should result in a terminal looking something like this:</p>
 <div class="highlight"><pre><span></span><code>root@9a27da455fb1:/opt#
 </code></pre></div>
 <p>Meaning that indeed the default directory has changed to <code>/opt</code></p>
 <p>Pushing it to dockerhub: </p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>test_deseq2<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/test_deseq2:v1
-docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/test_deseq2:v1
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>deseq2<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
+docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
 </code></pre></div>
 </details>
 <h3 id="get-information-on-your-image-with-docker-inspect">Get information on your image with <code>docker inspect</code></h3>
 <p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Config&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
-<span class="w">        </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Domainname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;User&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStdout&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;AttachStderr&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Tty&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;OpenStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;StdinOnce&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Env&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;LC_ALL=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;LANG=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;R_BASE_VERSION=4.2.3&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;--pattern&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;mouse&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;ArgsEscaped&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Image&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Volumes&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;WorkingDir&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/opt&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Entrypoint&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">            </span><span class="s">&quot;test_deseq2.R&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">],</span>
-<span class="w">        </span><span class="s">&quot;OnBuild&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
-<span class="w">        </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.authors&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Dirk</span><span class="nv"> </span><span class="s">Eddelbuettel</span><span class="nv"> </span><span class="s">&lt;edd@debian.org&gt;&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.licenses&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;GPL-2.0-or-later&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.source&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;https://github.com/rocker-org/rocker&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">            </span><span class="s">&quot;org.opencontainers.image.vendor&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Rocker</span><span class="nv"> </span><span class="s">Project&quot;</span>
-<span class="w">        </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Domainname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;User&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStdout&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;AttachStderr&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Tty&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;OpenStdin&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;StdinOnce&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">false</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Env&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;PATH=/opt:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;LC_ALL=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;LANG=en_US.UTF-8&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;DEBIAN_FRONTEND=noninteractive&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;TZ=UTC&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;Cmd&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;--rows&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;100&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;ArgsEscaped&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">true</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Image&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Volumes&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;WorkingDir&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/opt&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Entrypoint&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;test_deseq2.R&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="s">&quot;OnBuild&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
+<span class="w">        </span><span class="s">&quot;maintainer&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Dirk</span><span class="nv"> </span><span class="s">Eddelbuettel</span><span class="nv"> </span><span class="s">&lt;edd@debian.org&gt;&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.license&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;GPL-2.0&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.vcs-url&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;https://github.com/rocker-org/&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;org.label-schema.vendor&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;Rocker</span><span class="nv"> </span><span class="s">Project&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </code></pre></div>
 <h3 id="adding-metadata-to-your-image">Adding metadata to your image</h3>
 <p>You can annotate your <code>Dockerfile</code> and the image by using the instruction <code>LABEL</code>. You can give it any key and value with <code>&lt;key&gt;=&lt;value&gt;</code>. However, it is recommended to use the <a href="https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md">Open Container Initiative (OCI) keys</a>.</p>
@@ -1108,18 +1124,15 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">        </span>org.opencontainers.image.description<span class="o">=</span><span class="s2">&quot;Container with DESeq2 and friends&quot;</span>
 
 <span class="k">RUN</span><span class="w"> </span>install2.r<span class="w"> </span><span class="se">\</span>
-DESeq2<span class="w"> </span><span class="se">\</span>
-optparse<span class="w"> </span><span class="se">\</span>
-apeglm<span class="w"> </span><span class="se">\</span>
-IHW<span class="w"> </span><span class="se">\</span>
-limma<span class="w"> </span><span class="se">\</span>
-data.table<span class="w"> </span><span class="se">\</span>
-ggplot2<span class="w"> </span><span class="se">\</span>
-ggrepel<span class="w"> </span><span class="se">\</span>
-pheatmap<span class="w"> </span><span class="se">\</span>
-RColorBrewer<span class="w"> </span><span class="se">\</span>
-scales<span class="w"> </span><span class="se">\</span>
-stringr
+<span class="w">    </span>DESeq2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>optparse<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apeglm<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>IHW<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>limma<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>data.table<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ggrepel<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pheatmap<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>stringr
 
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/opt</span>
 
@@ -1158,7 +1171,12 @@ stringr
 
 <span class="k">RUN</span><span class="w"> </span>R<span class="w"> </span>-q<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;BiocManager::install(&quot;biomaRt&quot;)&#39;</span>
 </code></pre></div>
-<p>This will create an image from the existing <code>rstudio</code> image. It will also install <code>libz-dev</code> with <code>apt-get</code>, <code>BiocManager</code> with <code>install2.r</code> and <code>biomaRt</code> with an R command. Despiste we&rsquo;re installing the same packages, the installation steps need to be different from the <code>r-base</code> image. This is because in the <code>rocker/rstudio</code> images R is installed from source, and therefore you can&rsquo;t install packages with <code>apt-get</code>. More information on how to install R packages in R containers in this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
+<p>This will create an image from the existing <code>rstudio</code> image. It will also install <code>libz-dev</code> with <code>apt-get</code>, <code>BiocManager</code> with <code>install2.r</code> and <code>DESeq2</code> with an R command. Despite we&rsquo;re installing the same packages, the installation steps need to be different from the <code>r-base</code> image. This is because in the <code>rocker/rstudio</code> images R is installed from source, and therefore you can&rsquo;t install packages with <code>apt-get</code>. More information on how to install R packages in R containers in this <a href="https://raw.githubusercontent.com/sib-swiss/containers-introduction-training/main/r-docker-cheatsheet/r-docker-cheatsheet.pdf">cheat sheet</a>, or visit <a href="https://rocker-project.org/">rocker-project.org</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Installation will take a while</p>
+<p>The installation of CRAN packages will go relatively quickly, because can use the binary packages supplied by <a href="https://posit.co/products/cloud/public-package-manager/">Posit Public Package Manager</a>. However, the installation of Bioconductor packages will take a while, because they need to be installed from source. </p>
+<p>If you don&rsquo;t have time, you can skip the DESeq2 installation by removing the last line of the <code>Dockerfile</code>.</p>
+</div>
 <p><strong>Exercise:</strong> Build an image based on this <code>Dockerfile</code> and give it a meaningful name.</p>
 <details class="done">
 <summary>Answer</summary>
@@ -1182,8 +1200,8 @@ stringr
 <p class="admonition-title">Networking</p>
 <p>More info on docker container networking <a href="https://docs.docker.com/config/containers/container-networking/">here</a></p>
 </div>
-<p>By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of jupyterhub by typing <code>localhost:8787</code> in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.</p>
-<p>We can make this even more interesting by mounting a local directory to the container running the jupyter-lab image:</p>
+<p>By running the above command, a container will be started exposing rstudio server at port 8787 at localhost. You can approach the instance of Rstudio server by typing <code>localhost:8787</code> in your browser. You will be asked for a password. You can find this password in the terminal from which you have started the container.</p>
+<p>We can make this even more interesting by mounting a local directory to the container running the Rstudio image:</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
 -it<span class="w"> </span><span class="se">\</span>
 --rm<span class="w"> </span><span class="se">\</span>
