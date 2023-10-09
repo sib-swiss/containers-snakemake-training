@@ -449,8 +449,36 @@
   
   
     <li class="md-nav__item">
-      <a href="../introduction_snakemake/" class="md-nav__link">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
         Introduction to Snakemake
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
+        Making a more general-purpose Snakemake workflow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_decorating_workflow/" class="md-nav__link">
+        Decorating and optimising a Snakemake workflow
       </a>
     </li>
   
@@ -522,7 +550,7 @@
                 
                   
 
-  <a href="https://github.com/sib-swiss/containers-snakemake-training/edit/main/docs/course_material/day2/guidelines.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/sib-swiss/containers-snakemake-training/edit/main/docs/course_material/day2/1_guidelines.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
@@ -531,16 +559,16 @@
   <h1>General guidelines</h1>
 
 <h2 id="workshop-goal">Workshop goal</h2>
-<p>Over the course of the workshop, we will implement and improve a workflow to align bulk RNAseq reads to an assembly, perform some quality checks (QC), count mapped reads and identify Differentially Expressed Genes (DEG). The goal of the workshop is that after the last series of exercises, you will have implemented a simple workflow with commonly used Snakemake features. You will be able to use this workflow as a reference to implement your own workflows in the future.</p>
+<p>Over the course of the workshop, you will implement and improve a workflow to trim bulk RNAseq reads, align them on a genome, perform some quality checks (QC), count mapped reads, and identify Differentially Expressed Genes (DEG). The goal of the workshop is that after the last series of exercises, you will have implemented a simple workflow with commonly used Snakemake features. You will be able to use this workflow as a reference to implement your own workflows in the future.</p>
 <h2 id="software">Software</h2>
-<p>All the software required by this workflow is either:
-* Already installed in the <code>snakemake</code> conda environment
-* Installed in a container created during the Day 1
-* Will be installed through a conda environment during today&rsquo;s exercises</p>
+<p>All the software needed in this workflow is either:</p>
+<ul>
+<li>Already installed in the <code>snake_course</code> conda environment</li>
+<li>Already installed in a Docker container</li>
+<li>Will be installed via a conda environment during today&rsquo;s exercises</li>
+</ul>
 <h2 id="exercises">Exercises</h2>
-<p>Each series of exercises is divided in multiple questions. We first provide a general explanation on the context behind each question; we then explicitly describe the task and provide details when they are required. We also provide hints that should help you with the most challenging parts of some questions. You should first try to solve the problems without using these hints! Do not hesitate to modify and overwrite your code from previous questions when specified in an exercise, as the solutions for each series of exercises are provided. If something is not clear at any point, please call us and we will do our best to answer your questions. You can also check the <a href="https://snakemake.readthedocs.io/en/stable/index.html">official Snakemake documentation</a></p>
-<!-- AT. Check for description of exercises -->
-<!-- AT. Check for sentence on hints -->
+<p>Each series of exercises is divided in multiple questions. We first provide a general explanation on the context behind each question; we then explicitly describe the task and provide details when they are required. We also provide hints that should help you with the most challenging parts of some questions. You should first try to solve the problems without using these hints! Do not hesitate to modify and overwrite your code from previous questions when specified in an exercise, as the solutions for each series of exercises are provided. If something is not clear at any point, please call us and we will do our best to answer your questions. You can also check the <a href="https://snakemake.readthedocs.io/en/stable/index.html">official Snakemake documentation</a> for more information.</p>
 
 
 
@@ -577,7 +605,7 @@
       
       
         
-        <a href="../introduction_snakemake/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction to Snakemake" rel="next">
+        <a href="../2_introduction_snakemake/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction to Snakemake" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">

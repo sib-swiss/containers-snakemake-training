@@ -1,0 +1,1588 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+    
+    
+      
+        <title>Decorating and optimising a Snakemake workflow - Introduction to Containers and Snakemake</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../../.."> 
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to Containers and Snakemake
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Decorating and optimising a Snakemake workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to Containers and Snakemake
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../precourse/" class="md-nav__link">
+        Precourse preparations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../course_schedule/" class="md-nav__link">
+        Course schedule
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Day 1 - Containers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Day 1 - Containers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Day 1 - Containers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction_containers/" class="md-nav__link">
+        Introduction to containers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../managing_docker/" class="md-nav__link">
+        Managing containers and images
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dockerfiles/" class="md-nav__link">
+        Working with dockerfiles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../singularity/" class="md-nav__link">
+        Running containers with singularity
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Day 2 - Snakemake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Day 2 - Snakemake" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Day 2 - Snakemake
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_guidelines/" class="md-nav__link">
+        General guidelines
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
+        Introduction to Snakemake
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
+        Making a more general-purpose Snakemake workflow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Decorating and optimising a Snakemake workflow
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Decorating and optimising a Snakemake workflow
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimising-a-workflow-by-multi-threading" class="md-nav__link">
+    Optimising a workflow by multi-threading
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-non-file-parameters-and-config-files" class="md-nav__link">
+    Using non-file parameters and config files
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-file parameters and config files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-file-parameters" class="md-nav__link">
+    Non-file parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-files" class="md-nav__link">
+    Config files
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-non-conventional-outputs" class="md-nav__link">
+    Using non-conventional outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-conventional outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-case-of-the-temp-command" class="md-nav__link">
+    Use-case of the temp() command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-of-the-directory-command-the-fastqc-example" class="md-nav__link">
+    Use-case of the directory() command: the FastQC example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modularising-a-workflow" class="md-nav__link">
+    Modularising a workflow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-target-rule-and-aggregating-outputs" class="md-nav__link">
+    Using a target rule and aggregating outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Using a target rule and aggregating outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-target-rule" class="md-nav__link">
+    Creating a target rule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregating-outputs" class="md-nav__link">
+    Aggregating outputs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-the-other-samples-of-the-workflow" class="md-nav__link">
+    Running the other samples of the workflow
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimising-a-workflow-by-multi-threading" class="md-nav__link">
+    Optimising a workflow by multi-threading
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-non-file-parameters-and-config-files" class="md-nav__link">
+    Using non-file parameters and config files
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-file parameters and config files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-file-parameters" class="md-nav__link">
+    Non-file parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-files" class="md-nav__link">
+    Config files
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-non-conventional-outputs" class="md-nav__link">
+    Using non-conventional outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-conventional outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-case-of-the-temp-command" class="md-nav__link">
+    Use-case of the temp() command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-case-of-the-directory-command-the-fastqc-example" class="md-nav__link">
+    Use-case of the directory() command: the FastQC example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modularising-a-workflow" class="md-nav__link">
+    Modularising a workflow
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-target-rule-and-aggregating-outputs" class="md-nav__link">
+    Using a target rule and aggregating outputs
+  </a>
+  
+    <nav class="md-nav" aria-label="Using a target rule and aggregating outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-target-rule" class="md-nav__link">
+    Creating a target rule
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggregating-outputs" class="md-nav__link">
+    Aggregating outputs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-the-other-samples-of-the-workflow" class="md-nav__link">
+    Running the other samples of the workflow
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/sib-swiss/containers-snakemake-training/edit/main/docs/course_material/day2/4_decorating_workflow.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>Decorating and optimising a Snakemake workflow</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Optimise a workflow by multi-threading</li>
+<li>Use non-file parameters and config files in rules</li>
+<li>Create rules with non-conventional outputs</li>
+<li>Modularise a workflow</li>
+<li>Make a workflow process a list of files rather than one file at a time</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<p>In this series of exercises, we will create only one new rule to add to our workflow, because this part aims mainly to show how to improve and &lsquo;decorate&rsquo; the rules we previously wrote.</p>
+<div class="admonition note">
+<p class="admonition-title">Development and back-up</p>
+<p>During this session, we will modify our Snakefile quite heavily, so it may be a good idea to start by making a back-up: <code>cp worklow/Snakefile worklow/Snakefile_backup</code>. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up.</p>
+</div>
+<h3 id="optimising-a-workflow-by-multi-threading">Optimising a workflow by multi-threading</h3>
+<p>When working with real datasets, most processes are very long and computationally expensive. Fortunately, they can be parallelised very efficiently to decrease the computation time by using several <a href="https://en.wikipedia.org/wiki/Thread_(computing)">threads</a> for a single job.</p>
+<p><strong>Exercise:</strong> Parallelise as much processes as possible using the <code>threads</code> directive and test its effect:</p>
+<ol>
+<li>Identify which software can make use of parallelisation</li>
+<li>Identify in each software the parameter that controls multi-threading</li>
+<li>Implement the multi-threading</li>
+</ol>
+<!-- AT. Check if I need to add a newline -->
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<ul>
+<li>Check the software documentation and parameters with the <code>-h/--help</code> flags</li>
+<li>Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelize a software automatically</li>
+<li>Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads</li>
+<li>Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel! <!-- AT. Change the value of threads? --></li>
+</ul>
+</div>
+<!-- AT. Check if I need to add a newline -->
+<details class="done">
+<summary>Answer</summary>
+<p>It turns out that all the software except <code>samtools index</code> can handle multi-threading:</p>
+<ul>
+<li><code>atropos trim</code>, <code>hisat2</code>, <code>samtools view</code>, and <code>samtools sort</code> use the <code>--threads</code> option</li>
+<li><code>featureCounts</code> uses the <code>-T</code> option</li>
+</ul>
+<p>Let&rsquo;s use 4 threads for the mapping step and 2 for the other steps. Your Snakefile should look like this:
+<div class="highlight"><pre><span></span><code>rule fastq_trim:
+    &#39;&#39;&#39;
+    This rule trims paired-end reads to improve their quality. Specifically, it removes:
+    - Low quality bases
+    - A stretches longer than 20 bases
+    - N stretches
+    &#39;&#39;&#39;
+    input:
+        reads1 = &#39;data/{sample}_1.fastq&#39;,
+        reads2 = &#39;data/{sample}_2.fastq&#39;,
+    output:
+        trim1 = &#39;results/{sample}/{sample}_atropos_trimmed_1.fastq&#39;,
+        trim2 = &#39;results/{sample}/{sample}_atropos_trimmed_2.fastq&#39;
+    log:
+        &#39;logs/{sample}/{sample}_atropos_trimming.log&#39;
+    benchmark:
+        &#39;benchmarks/{sample}/{sample}_atropos_trimming.txt&#39;
+    resources:
+        mem_mb = 500
+    threads: 2
+    shell:
+        &#39;&#39;&#39;
+        echo &quot;Trimming reads in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt; {log}
+        atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a &quot;A{{20}}&quot; -A &quot;A{{20}}&quot; --threads {threads} -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &amp;&gt;&gt; {log}
+        echo &quot;Trimmed files saved in &lt;{output.trim1}&gt; and &lt;{output.trim2}&gt; respectively&quot; &gt;&gt; {log}
+        echo &quot;Trimming report saved in &lt;{log}&gt;&quot; &gt;&gt; {log}
+        &#39;&#39;&#39;
+
+rule read_mapping:
+    &#39;&#39;&#39;
+    This rule maps trimmed reads of a fastq on a reference assembly.
+    &#39;&#39;&#39;
+    input:
+        trim1 = rules.fastq_trim.output.trim1,
+        trim2 = rules.fastq_trim.output.trim2
+    output:
+        sam = &#39;results/{sample}/{sample}_mapped_reads.sam&#39;,
+        report = &#39;results/{sample}/{sample}_mapping_report.txt&#39;
+    log:
+        &#39;logs/{sample}/{sample}_mapping.log&#39;
+    benchmark:
+        &#39;benchmarks/{sample}/{sample}_mapping.txt&#39;
+    resources:
+        mem_gb = 2
+    threads: 4
+    shell:
+        &#39;&#39;&#39;
+        echo &quot;Mapping the reads&quot; &gt; {log}
+        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x resources/genome_indices/Scerevisiae_index --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
+        echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}
+        echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}
+        &#39;&#39;&#39;
+
+rule sam_to_bam:
+    &#39;&#39;&#39;
+    This rule converts a sam file to bam format, sorts it and indexes it.
+    &#39;&#39;&#39;
+    input:
+        sam = rules.read_mapping.output.sam
+    output:
+        bam = &#39;results/{sample}/{sample}_mapped_reads.bam&#39;,
+        bam_sorted = &#39;results/{sample}/{sample}_mapped_reads_sorted.bam&#39;,
+        index = &#39;results/{sample}/{sample}_mapped_reads_sorted.bam.bai&#39;
+    log:
+        &#39;logs/{sample}/{sample}_mapping_sam_to_bam.log&#39;
+    benchmark:
+        &#39;benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt&#39;
+    resources:
+        mem_mb = 250
+    threads: 2
+    shell:
+        &#39;&#39;&#39;
+        echo &quot;Converting &lt;{input.sam}&gt; to BAM format&quot; &gt; {log}
+        samtools view {input.sam} --threads {threads} -b -o {output.bam} 2&gt;&gt; {log}
+        echo &quot;Sorting BAM file&quot; &gt;&gt; {log}
+        samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2&gt;&gt; {log}
+        echo &quot;Indexing the sorted BAM file&quot; &gt;&gt; {log}
+        samtools index -b {output.bam_sorted} -o {output.index} 2&gt;&gt; {log}
+        echo &quot;Sorted file saved in &lt;{output.bam_sorted}&gt;&quot; &gt;&gt; {log}
+        &#39;&#39;&#39;
+
+rule reads_quantification_genes:
+    &#39;&#39;&#39;
+    This rule quantifies the reads of a bam file mapping on genes and produces
+    a count table for all genes of the assembly. The strandedness parameter
+    is determined by get_strandedness().
+    &#39;&#39;&#39;
+    input:
+        bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
+    output:
+        gene_level = &#39;results/{sample}/{sample}_genes_read_quantification.tsv&#39;,
+        gene_summary = &#39;results/{sample}/{sample}_genes_read_quantification.summary&#39;
+    log:
+        &#39;logs/{sample}/{sample}_genes_read_quantification.log&#39;
+    benchmark:
+        &#39;benchmarks/{sample}/{sample}_genes_read_quantification.txt&#39;
+    resources:
+        mem_mb = 500
+    threads: 2
+    shell:
+        &#39;&#39;&#39;
+        echo &quot;Counting reads mapping on genes in &lt;{input.bam_once_sorted}&gt;&quot; &gt; {log}
+        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}
+        echo &quot;Renaming output files&quot; &gt;&gt; {log}
+        mv {output.gene_level}.summary {output.gene_summary}
+        echo &quot;Results saved in &lt;{output.gene_level}&gt;&quot; &gt;&gt; {log}
+        echo &quot;Report saved in &lt;{output.gene_summary}&gt;&quot; &gt;&gt; {log}
+        &#39;&#39;&#39;
+</code></pre></div></p>
+</details>
+<p><strong>Exercise:</strong> Finally, test the effect of the number of threads on the workflow&rsquo;s runtime. What command will you use to run the workflow? Does the workflow run faster?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>The command to use is <code>snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>. Do not forget to provide additional cores to Snakemake in the execution command with <code>--cores 4</code>. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with <code>--cores</code>. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing <code>--cores</code> allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (<em>i.e.</em> a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Explicit is better than implicit</p>
+<p>Even if a software cannot multi-thread, it is useful to add <code>threads: 1</code> in the rule to keep the rule consistency and clearly state that the software works with a single thread.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Keep in mind when using parallel execution</p>
+<ul>
+<li>Parallel jobs will use more RAM. If you run out then either your OS will swap data to disk, or a process will crash</li>
+<li>The on-screen output from parallel jobs will be mixed, so save any output to log files instead</li>
+</ul>
+</div>
+<h3 id="using-non-file-parameters-and-config-files">Using non-file parameters and config files</h3>
+<h4 id="non-file-parameters">Non-file parameters</h4>
+<p>As we have seen, Snakemake&rsquo;s execution is based around inputs and outputs of each step of the workflow. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated (rightfully so!) against using hard-coded filepaths. Yet, if you look back at the rules we have implemented, you will find 2 occurrences of this behaviour in the shell command:</p>
+<ul>
+<li>In the <code>rule read_mapping</code>, the index parameter <code>-x resources/genome_indices/Scerevisiae_index</code></li>
+<li>In the <code>rule reads_quantification_genes</code>, the annotation parameter <code>-a resources/Scerevisiae.gtf</code></li>
+</ul>
+<p>This reduces readability and also makes it very hard to change the value of these parameters. The <code>params</code> directive was designed for this purpose: it allows to specify additional parameters that can also depend on the wildcards values and use input functions (see Session 4 for more information on this). <code>params</code> values can be of any type (integer, string, list  etc&hellip;) and similarly to the <code>{input}</code> and <code>{output}</code> placeholders, they can also be accessed from the shell command with the placeholder <code>arams}</code>. Just like for the <code>input</code> and <code>output</code> directives, you can define multiple parameters (in this case, do not forget the comma between each entry!) and they can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should always be named!). It also helps readability and clarity to use the <code>params</code> section to name and assign parameters and variables for your shell command. Here is an example on how to use <code>params</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">example</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;data/example.tsv&#39;</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/example.txt&#39;</span>
+    <span class="n">params</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;head -n </span><span class="si">{params.lines}</span><span class="s1"> </span><span class="si">{input}</span><span class="s1"> &gt; </span><span class="si">{output}</span><span class="s1">&#39;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Parameters arguments</p>
+<p>In contrast to the <code>input</code> directive, the <code>params</code> directive can optionally take more arguments than only wildcards, namely input, output, threads, and resources.</p>
+</div>
+<p><strong>Exercise:</strong> Replace the two hard-coded paths mentioned earlier by <code>params</code>.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Add a <code>params</code> directive to the rules, name the parameter and replace the path by the placeholder in the shell command.</p>
+</div>
+<details class="done">
+<summary>Answer</summary>
+<p>Note: for clarity, only the lines that changed are shown below.</p>
+<ul>
+<li><code>rule read_mapping</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
+<span class="n">shell</span><span class="p">:</span>
+    <span class="s1">&#39;hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x </span><span class="si">{params.index}</span><span class="s1"> --threads </span><span class="si">{threads}</span><span class="s1"> -1 </span><span class="si">{input.trim1}</span><span class="s1"> -2 </span><span class="si">{input.trim2}</span><span class="s1"> -S </span><span class="si">{output.sam}</span><span class="s1"> --summary-file </span><span class="si">{output.report}</span><span class="s1"> 2&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
+</code></pre></div>
+<ul>
+<li><code>rule reads_quantification_genes</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="s1">&#39;resources/Scerevisiae.gtf&#39;</span>
+<span class="n">shell</span><span class="p">:</span>
+    <span class="s1">&#39;featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a </span><span class="si">{params.annotations}</span><span class="s1"> -T </span><span class="si">{threads}</span><span class="s1"> -o </span><span class="si">{output.gene_level}</span><span class="s1"> </span><span class="si">{input.bam_once_sorted}</span><span class="s1"> &amp;&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Snakemake re-run behaviour</p>
+<p>If you try to re-run only the last rule with <code>snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>, Snakemake will actually try to re-run 3 rules in total. This is because the code changed in 2 rules (see <code>reason</code> field in Snakemake&rsquo;s log), which triggered an update of the inputs in the 3rd rule (<code>sam_to_bam</code>). To avoid this, first <code>touch</code> the files with <code>snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code> then re-run the last rule.</p>
+</div>
+<h4 id="config-files">Config files</h4>
+<p>That being said, there is an even better way to handle parameters like the we just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Python dictionary</a> named <code>config</code>. The path to the config file can be specified either in the Snakefile with the line <code>configfile: &lt;path/to/file.yaml&gt;</code> at the top of the file, or it can be specified at runtime with the execution parameter <code>--configfile &lt;path/to/file.yaml&gt;</code>.</p>
+<p>Config files are stored in the <code>config</code> subfolder and written in the <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> or <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> format. We will use the latter for this course as it is the most user-friendly and the recommended one. Briefly, in the YAML format, parameters are defined with the syntax <code>&lt;name&gt;: &lt;value&gt;</code>. Values can be strings, integers, floating points, booleans &hellip; For a complete overview of available value types, see <a href="https://learnxinyminutes.com/docs/yaml/">this list</a>. A parameter can have multiple values, which are then each listed on an indented single line starting with &ldquo;<strong>-</strong>&rdquo;. These values will be stored in a Python list when Snakemake parses the config file. Finally, parameters can be nested on indented single lines, and they will be stored as a dictionary when Snakemake parses the config file.</p>
+<p>The example below shows a parameter with a single value (<code>lines_number</code>), a parameter with multiple values (<code>samples</code>), and an example of nested parameters (<code>resources</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Parameter with a single value (string, int, float, bool ...)</span>
+<span class="nt">lines_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="c1"># Parameter with multiple values</span>
+<span class="nt">samples</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample2</span>
+<span class="c1"># Nested parameters</span>
+<span class="nt">resources</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4G</span>
+</code></pre></div>
+<p>Then, each parameter can be accessed in Snakefile with the following syntax:</p>
+<div class="highlight"><pre><span></span><code><span class="n">config</span><span class="p">[</span><span class="s1">&#39;lines_number&#39;</span><span class="p">]</span>  <span class="c1"># --&gt; 5</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">]</span>  <span class="c1"># --&gt; [&#39;sample1&#39;, &#39;sample2&#39;]  # Lists of parameters become list</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;resources&#39;</span><span class="p">]</span>  <span class="c1"># --&gt; {&#39;threads&#39;: 4, &#39;memory&#39;: &#39;4G&#39;}  # Lists of named parameters become dictionaries</span>
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;resources&#39;</span><span class="p">][</span><span class="s1">&#39;threads&#39;</span><span class="p">]</span>  <span class="c1"># --&gt; 4</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Accessing config values in <code>shell</code></p>
+<p>Values stored in the <code>config</code> dictionary cannot be accessed directly within the <code>shell</code> directive. If you need to use a parameter value in <code>shell</code>, define the parameter in <code>params</code> and assign its value from the <code>config</code> dictionary.</p>
+</div>
+<p><strong>Exercise:</strong> Create a config file in YAML format and fill it with adapted variables and values to replace the 2 hard-coded parameters in rules <code>read_mapping</code> and <code>reads_quantification_genes</code>. Then replace the hard-coded parameters by values from the config file and add its path on top of your Snakefile.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Note: for clarity, only the lines that changed are shown below. The first step is to create the subfolder and an empty config file:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>config<span class="w">  </span><span class="c1"># Create a new folder</span>
+touch<span class="w"> </span>config/config.yaml<span class="w">  </span><span class="c1"># Create an empty config file</span>
+</code></pre></div>
+<p>Then, fill the config file with the desired values:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Configuration options of RNAseq-analysis workflow</span>
+
+<span class="c1"># Location of the genome indices</span>
+<span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
+
+<span class="c1"># Location of the annotation file</span>
+<span class="nt">annotations</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources/Scerevisiae.gtf&#39;</span>
+</code></pre></div>
+<p>Then, replace the <code>params</code> values in the Snakefile:</p>
+<ul>
+<li><code>rule read_mapping</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+</code></pre></div>
+<ul>
+<li><code>rule reads_quantification_genes</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
+    <span class="n">annotations</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;annotations&#39;</span><span class="p">]</span>
+</code></pre></div>
+<p>Finally, add the file path on top of the Snakefile:
+<code>configfile: 'config/config.yaml'</code></p>
+</details>
+<p>Now, if we need to change these values, we can easily do it in the config file instead of modifying the code!</p>
+<h3 id="using-non-conventional-outputs">Using non-conventional outputs</h3>
+<p>Snakemake has several built-in utilities to assign properties to outputs that are deemed &lsquo;special&rsquo;. These properties are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Syntax</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temporary</td>
+<td><code>temp('path/to/file.txt')</code></td>
+<td>File is deleted as soon as it is not required by any future jobs</td>
+</tr>
+<tr>
+<td>Protected</td>
+<td><code>protected('path/to/file.txt')</code></td>
+<td>File cannot be overwritten after the job ends (useful to prevent erasing a file by mistake)</td>
+</tr>
+<tr>
+<td>Ancient</td>
+<td><code>ancient('path/to/file.txt')</code></td>
+<td>File will not be re-created when running the pipeline (useful for files that require heavy computation)</td>
+</tr>
+<tr>
+<td>Directory</td>
+<td><code>directory('path/to/directory')</code></td>
+<td>Output is a directory instead of a file (use &lsquo;touch&rsquo; instead if possible)</td>
+</tr>
+<tr>
+<td>Touch</td>
+<td><code>touch('path/to/file.txt')</code></td>
+<td>Create an empty flag file &lsquo;file.txt&rsquo; regardless of the shell command (if the command finished without errors)</td>
+</tr>
+</tbody>
+</table>
+<p>The next paragraphs will show how to use some of these properties.</p>
+<h4 id="use-case-of-the-temp-command">Use-case of the <code>temp()</code> command</h4>
+<p><strong>Exercise:</strong> Can you think of a convenient use of <code>temp()</code> command?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>The <code>temp()</code> command is extremely useful to automatically remove intermediary outputs that are no longer needed.</p>
+</details>
+<p><strong>Exercise:</strong> In your workflow, identify outputs that are intermediary and mark them as temporary with <code>temp()</code>.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>The unsorted .bam and the .sam outputs seem like great candidates to be marked as temporary. One could also argue that the trimmed FASTQ files are also temporary, but we will keep them for now. Note: for clarity, only the lines that changed are shown below.</p>
+<ul>
+<li><code>rule read_mapping</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">sam</span> <span class="o">=</span> <span class="n">temp</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.sam&#39;</span><span class="p">),</span>
+</code></pre></div>
+<ul>
+<li><code>rule sam_to_bam</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">bam</span> <span class="o">=</span> <span class="n">temp</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.bam&#39;</span><span class="p">),</span>
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Consequences of using <code>temp()</code></p>
+<p>Removing temporary outputs is a great way to save a lot of storage space. If you look at the size of your current <code>results/</code> folder (<code>du -bchd0 results/</code>), you will notice that it drastically. Just removing these two files would allow to save ~1 GB. While it may not seem a lot, remember that you usually have much bigger files and many more samples! On the other hand, using temporary outputs might force you to re-run more jobs than necessary if an input changes, so carefully think about it before using it.</p>
+</div>
+<p><strong>Exercise:</strong> On the contrary, is there a file of your workflow that you would like to protect with <code>protected()</code></p>
+<details class="done">
+<summary>Answer</summary>
+<p>This is debatable, but one could argue that the sorted .bam file is a good candidate for protection.</p>
+<ul>
+<li><code>rule sam_to_bam</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">bam_sorted</span> <span class="o">=</span> <span class="n">protected</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads_sorted.bam&#39;</span><span class="p">),</span>
+</code></pre></div>
+<p>If you set this output as protected, be careful when you want to re-run your workflow and recreate the file!</p>
+</details>
+<h4 id="use-case-of-the-directory-command-the-fastqc-example">Use-case of the <code>directory()</code> command: the FastQC example</h4>
+<p><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> is a program designed to spot potential problems in high-througput sequencing datasets. It is a very popular tool, notably because it runs quickly and does not require a lot of configuration. It runs a set of analyses on one or more raw sequence files in FASTQ or BAM format and produces a report with quality plots that summarises the results. It will highlight any areas where a dataset looks unusual and might require a closer look. FastQC can be run interactively or in batch mode, during which it saves results as an HTML file and a ZIP file. We will soon see that running FastQC in batch mode presents a little problem.</p>
+<div class="admonition note">
+<p class="admonition-title">Data types and FastQC</p>
+<p>FastQC does not differentiate between sequencing techniques and as such can be used to look at libraries coming from a large number of experiments (Genomic Sequencing, ChIP-Seq, RNAseq, BS-Seq etc&hellip;).</p>
+</div>
+<p>If you run <code>fastqc -h</code>, you will notice something a bit surprising (but not unusual in bioinformatics):</p>
+<div class="highlight"><pre><span></span><code>    -o --outdir     Create all output files in the specified output directory.
+                    Please note that this directory must exist as the program
+                    will not create it.  If this option is not set then the
+                    output file for each sequence file is created in the same
+                    directory as the sequence file which was processed.
+
+   -d --dir         Selects a directory to be used for temporary files written when
+                    generating report images. Defaults to system temp directory if
+                    not specified.
+</code></pre></div>
+<p>Two files are produced for each FASTQ file and these files appear in the same directory as the input file: FastQC does not allow to specify the names of the output files! However, we can set an alternative output directory, even though it needs to be created before FastQC is run.</p>
+<p>There are different solutions to deal with this problem:</p>
+<ol>
+<li>Work with the default file names produced by FastQC and leave the reports in the same directory than the input files</li>
+<li>Create the outputs in a new directory and leave the reports with their default name</li>
+<li>Create the outputs in a new directory and tell Snakemake that the directory itself is the output</li>
+<li>Force a naming convention by renaming the FastQC output files within the rule</li>
+</ol>
+<p>For the sake of time, we will not test all 4 solutions, but rather try to apply the 3<sup>rd</sup> <strong>or</strong> the 4<sup>th</sup> solution. We&rsquo;ll briefly summarise solutions 1 and 2 here:</p>
+<ol>
+<li>This could work, but it&rsquo;s better not to put the reports in the same directory than the input sequences. As a general principle, when writing Snakemake rules, we prefer to be in charge of the output names and to have all the files linked to a sample in the same directory</li>
+<li>This involves manually constructing the output directory path to use with the <code>-o</code> option, which works but isn&rsquo;t very convenient</li>
+</ol>
+<p>The base of the FastQC command is the following: <code>fastqc --format fastq --threads 2 &lt;input_fastq1&gt; &lt;input_fastq2&gt;</code></p>
+<ul>
+<li><code>-t/--threads</code>: specify the number of files which can be processed simultaneously. Here, it will be 2 because the inputs are paired-end files</li>
+<li>The <code>-o</code> and <code>-d</code> will be used in the last 2 solutions that we will now see in details</li>
+<li>We will create a single rule to run FastQC on both the original and the trimmed FASTQ files</li>
+</ul>
+<p><strong>Choose only one solution to implement:</strong></p>
+<!-- AT. Check whether this works -->
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Solution 3</label><label for="__tabbed_1_2">Solution 4</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>This option amounts to tell Snakemake not to worry about individual files at all and consider the output of the rule as an entire directory.</p>
+<p><strong>Exercise:</strong> Implement a single rule to run FastQC on both the original and the trimmed FASTQ files (4 files in total) using directories as ouputs with the <code>directory()</code> command.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>This makes the rule definition quite &lsquo;simple&rsquo;:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_qc_sol3</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule performs a QC on paired-end fastq files before and after trimming.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">reads1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads1</span><span class="p">,</span>
+        <span class="n">reads2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads2</span><span class="p">,</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">before_trim</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/before_trim/&#39;</span><span class="p">),</span>
+        <span class="n">after_trim</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/after_trim/&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_fastqc.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_fastqc.txt&#39;</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_gb</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        echo &quot;Creating output directory &lt;{output.before_trim}&gt;&quot; &gt; {log}</span>
+<span class="sd">        mkdir -p {output.before_trim} 2&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.before_trim} --dir {output.before_trim} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Results saved in &lt;{output.before_trim}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Creating output directory &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        mkdir -p {output.after_trim} 2&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.after_trim} --dir {output.after_trim} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Results saved in &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title"> <code>.snakemake_timestamp</code></p>
+<p>When <code>directory()</code> is used, Snakemake creates an empty file called <code>.snakemake_timestamp</code> in the output directory. This is the marker it uses to know if it needs to re-run the rule producing the directory.</p>
+</div>
+<p>Overall, this rule works well and allows for an easy rule definition. However, in this case, individual files are not explicitly named as outputs and this may cause problems to chain rules later. Also, remember that some applications won’t give you any control at all over the outputs, which is why you need a back-up plan, <em>i.e.</em> solution 4: the most powerful solution is to use shell commands to move and/or rename the files to the names you want. Also, the Snakemake developers advise to use <code>directory()</code> as a last resort and to rather use the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#flag-files"><code>touch()</code></a> flag instead.</p>
+</div>
+<div class="tabbed-block">
+<p>This option amounts to let FastQC follows its default behaviour but force the renaming of the files afterwards to obtain the exact outputs we require.</p>
+<p><strong>Exercise:</strong> Implement a single rule to run FastQC on both the original and the trimmed FASTQ files (4 files in total) and rename the files created by FastQC to precise output names using the <code>mv</code> command.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>This makes the rule definition (much) more complicated than the other solution:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_qc_sol4</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule performs a QC on paired-end fastq files before and after trimming.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">reads1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads1</span><span class="p">,</span>
+        <span class="n">reads2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads2</span><span class="p">,</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="c1"># QC before trimming</span>
+        <span class="n">html1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_1.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_1.zip&#39;</span><span class="p">,</span>
+        <span class="n">html2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_2.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_2.zip&#39;</span><span class="p">,</span>
+        <span class="c1"># QC after trimming</span>
+        <span class="n">html1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_1.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_1.zip&#39;</span><span class="p">,</span>
+        <span class="n">html2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_2.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_2.zip&#39;</span>
+    <span class="n">params</span><span class="p">:</span>
+        <span class="n">wd</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/&#39;</span><span class="p">,</span>
+        <span class="c1"># QC before trimming</span>
+        <span class="n">html1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_1_fastqc.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_1_fastqc.zip&#39;</span><span class="p">,</span>
+        <span class="n">html2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_2_fastqc.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_2_fastqc.zip&#39;</span><span class="p">,</span>
+        <span class="c1"># QC after trimming</span>
+        <span class="n">html1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1_fastqc.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1_fastqc.zip&#39;</span><span class="p">,</span>
+        <span class="n">html2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2_fastqc.html&#39;</span><span class="p">,</span>
+        <span class="n">zipfile2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2_fastqc.zip&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_fastqc.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_fastqc.txt&#39;</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_gb</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Renaming results from original fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
+<span class="sd">        mv {params.html1_before} {output.html1_before} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile1_before} {output.zipfile1_before} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.html2_before} {output.html2_before} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile2_before} {output.zipfile2_before} 2&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Renaming results from trimmed fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
+<span class="sd">        mv {params.html1_after} {output.html1_after} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile1_after} {output.zipfile1_after} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.html2_after} {output.html2_after} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile2_after} {output.zipfile2_after} 2&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Results saved in &lt;results/{wildcards.sample}/fastqc_reports/&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div>
+</details>
+<p>This solution is very long and much more complicated than the other one. However, it makes up for the complexity by allowing a total control on what is happening: with this method, we can choose where the temporary files are saved and the names of the outputs. It could have been shortened by using <code>-o .</code> to tell FastQC to create the files in the current working directory instead of a specific one, but this would have created another problem: if we run multiple jobs in parallel, then Snakemake may potentially try to produce files from different jobs but with the same temporary destination. In this case, the different instances would be trying to write to the same temporary files at the same time, overwriting each other and corrupting the output files.</p>
+</div>
+</div>
+</div>
+<p>Several interesting things are happening in both versions of this rule:</p>
+<ul>
+<li>Much like for the outputs, it is possible to refer to the inputs of a rule directly in another rule with the syntax <code>rules.&lt;rule_name&gt;.input.&lt;input_name&gt;</code></li>
+<li>FastQC doesn&rsquo;t create the output directory by itself (other programs might insist that the output directory <strong>does not</strong> already exist), so we have to create it manually  with <code>mkdir</code> in the shell command before running FastQC</li>
+<li>The <code>-p</code> flag of <code>mkdir</code> make parent directories as needed and does not return an error if the directory already exists</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Directory creation</p>
+<p>Remember that in most cases it is not necessary to manually create directories because Snakemake will do it for you. Even when using a <code>directory(</code>) output, Snakemake will not create the directory itself but most applications will make the directory for you; FastQC is an exception.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>If you want to make sure that a certain rule is executed before another, you can write the outputs of the first rule as inputs of the second one, even if you don&rsquo;t use them in the rule. For example, we could force the execution of FastQC before mapping the reads with only a few modifications to <code>rule read_mapping</code>:</p>
+<div class="highlight"><pre><span></span><code>rule read_mapping:
+    &#39;&#39;&#39;
+    This rule maps trimmed reads of a fastq on a reference assembly.
+    &#39;&#39;&#39;
+    input:
+        trim1 = rules.fastq_trim.output.trim1,
+        trim2 = rules.fastq_trim.output.trim2,  # Do not forget to add a comma here
+        fastqc = rules.fastq_qc_sol4.output.html1_before  # This single line will force the execution of FASTQC before read mapping
+    output:
+        sam = &#39;results/{sample}/{sample}_mapped_reads.sam&#39;,
+        report = &#39;results/{sample}/{sample}_mapping_report.txt&#39;
+    params:
+        index = &#39;resources/genome_indices/Scerevisiae_index&#39;
+    log:
+        &#39;logs/{sample}/{sample}_mapping.log&#39;
+    benchmark:
+        &#39;benchmarks/{sample}/{sample}_mapping.txt&#39;
+    resources:
+        mem_gb = 2
+    threads: 4
+    shell:
+        &#39;&#39;&#39;
+        echo &quot;Mapping the reads&quot; &gt; {log}
+        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x {params.index} --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
+        echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}
+        echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}
+        &#39;&#39;&#39;
+</code></pre></div>
+</div>
+<h3 id="modularising-a-workflow">Modularising a workflow</h3>
+<p>If you keep developing a workflow long enough, you are bound to encounter some cluttering problems. Have a look at your current Snakefile: with only 5 rules, it is already almost 200 lines long. Imagine what happens when your workflow comprises dozens of rules?! The <code>Snakefile</code> may become messy and harder to maintain and edit. This is why it quickly becomes crucial to modularise your workflow; this is a common practice in programming in general. This approach also makes it easier to re-use pieces of workflow in the future. Modularisation comes at 4 different levels:</p>
+<ol>
+<li>The most fine-grained level are wrappers. Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the <code>wrapper</code> directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility, however their implementation can sometimes be &lsquo;rigid&rsquo; and you may have to write your own rule. See the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#wrappers">official documentation</a> for more explanations</li>
+<li>For larger, reusable parts belonging to the same workflow, it is recommended to write smaller snakefiles and include them into a main Snakefile with the <code>include</code> statement. Note that in this case, all rules share a common config file. See the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes">official documentation</a> for more explanations</li>
+<li>The next level of modularisation is provided via the <code>module</code> statement, which enables arbitrary combination and re-use of rules in the same workflow and between workflows. See the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#snakefiles-modules">official documentation</a> for more explanations</li>
+<li>Finally, Snakemake also provides a syntax to define subworkflows, but this syntax is currently being deprecated in favor of the <code>module</code> statement. See the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#sub-workflows">official documentation</a> for more explanations</li>
+</ol>
+<p>In this course, we will only use the 2<sup>nd</sup> level of modularisation. In more details, the idea is to write a main Snakefile in <code>workflow/Snakefile</code>, to place the other snakefiles containing the rules in the subfolder <code>workflow/rules</code> (these &lsquo;sub-Snakefile&rsquo; should end with <code>.smk</code>, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefiles in the main Snakefile with the <code>include: &lt;path/to/snakefile.smk&gt;</code> syntax.</p>
+<div class="admonition note">
+<p class="admonition-title">Rules organisation</p>
+<p>How to organize rules is up to you, but a common approach would be to create &ldquo;thematic&rdquo; modules, <em>i.e.</em> regroup rules involved in the same general step of the workflow.</p>
+</div>
+<p><strong>Exercise:</strong> Move your current Snakefile into the subfolder <code>workflow/rules</code> and rename it to <code>read_mapping.smk</code>. Then create a new Snakefile in <code>workflow/</code> and import <code>read_mapping.smk</code> in it using the <code>include</code> syntax. You should also move the importation of the config file from the modular Snakefile to the main one.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>We will solve this problem step by step. First, create the new file structure:</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>workflow/rules<span class="w">  </span><span class="c1"># Create a new folder</span>
+mv<span class="w"> </span>workflow/Snakefile<span class="w"> </span>workflow/rules/read_mapping.smk<span class="w">  </span><span class="c1"># Move and rename the modular snakefile</span>
+touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span class="c1"># Recreate the main Snakefile</span>
+</code></pre></div>
+<p>Then, fill the main Snakefile with <code>include</code> and <code>configfile</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Main Snakefile of the RNAseq analysis workflow. This workflow can clean and</span>
+<span class="sd">map reads, and perform Differential Expression Analyses.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># Path of the config file</span>
+<span class="n">configfile</span><span class="p">:</span> <span class="s1">&#39;config/config.yaml&#39;</span>
+
+<span class="c1"># Rules to execute the workflow</span>
+<span class="n">include</span><span class="p">:</span> <span class="s1">&#39;rules/read_mapping.smk&#39;</span>
+</code></pre></div>
+<p>Finally, do not forget to remove the config file import (<code>configfile: 'config/config.yaml'</code>) from the snakefiles (<code>workflow/rules/read_mapping.smk</code>)</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Relative paths</p>
+<ul>
+<li>Includes are relative to the directory of the Snakefile in which they occur. For example, if the Snakefile resides in <code>workflow</code>, then Snakemake will search for the included snakefiles in <code>workflow/path/to/other/snakefile</code>, regardless of the working directory</li>
+<li>You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. <strong>However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called</strong> (this will be discussed in the last series of exercises)</li>
+</ul>
+</div>
+<p>In practice, you can imagine that the line <code>include: &lt;path/to/snakefile.smk&gt;</code> is replaced by the entire content of <code>snakefile.smk</code> in <code>Snakefile</code>. This means that syntaxes like <code>rules.&lt;rule_name&gt;.output.&lt;output_name&gt;</code> can still be used in snakefiles, even if the rule <code>&lt;rule_name&gt;</code> was defined in another snakefile, <strong>as long as the snakefile in which <code>&lt;rule_name&gt;</code> is defined is included before the snakefile that uses <code>rules.&lt;rule_name&gt;.output</code></strong>. This also works for input and output functions.</p>
+<h3 id="using-a-target-rule-and-aggregating-outputs">Using a target rule and aggregating outputs</h3>
+<h4 id="creating-a-target-rule">Creating a target rule</h4>
+<p>Modularisation also offers a great opportunity to facilitate the execution of the workflow. By default, if no target is given at the command line, Snakemake executes the first rule in the Snakefile. Hence, we have always executed the workflow by specifying a target file in the command line to avoid this behaviour. But we can actually use this property to make the execution easier by writing a pseudo-rule (also called target-rule and usually named <code>rule all</code>) in the Snakefile which has all the desired outputs (or a particular subsets of them) files as input files. This rule will look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;path/to/ouput1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;path/to/ouput2&#39;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Order of rules in Snakefile/snakefiles</p>
+<p>Apart from Snakemake considering the first rule of the workflow as the default target, the order of rules in the Snakefile/snakefiles is arbitrary and does not influence the DAG of jobs.</p>
+</div>
+<p><strong>Exercise:</strong> Implement a special rule in the Snakefile so that the final output is generated by default when running <code>snakemake</code> without specifying a target, then test your workflow with a dry-run.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<ul>
+<li>Remember that a rule is not required to have an output nor a shell command</li>
+<li>The inputs of <code>rule all</code> should be the final outputs that you want to generate (those from the last rule you wrote)</li>
+</ul>
+</div>
+<details class="done">
+<summary>Answer</summary>
+<p>If we consider that the last outputs are the ones produced by <code>rule reads_quantification_genes</code>, we can write the target rule like this:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Master rule that launches the workflow</span>
+<span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dummy rule to automatically generate the required outputs.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv&#39;</span>
+</code></pre></div>
+<p>Note that we used only one of the two outputs of <code>rule reads_quantification_genes</code>. We do this because it is enough to trigger the execution and if the rule didn&rsquo;t produce both outputs, Snakemake would crash and report it this error.</p>
+<p>Now, let&rsquo;s try to do a dry-run with this new rule: <code>snakemake --cores 4 -F -r -p -n</code>. You should see all the rules appearing thanks to the <code>-F</code> flag, including:</p>
+<div class="highlight"><pre><span></span><code>localrule<span class="w"> </span>all:
+<span class="w">    </span>input:<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+<span class="w">    </span>jobid:<span class="w"> </span><span class="m">0</span>
+<span class="w">    </span>reason:<span class="w"> </span>Input<span class="w"> </span>files<span class="w"> </span>updated<span class="w"> </span>by<span class="w"> </span>another<span class="w"> </span>job:<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+<span class="w">    </span>resources:<span class="w"> </span><span class="nv">tmpdir</span><span class="o">=</span>/tmp
+
+Job<span class="w"> </span>stats:
+job<span class="w">                           </span>count
+--------------------------<span class="w">  </span>-------
+all<span class="w">                               </span><span class="m">1</span>
+fastq_qc_sol4<span class="w">                     </span><span class="m">1</span>
+fastq_trim<span class="w">                        </span><span class="m">1</span>
+read_mapping<span class="w">                      </span><span class="m">1</span>
+reads_quantification_genes<span class="w">        </span><span class="m">1</span>
+sam_to_bam<span class="w">                        </span><span class="m">1</span>
+total<span class="w">                             </span><span class="m">6</span>
+</code></pre></div>
+</details>
+<h4 id="aggregating-outputs">Aggregating outputs</h4>
+<p>Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the rule we just created, we used a hard-coded input and by now, you should know that this is not an optimal solution and that we should avoid this as much as possible, especially if you have many samples to process. To solve this problem, we will rely on the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#the-expand-function">expand function</a>.</p>
+<p><strong>Exercise:</strong> Write an <code>expand()</code> syntax to generate a list of outputs from <code>rule reads_quantification_genes</code> <strong>with all the RNAseq samples</strong>. What do you need to write this?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>The output of <code>rule reads_quantification_genes</code> has the following syntax: <code>'results/{sample}/{sample}_genes_read_quantification.tsv'</code>. First, we need to create a Python list containing all the values that the <code>{sample}</code> wildcards can take:
+<code>SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']</code></p>
+<p>Then, we can transform the output syntax with <code>expand()</code>:
+<code>expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)</code></p>
+</details>
+<p><strong>Exercise:</strong> Use these two elements (the list of samples and the <code>expand()</code> syntax) in the target rule to ask Snakemake to generate all the outputs.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>You need to add the sample list to the Snakefile before the <code>rule all</code> and replace the value of the <code>input</code> directive:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Sample list</span>
+<span class="n">SAMPLES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;highCO2_sample1&#39;</span><span class="p">,</span> <span class="s1">&#39;highCO2_sample2&#39;</span><span class="p">,</span> <span class="s1">&#39;highCO2_sample3&#39;</span><span class="p">,</span> <span class="s1">&#39;lowCO2_sample1&#39;</span><span class="p">,</span> <span class="s1">&#39;lowCO2_sample2&#39;</span><span class="p">,</span> <span class="s1">&#39;lowCO2_sample3&#39;</span><span class="p">]</span>
+
+<span class="c1"># Master rule that launches the workflow</span>
+<span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dummy rule to automatically generate the required outputs.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">expand</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.tsv&#39;</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">SAMPLES</span><span class="p">)</span>
+</code></pre></div>
+<p>If you launch the workflow in dry-run mode with this new rule: <code>snakemake --cores 4 -F -r -p -n</code>. You should see all the rules appearing 5 times (1 for each sample that hasn&rsquo;t been processed yet):</p>
+<div class="highlight"><pre><span></span><code>localrule<span class="w"> </span>all:
+<span class="w">    </span>input:<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv,<span class="w"> </span>results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv,<span class="w"> </span>results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv,<span class="w"> </span>results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv,<span class="w"> </span>results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv,<span class="w"> </span>results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv
+<span class="w">    </span>jobid:<span class="w"> </span><span class="m">0</span>
+<span class="w">    </span>reason:<span class="w"> </span>Input<span class="w"> </span>files<span class="w"> </span>updated<span class="w"> </span>by<span class="w"> </span>another<span class="w"> </span>job:<span class="w"> </span>results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv,<span class="w"> </span>results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv,<span class="w"> </span>results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv,<span class="w"> </span>results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv,<span class="w"> </span>results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv
+<span class="w">    </span>resources:<span class="w"> </span><span class="nv">tmpdir</span><span class="o">=</span>/tmp
+
+Job<span class="w"> </span>stats:
+job<span class="w">                           </span>count
+--------------------------<span class="w">  </span>-------
+all<span class="w">                               </span><span class="m">1</span>
+fastq_qc_sol4<span class="w">                     </span><span class="m">5</span>
+fastq_trim<span class="w">                        </span><span class="m">5</span>
+read_mapping<span class="w">                      </span><span class="m">5</span>
+reads_quantification_genes<span class="w">        </span><span class="m">5</span>
+sam_to_bam<span class="w">                        </span><span class="m">5</span>
+total<span class="w">                            </span><span class="m">26</span>
+</code></pre></div>
+</details>
+<p>But we can do even better! At the moment, samples are defined in a list at the top of the Snakefile. To further improve the workflow&rsquo;s usability, we can define samples in the config file, so they can easily be added, removed, or modified by the user.</p>
+<p><strong>Exercise:</strong> Implement a parameter in the config file to specify sample names and modify <code>rule all</code> to use this parameter in the <code>expand()</code> syntax.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>First, we need to modify the config file:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Configuration options of RNAseq-analysis workflow</span>
+
+<span class="c1"># Location of the genome indices</span>
+<span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
+
+<span class="c1"># Location of the annotation file</span>
+<span class="nt">annotations</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources/Scerevisiae.gtf&#39;</span>
+
+<span class="c1"># Sample names</span>
+<span class="nt">samples</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">highCO2_sample1</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">highCO2_sample2</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">highCO2_sample3</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lowCO2_sample1</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lowCO2_sample2</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lowCO2_sample3</span>
+</code></pre></div>
+<p>Then, we need to use the config file in the <code>expand()</code> syntax (and remove <code>SAMPLES</code> from the Snakefile, because we don&rsquo;t need this variable anymore):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Master rule that launches the workflow</span>
+<span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dummy rule to automatically generate the required outputs.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">expand</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.tsv&#39;</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">])</span>
+</code></pre></div>
+<p>Here, <code>config['samples']</code> is a Python list containing strings, each string being a sample name. This is because a list of parameters become a list during the config file parsing.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">An even more Snakemake-idiomatic solution</p>
+<p>There is an even better and more Snakemake-idiomatic version of the <code>expand()</code> syntax: <code>expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])</code>. While it may not seem easy to use and understand, this entirely removes the need to write the output paths!</p>
+</div>
+<h3 id="running-the-other-samples-of-the-workflow">Running the other samples of the workflow</h3>
+<p><strong>Exercise:</strong> Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.</p>
+<details class="done">
+<summary>Answer</summary>
+<ul>
+<li>To touch the existing files, you can use: <code>snakemake --cores 1 --touch</code></li>
+<li>To run the workflow, you can use <code>snakemake --cores 4 -r -p</code></li>
+</ul>
+</details>
+<p>Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!</p>
+<p><strong>Exercise:</strong> Generate the workflow DAG and filegraph.</p>
+<details class="done">
+<summary>Answer</summary>
+<ul>
+<li>Generate the DAG: <code>snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng &gt; images/all_samples_rulegraph.png</code></li>
+<li>Generate the filegraph: <code>snakemake --cores 1 -F -r -p --filegraph | dot -Tpng &gt; images/all_samples_filegraph.png</code></li>
+</ul>
+</details>
+<!-- AT. Check this on website -->
+<p>Your DAG should resemble this:</p>
+<figure align="center">
+  <img src="../../assets/images/all_samples_dag.png" width="100%"/>
+</figure>
+
+<p>And your filegraph, this:</p>
+<figure align="center">
+  <img src="../../assets/images/all_samples_filegraph.png" height=500/>
+</figure>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../3_generalising_snakemake/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Making a more general-purpose Snakemake workflow" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Making a more general-purpose Snakemake workflow
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.8492ddcf.min.js"></script>
+      
+    
+  </body>
+</html>
