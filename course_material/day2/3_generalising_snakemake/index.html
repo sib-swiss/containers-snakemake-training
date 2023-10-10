@@ -334,8 +334,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../day1/singularity/" class="md-nav__link">
-        Running containers with singularity
+      <a href="../../day1/apptainer/" class="md-nav__link">
+        Running containers with apptainer
       </a>
     </li>
   
@@ -1351,10 +1351,12 @@ snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_
 </details>
 <p>You should obtain the 3 following figures:</p>
 <figure align="center">
-<p><img alt="backbone_dag" height="450" src="../../../assets/images/backbone_dag.png" width="30%" /> <img alt="backbone_rulegraph" height="450" src="../../../assets/images/backbone_rulegraph.png" width="30%" /> <img alt="backbone_filegraph" height="450" src="../../../assets/images/backbone_filegraph.png" width="30%" />
-  </p>
-<figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
+  <img src="../../assets/images/backbone_dag.png" width="32%" height="450"/>
+  <img src="../../assets/images/backbone_rulegraph.png" width="32%" height="450"/>
+  <img src="../../assets/images/backbone_filegraph.png" width="32%" height="450"/>
+  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
+
 <p>The differences between these plots are:</p>
 <ul>
 <li><code>--dag</code>: dependency graph of all the jobs</li>

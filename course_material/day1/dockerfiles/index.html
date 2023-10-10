@@ -435,8 +435,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../singularity/" class="md-nav__link">
-        Running containers with singularity
+      <a href="../apptainer/" class="md-nav__link">
+        Running containers with apptainer
       </a>
     </li>
   
@@ -821,7 +821,7 @@ __ _ _ __   ___ | |_| |__   ___ _ __  | |_ _____  _| |_
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/bin/sh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;figlet My image works!&quot;</span><span class="p">]</span>
 </code></pre></div>
 </div>
-<p><strong>Exercise:</strong> Now push our created image (with a version tag) to docker hub. We will use it later for the <a href="../singularity/"><code>singularity</code> exercises</a>.</p>
+<p><strong>Exercise:</strong> Now push our created image (with a version tag) to docker hub. We will use it later for the <a href="../apptainer/"><code>apptainer</code> exercises</a>.</p>
 <details class="done">
 <summary>Answer</summary>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>tag<span class="w"> </span>ubuntu-figlet:v3<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/ubuntu-figlet:v3
@@ -1089,7 +1089,7 @@ ls
 <span class="c"># default option (if positional arguments are not specified)</span>
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;--rows&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">]</span>
 </code></pre></div>
-<p><strong>Exercise</strong>: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the singularity exercises.</p>
+<p><strong>Exercise</strong>: build the image, and start the container interactively. Has the default directory changed? After that, push the image to dockerhub, so we can use it later with the apptainer exercises.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can overwrite <code>ENTRYPOINT</code> with <code>--entrypoint</code> as an argument to <code>docker run</code>. </p>
@@ -1288,13 +1288,13 @@ rstudio-server
       
       
         
-        <a href="../singularity/" class="md-footer__link md-footer__link--next" aria-label="Next: Running containers with singularity" rel="next">
+        <a href="../apptainer/" class="md-footer__link md-footer__link--next" aria-label="Next: Running containers with apptainer" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Running containers with singularity
+              Running containers with apptainer
             </div>
           </div>
           <div class="md-footer__button md-icon">
