@@ -633,7 +633,7 @@
   
     <li class="md-nav__item">
       <a href="../5_reproducibility_snakemake.md" class="md-nav__link">
-        Running containers with singularity
+        Reproducibility with snakemake
       </a>
     </li>
   
@@ -874,11 +874,11 @@
 <li>A rule to count the reads mapping on each gene</li>
 </ul>
 <p>At the end of this series of exercises, the DAG of your workflow should look like this:</p>
-<figure markdown align="center">
-  ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
-  <figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
+<figure align="center">
+<p><img alt="backbone_rulegraph" src="../../../assets/images/backbone_rulegraph.png" />
+  </p>
+<figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
 </figure>
-
 <div class="admonition note">
 <p class="admonition-title">Designing and debugging a workflow</p>
 <p>If you have problems designing your Snakemake workflow or debugging it, you can find some help <a href="#designing-a-snakemake-workflow-and-debugging-it">here</a>.</p>
@@ -1350,11 +1350,11 @@ snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_
 </ul>
 </details>
 <p>You should obtain the 3 following figures:</p>
-<figure markdown align="center">
-  ![backbone_dag](../../../assets/images/backbone_dag.png){ width="30%" height="450" } ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png){ width="30%" height="450" } ![backbone_filegraph](../../../assets/images/backbone_filegraph.png){ width="30%" height="450" }
-  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
+<figure align="center">
+<p><img alt="backbone_dag" height="450" src="../../../assets/images/backbone_dag.png" width="30%" /> <img alt="backbone_rulegraph" height="450" src="../../../assets/images/backbone_rulegraph.png" width="30%" /> <img alt="backbone_filegraph" height="450" src="../../../assets/images/backbone_filegraph.png" width="30%" />
+  </p>
+<figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
-
 <p>The differences between these plots are:</p>
 <ul>
 <li><code>--dag</code>: dependency graph of all the jobs</li>

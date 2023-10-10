@@ -540,7 +540,7 @@
   
     <li class="md-nav__item">
       <a href="../../day2/5_reproducibility_snakemake.md" class="md-nav__link">
-        Running containers with singularity
+        Reproducibility with snakemake
       </a>
     </li>
   
@@ -742,6 +742,10 @@ mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 </div>
 </div>
 <p>Save and close the config file. Now click again the green or blue button in the bottom left corner. Select <code>Connect to Host...</code>, and then on <code>sib_course_remote</code>. You will be asked which operating system is used on the remote. Specify &lsquo;Linux&rsquo;. </p>
+<p>At first login, initiate conda (for tomorrow):</p>
+<div class="highlight"><pre><span></span><code>/opt/miniconda3/bin/conda<span class="w"> </span>init
+</code></pre></div>
+<p>Close this terminal and open a new one, and you are good to go!</p>
 <h3 id="pulling-an-image">Pulling an image</h3>
 <p>Apptainer can take several image formats (e.g. a <code>docker</code> image), and convert them into it&rsquo;s own <code>.sif</code> format. Unlike <code>docker</code> this image doesn&rsquo;t live in a local image cache, but it&rsquo;s stored as an actual file.</p>
 <p><strong>Exercise:</strong> On the remote server, pull the docker image that has the adjusted default <code>CMD</code> that we have pushed to dockerhub <a href="../dockerfiles/#using-cmd">in this exercise</a> (<code>ubuntu-figlet-df:v3</code>) with <code>apptainer pull</code>. The syntax is:</p>
