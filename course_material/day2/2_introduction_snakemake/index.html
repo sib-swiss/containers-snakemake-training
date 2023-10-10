@@ -553,6 +553,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_reproducibility_snakemake.md" class="md-nav__link">
+        Running containers with singularity
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -742,27 +756,20 @@
 <li>Check the output content: <code>cat results/first_step.txt</code></li>
 </ul>
 </details>
-<p>Note that during the execution of the workflow, Snakemake automatically created the <strong>missing folder</strong> (<code>results/</code>) in the output path. If several folders are missing (for example, here, <code>test1/test2/test3/first_step.txt</code>), Snakemake will create <strong>all of them</strong>.</p>
+<p>Note that during the execution of the workflow, Snakemake automatically created the <strong>missing folder</strong> (<code>results/</code>) in the output path. If several folders are missing (for example, <code>test1/test2/test3/first_step.txt</code>), Snakemake will create <strong>all of them</strong>.</p>
 <p><strong>Exercise:</strong> Re-run the exact same command. What happens?</p>
 <details class="done">
 <summary>Answer</summary>
-</details>
-<!-- AT. Check how this looks -->
-<div class="codehilite"><pre><span></span><code>Nothing! We get a message saying that Snakemake did not run anything:
-
-```
-Building DAG of jobs...
+<p>Nothing! We get a message saying that Snakemake did not run anything:</p>
+<div class="highlight"><pre><span></span><code>Building DAG of jobs...
 Nothing to be done (all requested files are present and up to date).
-```
-
-By default, Snakemake only runs a job if:
-* A target file explicitly requested in the `snakemake` command is missing
-* An intermediate file is missing and is required produce a target file
-* It notices input files newer than output files, based on file modification dates. In this case, Snakemake will generate again the existing outputs.
-
-We can change this behaviour and force the re-run of a specific target by using the `-f` option: `snakemake --cores 1 -f results/first_step.txt` or force recreate ALL the outputs of the workflow using the `-F` option: `snakemake --cores 1 -F`. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/stable/executing/cli.html) in Snakemake&#39;s CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 </code></pre></div>
-
+<p>By default, Snakemake only runs a job if:
+* A target file explicitly requested in the <code>snakemake</code> command is missing
+* An intermediate file is missing and is required produce a target file
+* It notices input files newer than output files, based on file modification dates. In this case, Snakemake will generate again the existing outputs.</p>
+<p>We can change this behaviour and force the re-run of a specific target by using the <code>-f</code> option: <code>snakemake --cores 1 -f results/first_step.txt</code> or force recreate ALL the outputs of the workflow using the <code>-F</code> option: <code>snakemake --cores 1 -F</code>. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see <a href="https://snakemake.readthedocs.io/en/stable/executing/cli.html">&ndash;rerun-triggers option</a> in Snakemake&rsquo;s CLI help and <a href="https://github.com/snakemake/snakemake/issues/1694">this git issue</a> for more information).</p>
+</details>
 <p>In the previous example, the values of the two rule directives are <strong>strings</strong>. For the <code>shell</code> directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:</p>
 <div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
     <span class="n">output</span><span class="p">:</span>
@@ -798,27 +805,24 @@ We can change this behaviour and force the re-run of a specific target by using 
 <p><strong>Exercise:</strong> Delete the <code>results/</code> folder, copy the two previous rules (<code>first_step</code> and <code>second_step</code>) in the same Snakefile (place the <code>first_step</code> rule first) and try to run the workflow <strong>without specifying an output</strong>. What happens?</p>
 <details class="done">
 <summary>Answer</summary>
+<ul>
+<li>Delete the <code>results</code> folder: using the graphic interface or <code>rm -rf results/</code></li>
+<li>Execute the workflow without output: <code>snakemake --cores 1</code></li>
+</ul>
+<p>Only the first output, <code>results/first_step.txt</code>, is created. During its execution, Snakemake tries to generate a specific output called <strong>target</strong> and resolve all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here <code>results/first_step.txt</code> of <code>rule first_step</code>.</p>
 </details>
-<!-- AT. Check how this looks -->
-<div class="codehilite"><pre><span></span><code>* Delete the `results` folder: using the graphic interface or `rm -rf results/`
-* Execute the workflow without output: `snakemake --cores 1`
-
-Only the first output, `results/first_step.txt`, is created. During its execution, Snakemake tries to generate a specific output called **target** and resolve all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here `results/first_step.txt` of `rule first_step`.
-</code></pre></div>
-
 <p><strong>Exercise:</strong> With this in mind, instead of one target, use a space-separated list of targets in your command, to generate multiple targets. Use the <code>-F</code> to force the re-run of the whole workflow or delete your <code>results/</code> folder beforehand.</p>
 <details class="done">
 <summary>Answer</summary>
+<ul>
+<li>Delete the <code>results</code> folder: using the graphic interface or <code>rm -rf results/</code></li>
+<li>Execute the workflow with multiple targets: <code>snakemake --cores 1 results/first_step.txt results/second_step.txt</code></li>
+</ul>
+<p>We should now see Snakemake execute the 2 rules and produce both targets/outputs.</p>
 </details>
-<!-- AT. Check how this looks -->
-<div class="codehilite"><pre><span></span><code>* Delete the `results` folder: using the graphic interface or `rm -rf results/`
-* Execute the workflow with multiple targets: `snakemake --cores 1 results/first_step.txt results/second_step.txt`
-
-We should now see Snakemake execute the 2 rules and produce both targets/outputs.
-</code></pre></div>
-
 <h3 id="chaining-rules">Chaining rules</h3>
-<p>Once again, writing all the outputs in the <code>snakemake</code> command does not look like a good solution: it is very time-consuming, error-prone (and annoying)! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency. The core principle of Snakemake&rsquo;s execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all the inputs and outputs required to generate the final desired outputs. For each job, starting from the jobs generating the final outputs, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a &lsquo;bottom-up&rsquo; approach: it starts from the last outputs and go back to the first inputs.</p>
+<p>Once again, writing all the outputs in the <code>snakemake</code> command does not look like a good solution: it is very time-consuming, error-prone (and annoying)! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency.</p>
+<p>The core principle of Snakemake&rsquo;s execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all the inputs and outputs required to generate the final desired outputs. For each job, starting from the jobs generating the final outputs, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a &lsquo;bottom-up&rsquo; approach: it starts from the last outputs and go back to the first inputs.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <p>Your Snakefile should look like this:</p>
@@ -845,7 +849,7 @@ We should now see Snakemake execute the 2 rules and produce both targets/outputs
 <li>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code></li>
 <li>Visualise the content of the <code>results</code> folder: <code>ls -alh results/</code></li>
 </ul>
-<p>We should now see Snakemake executing the 2 rules and producing both outputs. To generate the output <code>results/second_step.txt</code>, Snakemake requires the input <code>results/first_step.txt</code>. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates <code>results/first_step.txt</code>, in this case the rule <code>first_step</code>. The process is then repeated for <code>first_step</code>. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.</p>
+<p>You should now see Snakemake executing the two rules and producing both outputs. To generate the output <code>results/second_step.txt</code>, Snakemake requires the input <code>results/first_step.txt</code>. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates <code>results/first_step.txt</code>, in this case the rule <code>first_step</code>. The process is then repeated for <code>first_step</code>. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.</p>
 </details>
 <h3 id="important-notes-on-rules-dependency">Important notes on rules dependency</h3>
 <h4 id="rules-must-produce-unique-outputs">Rules must produce unique outputs</h4>

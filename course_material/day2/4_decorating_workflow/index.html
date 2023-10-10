@@ -586,6 +586,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_reproducibility_snakemake.md" class="md-nav__link">
+        Running containers with singularity
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -783,17 +797,15 @@
 <li>Identify in each software the parameter that controls multi-threading</li>
 <li>Implement the multi-threading</li>
 </ol>
-<!-- AT. Check if I need to add a newline -->
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
 <ul>
 <li>Check the software documentation and parameters with the <code>-h/--help</code> flags</li>
-<li>Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelize a software automatically</li>
+<li>Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelise a software automatically</li>
 <li>Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads</li>
-<li>Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel! <!-- AT. Change the value of threads? --></li>
+<li>Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel!</li>
 </ul>
 </div>
-<!-- AT. Check if I need to add a newline -->
 <details class="done">
 <summary>Answer</summary>
 <p>It turns out that all the software except <code>samtools index</code> can handle multi-threading:</p>
@@ -825,7 +837,9 @@
     shell:
         &#39;&#39;&#39;
         echo &quot;Trimming reads in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt; {log}
-        atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a &quot;A{{20}}&quot; -A &quot;A{{20}}&quot; --threads {threads} -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &amp;&gt;&gt; {log}
+        atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
+        --no-cache-adapters -a &quot;A{{20}}&quot; -A &quot;A{{20}}&quot; --threads {threads} \
+        -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &amp;&gt;&gt; {log}
         echo &quot;Trimmed files saved in &lt;{output.trim1}&gt; and &lt;{output.trim2}&gt; respectively&quot; &gt;&gt; {log}
         echo &quot;Trimming report saved in &lt;{log}&gt;&quot; &gt;&gt; {log}
         &#39;&#39;&#39;
@@ -850,7 +864,9 @@ rule read_mapping:
     shell:
         &#39;&#39;&#39;
         echo &quot;Mapping the reads&quot; &gt; {log}
-        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x resources/genome_indices/Scerevisiae_index --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
+        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+        -x resources/genome_indices/Scerevisiae_index --threads {threads} \
+        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
         echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}
         echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}
         &#39;&#39;&#39;
@@ -904,7 +920,8 @@ rule reads_quantification_genes:
     shell:
         &#39;&#39;&#39;
         echo &quot;Counting reads mapping on genes in &lt;{input.bam_once_sorted}&gt;&quot; &gt; {log}
-        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}
+        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
+        -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}
         echo &quot;Renaming output files&quot; &gt;&gt; {log}
         mv {output.gene_level}.summary {output.gene_summary}
         echo &quot;Results saved in &lt;{output.gene_level}&gt;&quot; &gt;&gt; {log}
@@ -915,14 +932,16 @@ rule reads_quantification_genes:
 <p><strong>Exercise:</strong> Finally, test the effect of the number of threads on the workflow&rsquo;s runtime. What command will you use to run the workflow? Does the workflow run faster?</p>
 <details class="done">
 <summary>Answer</summary>
-<p>The command to use is <code>snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>. Do not forget to provide additional cores to Snakemake in the execution command with <code>--cores 4</code>. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with <code>--cores</code>. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing <code>--cores</code> allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (<em>i.e.</em> a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!</p>
+<p>The command to use is:</p>
+<p><code>snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code></p>
+<p>Do not forget to provide additional cores to Snakemake in the execution command with <code>--cores 4</code>. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with <code>--cores</code>. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing <code>--cores</code> allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (<em>i.e.</em> a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!</p>
 </details>
 <div class="admonition note">
 <p class="admonition-title">Explicit is better than implicit</p>
 <p>Even if a software cannot multi-thread, it is useful to add <code>threads: 1</code> in the rule to keep the rule consistency and clearly state that the software works with a single thread.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Keep in mind when using parallel execution</p>
+<p class="admonition-title">Things to keep in mind when using parallel execution</p>
 <ul>
 <li>Parallel jobs will use more RAM. If you run out then either your OS will swap data to disk, or a process will crash</li>
 <li>The on-screen output from parallel jobs will be mixed, so save any output to log files instead</li>
@@ -935,7 +954,10 @@ rule reads_quantification_genes:
 <li>In the <code>rule read_mapping</code>, the index parameter <code>-x resources/genome_indices/Scerevisiae_index</code></li>
 <li>In the <code>rule reads_quantification_genes</code>, the annotation parameter <code>-a resources/Scerevisiae.gtf</code></li>
 </ul>
-<p>This reduces readability and also makes it very hard to change the value of these parameters. The <code>params</code> directive was designed for this purpose: it allows to specify additional parameters that can also depend on the wildcards values and use input functions (see Session 4 for more information on this). <code>params</code> values can be of any type (integer, string, list  etc&hellip;) and similarly to the <code>{input}</code> and <code>{output}</code> placeholders, they can also be accessed from the shell command with the placeholder <code>arams}</code>. Just like for the <code>input</code> and <code>output</code> directives, you can define multiple parameters (in this case, do not forget the comma between each entry!) and they can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should always be named!). It also helps readability and clarity to use the <code>params</code> section to name and assign parameters and variables for your shell command. Here is an example on how to use <code>params</code>:</p>
+<p>This reduces readability and also makes it very hard to change the value of these parameters.</p>
+<p>The <code>params</code> directive was designed for this purpose: it allows to specify additional parameters that can also depend on the wildcards values and use input functions (see Session 4 for more information on this). <code>params</code> values can be of any type (integer, string, list  etc&hellip;) and similarly to the <code>{input}</code> and <code>{output}</code> placeholders, they can also be accessed from the shell command with the placeholder <code>{params}</code>. Just like for the <code>input</code> and <code>output</code> directives, you can define multiple parameters (in this case, do not forget the comma between each entry!) and they can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should always be named!).</p>
+<p>It also helps readability and clarity to use the <code>params</code> section to name and assign parameters and variables for your shell command.</p>
+<p>Here is an example on how to use <code>params</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">example</span><span class="p">:</span>
     <span class="nb">input</span><span class="p">:</span>
         <span class="s1">&#39;data/example.tsv&#39;</span>
@@ -948,7 +970,7 @@ rule reads_quantification_genes:
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Parameters arguments</p>
-<p>In contrast to the <code>input</code> directive, the <code>params</code> directive can optionally take more arguments than only wildcards, namely input, output, threads, and resources.</p>
+<p>In contrast to the <code>input</code> directive, the <code>params</code> directive can optionally take more arguments than only <code>wildcards</code>, namely <code>input</code>, <code>output</code>, <code>threads</code>, and <code>resources</code>.</p>
 </div>
 <p><strong>Exercise:</strong> Replace the two hard-coded paths mentioned earlier by <code>params</code>.</p>
 <div class="admonition hint">
@@ -964,7 +986,9 @@ rule reads_quantification_genes:
 <div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
     <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
 <span class="n">shell</span><span class="p">:</span>
-    <span class="s1">&#39;hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x </span><span class="si">{params.index}</span><span class="s1"> --threads </span><span class="si">{threads}</span><span class="s1"> -1 </span><span class="si">{input.trim1}</span><span class="s1"> -2 </span><span class="si">{input.trim2}</span><span class="s1"> -S </span><span class="si">{output.sam}</span><span class="s1"> --summary-file </span><span class="si">{output.report}</span><span class="s1"> 2&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
+    <span class="s1">&#39;hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal </span><span class="se">\</span>
+<span class="s1">    -x </span><span class="si">{params.index}</span><span class="s1"> --threads </span><span class="si">{threads}</span><span class="s1"> </span><span class="se">\</span>
+<span class="s1">    -1 </span><span class="si">{input.trim1}</span><span class="s1"> -2 </span><span class="si">{input.trim2}</span><span class="s1"> -S </span><span class="si">{output.sam}</span><span class="s1"> --summary-file </span><span class="si">{output.report}</span><span class="s1"> 2&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
 </code></pre></div>
 <ul>
 <li><code>rule reads_quantification_genes</code></li>
@@ -972,12 +996,14 @@ rule reads_quantification_genes:
 <div class="highlight"><pre><span></span><code><span class="n">params</span><span class="p">:</span>
     <span class="n">annotations</span> <span class="o">=</span> <span class="s1">&#39;resources/Scerevisiae.gtf&#39;</span>
 <span class="n">shell</span><span class="p">:</span>
-    <span class="s1">&#39;featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF -a </span><span class="si">{params.annotations}</span><span class="s1"> -T </span><span class="si">{threads}</span><span class="s1"> -o </span><span class="si">{output.gene_level}</span><span class="s1"> </span><span class="si">{input.bam_once_sorted}</span><span class="s1"> &amp;&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
+    <span class="s1">&#39;featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF </span><span class="se">\</span>
+<span class="s1">    -a </span><span class="si">{params.annotations}</span><span class="s1"> -T </span><span class="si">{threads}</span><span class="s1"> -o </span><span class="si">{output.gene_level}</span><span class="s1"> </span><span class="si">{input.bam_once_sorted}</span><span class="s1"> &amp;&gt;&gt; </span><span class="si">{log}</span><span class="s1">&#39;</span>
 </code></pre></div>
 </details>
 <div class="admonition note">
 <p class="admonition-title">Snakemake re-run behaviour</p>
-<p>If you try to re-run only the last rule with <code>snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>, Snakemake will actually try to re-run 3 rules in total. This is because the code changed in 2 rules (see <code>reason</code> field in Snakemake&rsquo;s log), which triggered an update of the inputs in the 3rd rule (<code>sam_to_bam</code>). To avoid this, first <code>touch</code> the files with <code>snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code> then re-run the last rule.</p>
+<p>If you try to re-run only the last rule with <code>snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>, Snakemake will actually try to re-run 3 rules in total.</p>
+<p>This is because the code changed in 2 rules (see <code>reason</code> field in Snakemake&rsquo;s log), which triggered an update of the inputs in the 3rd rule (<code>sam_to_bam</code>). To avoid this, first <code>touch</code> the files with <code>snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code> then re-run the last rule.</p>
 </div>
 <h4 id="config-files">Config files</h4>
 <p>That being said, there is an even better way to handle parameters like the we just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Python dictionary</a> named <code>config</code>. The path to the config file can be specified either in the Snakefile with the line <code>configfile: &lt;path/to/file.yaml&gt;</code> at the top of the file, or it can be specified at runtime with the execution parameter <code>--configfile &lt;path/to/file.yaml&gt;</code>.</p>
@@ -1152,7 +1178,6 @@ touch<span class="w"> </span>config/config.yaml<span class="w">  </span><span cl
 <li>We will create a single rule to run FastQC on both the original and the trimmed FASTQ files</li>
 </ul>
 <p><strong>Choose only one solution to implement:</strong></p>
-<!-- AT. Check whether this works -->
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Solution 3</label><label for="__tabbed_1_2">Solution 4</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1185,12 +1210,14 @@ touch<span class="w"> </span>config/config.yaml<span class="w">  </span><span cl
 <span class="sd">        echo &quot;Creating output directory &lt;{output.before_trim}&gt;&quot; &gt; {log}</span>
 <span class="sd">        mkdir -p {output.before_trim} 2&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.before_trim} --dir {output.before_trim} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.before_trim} \</span>
+<span class="sd">        --dir {output.before_trim} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Results saved in &lt;{output.before_trim}&gt;&quot; &gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Creating output directory &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
 <span class="sd">        mkdir -p {output.after_trim} 2&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.after_trim} --dir {output.after_trim} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.after_trim} \</span>
+<span class="sd">        --dir {output.after_trim} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Results saved in &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 </code></pre></div>
@@ -1249,14 +1276,16 @@ touch<span class="w"> </span>config/config.yaml<span class="w">  </span><span cl
     <span class="n">shell</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} \</span>
+<span class="sd">        --dir {params.wd} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Renaming results from original fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
 <span class="sd">        mv {params.html1_before} {output.html1_before} 2&gt;&gt; {log}</span>
 <span class="sd">        mv {params.zipfile1_before} {output.zipfile1_before} 2&gt;&gt; {log}</span>
 <span class="sd">        mv {params.html2_before} {output.html2_before} 2&gt;&gt; {log}</span>
 <span class="sd">        mv {params.zipfile2_before} {output.zipfile2_before} 2&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} --dir {params.wd} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} \</span>
+<span class="sd">        --dir {params.wd} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Renaming results from trimmed fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
 <span class="sd">        mv {params.html1_after} {output.html1_after} 2&gt;&gt; {log}</span>
 <span class="sd">        mv {params.zipfile1_after} {output.zipfile1_after} 2&gt;&gt; {log}</span>
@@ -1306,7 +1335,9 @@ touch<span class="w"> </span>config/config.yaml<span class="w">  </span><span cl
     shell:
         &#39;&#39;&#39;
         echo &quot;Mapping the reads&quot; &gt; {log}
-        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal -x {params.index} --threads {threads} -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
+        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+        -x {params.index} --threads {threads} \
+        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}
         echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}
         echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}
         &#39;&#39;&#39;
@@ -1411,10 +1442,11 @@ total<span class="w">                             </span><span class="m">6</span
 <p><strong>Exercise:</strong> Write an <code>expand()</code> syntax to generate a list of outputs from <code>rule reads_quantification_genes</code> <strong>with all the RNAseq samples</strong>. What do you need to write this?</p>
 <details class="done">
 <summary>Answer</summary>
-<p>The output of <code>rule reads_quantification_genes</code> has the following syntax: <code>'results/{sample}/{sample}_genes_read_quantification.tsv'</code>. First, we need to create a Python list containing all the values that the <code>{sample}</code> wildcards can take:
-<code>SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']</code></p>
-<p>Then, we can transform the output syntax with <code>expand()</code>:
-<code>expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)</code></p>
+<p>The output of <code>rule reads_quantification_genes</code> has the following syntax: <code>'results/{sample}/{sample}_genes_read_quantification.tsv'</code>.</p>
+<p>First, we need to create a Python list containing all the values that the <code>{sample}</code> wildcards can take:</p>
+<p><code>SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']</code></p>
+<p>Then, we can transform the output syntax with <code>expand()</code>:</p>
+<p><code>expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)</code></p>
 </details>
 <p><strong>Exercise:</strong> Use these two elements (the list of samples and the <code>expand()</code> syntax) in the target rule to ask Snakemake to generate all the outputs.</p>
 <details class="done">
@@ -1485,15 +1517,17 @@ total<span class="w">                            </span><span class="m">26</span
 </details>
 <div class="admonition note">
 <p class="admonition-title">An even more Snakemake-idiomatic solution</p>
-<p>There is an even better and more Snakemake-idiomatic version of the <code>expand()</code> syntax: <code>expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])</code>. While it may not seem easy to use and understand, this entirely removes the need to write the output paths!</p>
+<p>There is an even better and more Snakemake-idiomatic version of the <code>expand()</code> syntax:</p>
+<p><code>expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])</code>.</p>
+<p>While it may not seem easy to use and understand, this entirely removes the need to write the output paths!</p>
 </div>
 <h3 id="running-the-other-samples-of-the-workflow">Running the other samples of the workflow</h3>
 <p><strong>Exercise:</strong> Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.</p>
 <details class="done">
 <summary>Answer</summary>
 <ul>
-<li>To touch the existing files, you can use: <code>snakemake --cores 1 --touch</code></li>
-<li>To run the workflow, you can use <code>snakemake --cores 4 -r -p</code></li>
+<li>Touch the existing files: <code>snakemake --cores 1 --touch</code></li>
+<li>Run the workflow <code>snakemake --cores 4 -r -p</code></li>
 </ul>
 </details>
 <p>Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!</p>
@@ -1505,13 +1539,12 @@ total<span class="w">                            </span><span class="m">26</span
 <li>Generate the filegraph: <code>snakemake --cores 1 -F -r -p --filegraph | dot -Tpng &gt; images/all_samples_filegraph.png</code></li>
 </ul>
 </details>
-<!-- AT. Check this on website -->
 <p>Your DAG should resemble this:</p>
 <figure align="center">
   <img src="../../assets/images/all_samples_dag.png" width="100%"/>
 </figure>
 
-<p>And your filegraph, this:</p>
+<p>And this should be your filegraph:</p>
 <figure align="center">
   <img src="../../assets/images/all_samples_filegraph.png" height=500/>
 </figure>
