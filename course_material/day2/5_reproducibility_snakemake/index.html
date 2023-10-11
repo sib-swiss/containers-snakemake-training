@@ -8,19 +8,19 @@
       
       
       
-      <link rel="icon" href="/assets/images/SIB_logo.svg">
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
     
     
       
-        <title>Introduction to Containers and Snakemake</title>
+        <title>Reproducibility with Snakemake - Introduction to Containers and Snakemake</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.cbb835fc.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
       
       
@@ -37,9 +37,9 @@
       
     
     
-      <link rel="stylesheet" href="/stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -63,6 +63,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -74,7 +79,7 @@
             <div class="md-banner__inner md-grid md-typeset">
               
   You're not viewing the latest version.
-  <a href="..//"> 
+  <a href="../../../.."> 
     <strong>Click here to go to latest.</strong>
   </a>
 
@@ -89,9 +94,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
       
-  <img src="/assets/images/SIB_logo.svg" alt="logo">
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -107,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Reproducibility with Snakemake
             
           </span>
         </div>
@@ -186,9 +191,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
       
-  <img src="/assets/images/SIB_logo.svg" alt="logo">
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
 
     </a>
     Introduction to Containers and Snakemake
@@ -216,7 +221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -231,7 +236,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/precourse/" class="md-nav__link">
+      <a href="../../../precourse/" class="md-nav__link">
         Precourse preparations
       </a>
     </li>
@@ -246,7 +251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_schedule/" class="md-nav__link">
+      <a href="../../../course_schedule/" class="md-nav__link">
         Course schedule
       </a>
     </li>
@@ -287,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day1/introduction_containers/" class="md-nav__link">
+      <a href="../../day1/introduction_containers/" class="md-nav__link">
         Introduction to containers
       </a>
     </li>
@@ -301,7 +306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day1/managing_docker/" class="md-nav__link">
+      <a href="../../day1/managing_docker/" class="md-nav__link">
         Managing containers and images
       </a>
     </li>
@@ -315,7 +320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day1/dockerfiles/" class="md-nav__link">
+      <a href="../../day1/dockerfiles/" class="md-nav__link">
         Working with dockerfiles
       </a>
     </li>
@@ -329,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day1/apptainer/" class="md-nav__link">
+      <a href="../../day1/apptainer/" class="md-nav__link">
         Running containers with apptainer
       </a>
     </li>
@@ -349,12 +354,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
       
       
       
@@ -377,7 +384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day2/1_guidelines/" class="md-nav__link">
+      <a href="../1_guidelines/" class="md-nav__link">
         General guidelines
       </a>
     </li>
@@ -391,7 +398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day2/2_introduction_snakemake/" class="md-nav__link">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
         Introduction to Snakemake
       </a>
     </li>
@@ -405,7 +412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day2/3_generalising_snakemake/" class="md-nav__link">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
         Making a more general-purpose Snakemake workflow
       </a>
     </li>
@@ -419,7 +426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/course_material/day2/4_decorating_workflow/" class="md-nav__link">
+      <a href="../4_decorating_workflow/" class="md-nav__link">
         Decorating and optimising a Snakemake workflow
       </a>
     </li>
@@ -431,11 +438,75 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/course_material/day2/5_reproducibility_snakemake/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Reproducibility with Snakemake
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Reproducibility with Snakemake
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-gather-read-count-files" class="md-nav__link">
+    Creating a rule to gather read count files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-detect-differentially-expressed-genes" class="md-nav__link">
+    Creating a rule to detect Differentially Expressed Genes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -465,6 +536,48 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    Learning outcomes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    Exercises
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-gather-read-count-files" class="md-nav__link">
+    Creating a rule to gather read count files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-detect-differentially-expressed-genes" class="md-nav__link">
+    Creating a rule to detect Differentially Expressed Genes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -475,8 +588,108 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  <a href="https://github.com/sib-swiss/containers-snakemake-training/edit/main/docs/course_material/day2/5_reproducibility_snakemake.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>Reproducibility with Snakemake</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Create and use an input function</li>
+<li>Deploy a conda environment and run scripts within it</li>
+<li>Deploy a Docker/Singularity container and run scripts within it</li>
+</ul>
+<h2 id="exercises">Exercises</h2>
+<p>In this series of exercises, we will create the last two rules of the workflow. Each rule will execute a script, one in Python and one in R, and both rules will have dedicated environment that you will need to take into account in the snakefiles.</p>
+<div class="admonition note">
+<p class="admonition-title">Development and back-up</p>
+<p>During this session, we will modify our snakefiles quite heavily, so it may be a good idea to start by making a back-up: <code>cp -r worklow/ worklow_backup</code>. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This is not a programming course, so you won&rsquo;t need to write the scripts: they were already prepared for you!</p>
+</div>
+<h3 id="creating-a-rule-to-gather-read-count-files">Creating a rule to gather read count files</h3>
+<h3 id="creating-a-rule-to-detect-differentially-expressed-genes">Creating a rule to detect Differentially Expressed Genes</h3>
+<!-- ### Optimising a workflow by multi-threading
+
+When working with real datasets, most processes are very long and computationally expensive. Fortunately, they can be parallelised very efficiently to decrease the computation time by using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) for a single job.
+
+**Exercise:** Parallelise as much processes as possible using the `threads` directive and test its effect:
+
+1. Identify which software can make use of parallelisation
+1. Identify in each software the parameter that controls multi-threading
+1. Implement the multi-threading
+
+!!! hint
+    * Check the software documentation and parameters with the `-h/--help` flags
+    * Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelize a software automatically
+    * Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads
+    * Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel!
+
+??? done "Answer"
+    It turns out that all the software except `samtools index` can handle multi-threading:
+
+    * `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` use the `--threads` option
+    * `featureCounts` uses the `-T` option
+
+    Let's use 4 threads for the mapping step and 2 for the other steps. Your Snakefile should look like this:
+    ```
+    rule fastq_trim:
+        '''
+        This rule trims paired-end reads to improve their quality. Specifically, it removes:
+        - Low quality bases
+        - A stretches longer than 20 bases
+        - N stretches
+        '''
+        input:
+            reads1 = 'data/{sample}_1.fastq',
+            reads2 = 'data/{sample}_2.fastq',
+        output:
+            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
+            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
+        log:
+            'logs/{sample}/{sample}_atropos_trimming.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
+        resources:
+            mem_mb = 500
+        threads: 2
+        shell:
+            '''
+            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
+            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
+            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
+            echo "Trimming report saved in <{log}>" >> {log}
+            '''
+
+!!! note "Explicit is better than implicit"
+    Even if a software cannot multi-thread, it is useful to add `threads: 1` in the rule to keep the rule consistency and clearly state that the software works with a single thread.
+
+
+Your DAG should resemble this:
+<figure align="center">
+  <img src="../../assets/images/all_samples_dag.png" width="100%"/>
+</figure>
+
+And your filegraph, this:
+
+<figure align="center">
+  <img src="../../assets/images/all_samples_filegraph.png" height=500/>
+</figure>
+ -->
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -486,6 +699,27 @@
       </main>
       
         <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../4_decorating_workflow/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Decorating and optimising a Snakemake workflow" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Decorating and optimising a Snakemake workflow
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -513,10 +747,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["announce.dismiss"], "search": "/assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.8492ddcf.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.8492ddcf.min.js"></script>
       
     
   </body>

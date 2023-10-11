@@ -632,7 +632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5_reproducibility_snakemake.md" class="md-nav__link">
+      <a href="../5_reproducibility_snakemake/" class="md-nav__link">
         Reproducibility with Snakemake
       </a>
     </li>
@@ -1060,8 +1060,8 @@ touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span cl
 <p><strong>Exercise:</strong> Implement a rule to map the trimmed reads on the <em>S. cerevisiae</em> assembly using <a href="https://www.nature.com/articles/s41587-019-0201-4">HISAT2</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">HISAT2 genome index</p>
-<p>To align reads on a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command <code>hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index</code>.
-<br><code>-p</code> is the number of threads to use, <code>-f</code> is the genomic sequence in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a> and <code>Scerevisiae_genome_index</code> is the global name shared by all the index files.</p>
+<p>To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command <code>hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index</code>.
+<br><code>-p</code> is the number of threads to use, <code>-f</code> is the genomic sequence in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a> and <code>Scerevisiae_index</code> is the global name shared by all the index files.</p>
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
@@ -1071,7 +1071,7 @@ touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span cl
 <li>If you are interested in what these options mean, see <a href="#hisat2-options">below</a> for an explanation</li>
 </ul>
 </li>
-<li>The path of the genome indices (<em>i.e.</em> input files, in binary format) is specified with the option <code>-x</code>. The files have a shared title of <code>resources/genome_indices/Scerevisiae_genome_index</code>, which is the value you need to use for <code>-x</code></li>
+<li>The path of the genome indices (<em>i.e.</em> input files, in binary format) is specified with the option <code>-x</code>. The files have a shared title of <code>resources/genome_indices/Scerevisiae_index</code>, which is the value you need to use for <code>-x</code></li>
 <li>The paths of the trimmed files (<em>i.e.</em> input files) are specified with the options <code>-1</code> (first read) and <code>-2</code> (second read)</li>
 <li>The path of the mapped reads file (<em>i.e.</em> output file, in SAM format) is specified with the option <code>-S</code> (do not forget the .sam extension to the filename)</li>
 <li>The path of the mapping report (<em>i.e.</em> output file, in text format) is specified with the option <code>--summary-file</code></li>
@@ -1102,7 +1102,7 @@ touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span cl
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        echo &quot;Mapping the reads&quot; &gt; {log}</span>
 <span class="sd">        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
-<span class="sd">        -x resources/genome_indices/Scerevisiae_genome_index \</span>
+<span class="sd">        -x resources/genome_indices/Scerevisiae_index \</span>
 <span class="sd">        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}</span>
 <span class="sd">        echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}</span>

@@ -559,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5_reproducibility_snakemake.md" class="md-nav__link">
+      <a href="../5_reproducibility_snakemake/" class="md-nav__link">
         Reproducibility with Snakemake
       </a>
     </li>
@@ -737,11 +737,11 @@
     <span class="n">output</span><span class="p">:</span>
         <span class="s1">&#39;results/first_step.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
 </code></pre></div>
 <details class="done">
 <summary>Answer</summary>
-<p>This rule uses the <code>echo</code> shell command to print the line &ldquo;snakemake&rdquo; in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder.</p>
+<p>This rule uses the <code>echo</code> shell command to print the line <code>Hello world!</code> in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder.</p>
 </details>
 <p>Rules are defined and written in a file called <strong>Snakefile</strong> (note the capital <code>S</code> and the absence of extension in the filename). This file should be located at the root of the workflow directory (here, <code>workflow/Snakefile</code>).</p>
 <p><strong>Exercise:</strong> Create a Snakefile and copy the previous rule in it. Because the Snakemake language is built on top of Python, spaces and indents are essential, so <em>do not forget to keep the indentation as is and use space characters in the indents instead of tabs.</em></p>
@@ -764,10 +764,12 @@
 <div class="highlight"><pre><span></span><code>Building DAG of jobs...
 Nothing to be done (all requested files are present and up to date).
 </code></pre></div>
-<p>By default, Snakemake only runs a job if:
-* A target file explicitly requested in the <code>snakemake</code> command is missing
-* An intermediate file is missing and is required produce a target file
-* It notices input files newer than output files, based on file modification dates. In this case, Snakemake will generate again the existing outputs.</p>
+<p>By default, Snakemake only runs a job if:</p>
+<ul>
+<li>A target file explicitly requested in the <code>snakemake</code> command is missing</li>
+<li>An intermediate file is missing and is required to produce a target file</li>
+<li>It detects when input files that have been modified more recently than output files, based on their modification dates. In this case, Snakemake will generate again the existing outputs.</li>
+</ul>
 <p>We can change this behaviour and force the re-run of a specific target by using the <code>-f</code> option: <code>snakemake --cores 1 -f results/first_step.txt</code> or force recreate ALL the outputs of the workflow using the <code>-F</code> option: <code>snakemake --cores 1 -F</code>. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see <a href="https://snakemake.readthedocs.io/en/stable/executing/cli.html">&ndash;rerun-triggers option</a> in Snakemake&rsquo;s CLI help and <a href="https://github.com/snakemake/snakemake/issues/1694">this git issue</a> for more information).</p>
 </details>
 <p>In the previous example, the values of the two rule directives are <strong>strings</strong>. For the <code>shell</code> directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:</p>
@@ -797,7 +799,7 @@ Nothing to be done (all requested files are present and up to date).
 <li>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code></li>
 <li>Visualise the content of the <code>results</code> folder: <code>ls -alh results/</code></li>
 <li>Check that the files are identical: <code>diff results/first_step.txt results/second_step.txt</code></li>
-<li>If the input file is missing, you can create it with <code>echo “snakemake” &gt; results/first_step.txt</code> and then execute the workflow. We will see later why this happened and how to avoid it!</li>
+<li>If the input file is missing, you can create it with <code>echo "Hello world!" &gt; results/first_step.txt</code> and then execute the workflow. We will see later why this happened and how to avoid it!</li>
 </ul>
 </details>
 <h3 id="creating-a-workflow-with-several-rules">Creating a workflow with several rules</h3>
@@ -830,7 +832,7 @@ Nothing to be done (all requested files are present and up to date).
     <span class="n">output</span><span class="p">:</span>
         <span class="s1">&#39;results/first_step.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
 
 <span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
     <span class="nb">input</span><span class="p">:</span>
@@ -860,7 +862,7 @@ Nothing to be done (all requested files are present and up to date).
     <span class="n">output</span><span class="p">:</span>
         <span class="s1">&#39;results/first_step.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo “snakemake” &gt; results/first_step.txt&#39;</span>
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
 
 <span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
     <span class="nb">input</span><span class="p">:</span>
