@@ -1466,9 +1466,9 @@ snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_
 </details>
 <p>You should obtain the 3 following figures:</p>
 <figure align="center">
-  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450"/>
-  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450"/>
-  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450"/>
+  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450" align="center"/>
+  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450" align="center"/>
+  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450" align="center"/>
   <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
 </figure>
 
@@ -1484,7 +1484,7 @@ snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_
 <ul>
 <li>Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!<ul>
 <li>Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first</li>
-<li>Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)  <!-- Double check sessio number --></li>
+<li>Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)</li>
 </ul>
 </li>
 <li>Make sure your input and output directives are right before worrying about anything else, especially the shell sections.<ul>
