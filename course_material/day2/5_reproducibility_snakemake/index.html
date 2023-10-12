@@ -868,18 +868,28 @@
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>While the goal of this rule is quite easy to grasp, setting it up requires using several advanced notions of Snakemake, so here is a little outline of the steps you should take:
-1. Build the basic structure of your rule: name, output, log, benchmark
-    * Memory should be set at 500 MB
-    * Threads should be set at 1
-    * Don&rsquo;t focus on the inputs for now
-1. Think about the directive you want to use to run the script
-    * Looking at the script length with <code>wc -l &lt;path/to/script&gt;</code> could help you decide
-1. Think about the location/path of the script
-1. Check the beginning of the script to see if you need any special Python packages. You can do that with <code>head &lt;path/to/script&gt;</code>. If you see lines containing <code>import &lt;package_name&gt;</code>, it means that the script is using external Python packages
-    * If the script is using external packages, think on how can you provide them
-1. Finally, identify the inputs your rule needs
-    * Think on how you can easily list and provide the inputs. Does it remind you of something you saw in the course?</p>
+<p>While the goal of this rule is quite easy to grasp, setting it up requires using several advanced notions of Snakemake, so here is a little outline of the steps you should take:</p>
+<ol>
+<li>Build the basic structure of your rule: name, output, log, benchmark<ul>
+<li>Memory should be set at 500 MB</li>
+<li>Threads should be set at 1</li>
+<li>Don&rsquo;t focus on the inputs for now</li>
+</ul>
+</li>
+<li>Think about the directive you want to use to run the script<ul>
+<li>Looking at the script length with <code>wc -l &lt;path/to/script&gt;</code> could help you decide</li>
+</ul>
+</li>
+<li>Think about the location/path of the script</li>
+<li>Check the beginning of the script to see if you need any special Python packages. You can do that with <code>head &lt;path/to/script&gt;</code>. If you see lines containing <code>import &lt;package_name&gt;</code>, it means that the script is using external Python packages<ul>
+<li>If the script is using external packages, think on how can you provide them</li>
+</ul>
+</li>
+<li>Finally, identify the inputs your rule needs<ul>
+<li>Think on how you can easily list and provide the inputs. Does it remind you of something you saw in the course?</li>
+</ul>
+</li>
+</ol>
 </div>
 <p>Now, let&rsquo;s solve these problems one by one!</p>
 <h4 id="building-the-rule-structure">Building the rule structure</h4>
@@ -1074,14 +1084,20 @@ mv<span class="w"> </span>count_table.py<span class="w"> </span>workflow/scripts
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>While not being trivial, this rule is much easier than the previous one and some things work similarly. Still, here is a little outline of the steps you should take:
-1. Build the basic structure of your rule: name, input, outputs, log, benchmark
-    * Memory should be set at 1 GB
-    * Threads should be set at 2
-1. Think about the directive you want to use to run the script
-    * Remember than there is only one way to run an R script
-1. Think about the location/path of the script
-1. This script is using a lot of external packages. Fortunately, all these packages are available in a <em>certain Docker image you worked with yesterday</em></p>
+<p>While not being trivial, this rule is much easier than the previous one and some things work similarly. Still, here is a little outline of the steps you should take:</p>
+<ol>
+<li>Build the basic structure of your rule: name, input, outputs, log, benchmark<ul>
+<li>Memory should be set at 1 GB</li>
+<li>Threads should be set at 2</li>
+</ul>
+</li>
+<li>Think about the directive you want to use to run the script<ul>
+<li>Remember than there is only one way to run an R script</li>
+</ul>
+</li>
+<li>Think about the location/path of the script</li>
+<li>This script is using a lot of external packages. Fortunately, all these packages are available in a <em>certain Docker image you worked with yesterday</em></li>
+</ol>
 </div>
 <p>Now, let&rsquo;s write this last rule!</p>
 <h4 id="building-the-rule-structure_1">Building the rule structure</h4>
@@ -1135,12 +1151,12 @@ mv<span class="w"> </span>DESeq2.R<span class="w"> </span>workflow/scripts<span 
 </div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Inside the script, an S4 object named <code>snakemake</code> analogous to the Python case available and allows access to input and output files and other parameters. Here the syntax follows that of S4 classes with attributes that are R lists, <em>e.g.</em> you can access the first input file with snakemake@input[[1]] (note that the first file does not have index 0 here, because R starts counting from 1). Named input and output files can be accessed in the same way, by just providing the name instead of an index, <em>e.g.</em> snakemake@input[[&ldquo;myfile&rdquo;]].</p>
+<p>Inside the script, an S4 object named <code>snakemake</code> analogous to the Python case available and allows access to input and output files and other parameters. Here the syntax follows that of S4 classes with attributes that are R lists, <em>e.g.</em> you can access the first input file with <code>snakemake@input[[1]]</code> (note that the first file does not have index 0 here, because R starts counting from 1). Named input and output files can be accessed in the same way, by just providing the name instead of an index, <em>e.g.</em> <code>snakemake@input[["myfile"]]</code>.</p>
 </div>
 <p><strong>Exercise:</strong> Find an efficient way to create a computing environment for the rule.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Remember what you did during 1, session 3 &ldquo;Working with Dockerfiles&rdquo;!</p>
+<p>Remember what you did during Day 1, session 3 &ldquo;Working with Dockerfiles&rdquo;!</p>
 </div>
 <details class="done">
 <summary>Answer</summary>
@@ -1150,8 +1166,8 @@ mv<span class="w"> </span>DESeq2.R<span class="w"> </span>workflow/scripts<span 
 </code></pre></div></p>
 </details>
 <div class="admonition note">
-<p class="admonition-title">yourownimage/deseq2:v1</p>
-<p>First try with your own image. If it doesn&rsquo;t work, then you can use Geert&rsquo;s image: geertvangeest/deseq2:v1.</p>
+<p class="admonition-title">Your own Docker image</p>
+<p>First try with your own image. If it doesn&rsquo;t work, then you can use Geert&rsquo;s image: <code>geertvangeest/deseq2:v1</code>.</p>
 </div>
 <p>After all these modifcations, this is what your final rule should look like:</p>
 <details class="done">
@@ -1226,7 +1242,14 @@ INFO:    Cleaning up image...
 <p><strong>Exercise:</strong> How many DEG were detected?</p>
 <details class="done">
 <summary>Answer</summary>
-<p>Have a look at the list that just created: <code>cat results/deg_list.tsv</code>. 8 genes are differentially expressed!</p>
+<p>Have a look at the list that was just created: <code>cat results/deg_list.tsv</code>. 8 genes are differentially expressed!</p>
+</details>
+<p><strong>Exercise:</strong> If you had to re-run the entire workflow from scratch, what command would you use?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>You would need to execute <code>snakemake --cores 4 -r -p --use-conda --use-singularity -F</code>.
+* <code>-F</code> is to force the execution of the entire workflow
+* Don&rsquo;t forget <code>--use-conda --use-singularity</code>! Otherwise, you will lack some software and packages and the workflow will crash!</p>
 </details>
 <p><strong>Exercise:</strong> Visualise the DAG of the entire workflow.</p>
 <details class="done">
@@ -1235,10 +1258,10 @@ INFO:    Cleaning up image...
 </details>
 <p>This is the DAG you should see:</p>
 <figure align="center">
-  <img src="../../assets/images/total_dag.png" width="100%"/>
+  <img src="../../../assets/images/total_dag.png" width="100%"/>
 </figure>
 
-<p>Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda and Docker/Singularity! To make things even better, have a look at <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html">Snakemake&rsquo;s best practices</a>!</p>
+<p>Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html">Snakemake&rsquo;s best practices</a>!</p>
 
 
 
