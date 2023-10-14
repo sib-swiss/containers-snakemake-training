@@ -1410,7 +1410,7 @@ touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span cl
 <details class="done">
 <summary>Answer</summary>
 <p>Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules:</p>
-<p><code>snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code>.</p>
+<p><code>snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code></p>
 <p>You can add the <code>-F</code> flag to force an entire re-run. The entire run should take about ~10 min to complete.</p>
 </details>
 <p><strong>Exercise:</strong> Check Snakemake&rsquo;s log in <code>.snakemake/log/</code>. Is everything as you expected, especially the wildcard values, input and output names etc&hellip;?</p>

@@ -910,7 +910,7 @@ Nothing to be done (all requested files are present and up to date).
     <span class="n">shell</span><span class="p">:</span>
         <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
 </code></pre></div>
-<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>results/first_step.tsv</code> does not exist!</p>
+<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>results/first_step.txt</code> does not exist!</p>
 <p><strong>Exercise:</strong> Modify your first rule to add an <code>input</code> directive and execute the workflow. Check that the output was created and that the files are identical. If you get a <code>Missing input files for rule &lt;rule_name&gt;</code> error, that means that the input file is missing and cannot be created. How can you solve this problem?</p>
 <details class="done">
 <summary>Answer</summary>

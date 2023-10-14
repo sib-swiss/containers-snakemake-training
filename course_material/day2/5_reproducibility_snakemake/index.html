@@ -1059,7 +1059,7 @@ mv<span class="w"> </span>count_table.py<span class="w"> </span>workflow/scripts
     <span class="nb">input</span><span class="p">:</span>
         <span class="s1">&#39;results/total_count_table.tsv&#39;</span>
 </code></pre></div>
-<p>Finally, run the workflow with <code>snakemake --cores 1 -r -p --use-conda</code></p>
+<p>Finally, run the workflow with <code>snakemake --cores 4 -r -p --use-conda</code></p>
 </details>
 <div class="admonition note">
 <p class="admonition-title">&ndash;use-conda</p>
@@ -1221,7 +1221,7 @@ mv<span class="w"> </span>DESeq2.R<span class="w"> </span>workflow/scripts<span 
     <span class="nb">input</span><span class="p">:</span>
         <span class="s1">&#39;results/deg_list.tsv&#39;</span>
 </code></pre></div>
-<p>Finally, run the workflow with <code>snakemake --cores 1 -r -p --use-singularity</code>. You should see new Snakemake information messages:
+<p>Finally, run the workflow with <code>snakemake --cores 4 -r -p --use-singularity</code>. You should see new Snakemake information messages:
 <div class="highlight"><pre><span></span><code>Rscript --vanilla /path/to/snakemake_rnaseq/.snakemake/scripts/tmpge97d_lz.DESeq2.R
 Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
 INFO:    squashfuse not found, will not be able to mount SIF
