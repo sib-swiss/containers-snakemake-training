@@ -1026,9 +1026,20 @@ uid=0(root) gid=0(root) groups=0(root)
 </code></pre></div>
 </details>
 <h3 id="a-bioinformatics-example-extra">A bioinformatics example (extra)</h3>
-<p>All bioconda packages also have a pre-built container. Have a look at the <a href="https://bioconda.github.io/index.html">bioconda website</a>, and search for <code>fastqc</code>. In the search results, click on the appropriate record (i.e. package &lsquo;fastqc&rsquo;). Now, scroll down and find the namespace and tag for the latest fastqc image. Now we can pull it with apptainer like this:</p>
-<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://quay.io/biocontainers/fastqc:0.11.9--hdfd78af_1
+<p>All bioconda packages also have a pre-built container. Have a look at the <a href="https://bioconda.github.io/index.html">bioconda website</a>, and search for <code>fastqc</code>. In the search results, click on the appropriate record (i.e. package &lsquo;fastqc&rsquo;). Now, scroll down and find the namespace for the latest fastqc image. </p>
+<p><strong>Exercise:</strong> Check out the container image at quay.io, by following <a href="https://quay.io/biocontainers/fastqc">quay.io/biocontainers/fastqc</a>. Choose a tag, and pull it with <code>apptainer pull</code>.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>It&rsquo;s up to you which tag you choose. The tag with the latest version is <code>0.12.1--hdfd78af_0</code>.</p>
+<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0
 </code></pre></div>
+</details>
+<div class="admonition tip">
+<p class="admonition-title">Apptainer images at galaxy.org</p>
+<p>Most (if not all) biocontainer images are available as apptainer (singularity) image at <a href="https://depot.galaxyproject.org/singularity/">https://depot.galaxyproject.org/singularity/</a>. You can simply download them with <code>wget</code> or <code>curl</code>, e.g.:</p>
+<div class="highlight"><pre><span></span><code>wget<span class="w"> </span>https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0
+</code></pre></div>
+</div>
 <p>Let&rsquo;s test the image. Download some sample reads first:</p>
 <div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>reads
 <span class="nb">cd</span><span class="w"> </span>reads
@@ -1038,7 +1049,7 @@ rm<span class="w"> </span>ecoli_reads.tar.gz
 </code></pre></div>
 <p>Now you can simply run the image as an executable preceding the commands you would like to run within the container. E.g. running <code>fastqc</code> would look like:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span>
-./fastqc_0.11.9--hdfd78af_1.sif<span class="w"> </span>fastqc<span class="w"> </span>./reads/ecoli_*.fastq.gz
+./fastqc_0.12.1--hdfd78af_0.sif<span class="w"> </span>fastqc<span class="w"> </span>./reads/ecoli_*.fastq.gz
 </code></pre></div>
 <p>This will result in <code>html</code> files in the directory <code>./reads</code>. These are quality reports for the sequence reads. If you&rsquo;d like to view them, you can download them with <code>scp</code> or e.g. <a href="https://filezilla-project.org/">FileZilla</a>, and view them with your local browser.</p>
 
