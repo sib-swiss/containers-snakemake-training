@@ -4,7 +4,6 @@
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
-- Damir Zhakparov
 
 ## Authors
 
@@ -54,7 +53,7 @@ A main source of communication will be our [slack channel](https://www.slack.com
   <img src="assets/images/reply_in_thread.png" width="350"/>
 </figure>
 
-The teachers will review the answers, and add/modify if necessary. If you're really stuck and need specific tutor support, write the teachers or helpers personally.
+The teachers will review the answers, and add/modify if necessary. If you are really stuck and need specific tutor support, write the teachers or helpers personally.
 
 **To summarise:**
 

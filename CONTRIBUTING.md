@@ -1,6 +1,6 @@
 # Contributing
 
-First of all, great that you're considering to contribute. Anything that you can contribute is highly appreciated! :thumbsup::tada:
+First of all, great that you are considering to contribute. Anything that you can contribute is highly appreciated! :thumbsup::tada:
 
 This documented is inspired by the [carpentries contributing file](https://github.com/carpentries/lesson-example/blob/main/CONTRIBUTING.md). 
 
