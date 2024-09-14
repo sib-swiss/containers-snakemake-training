@@ -25,13 +25,13 @@ When working with real datasets, most processes are very long and computationall
 1. Identify in each software the parameter that controls multi-threading
 1. Implement the multi-threading
 
-!!! hint
+??? tip
     * Check the software documentation and parameters with the `-h/--help` flags
     * Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelise a software automatically
     * Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads
     * Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel!
 
-??? done "Answer"
+??? success "Answer"
     It turns out that all the software except `samtools index` can handle multi-threading:
 
     * `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` use the `--threads` option
@@ -156,7 +156,7 @@ When working with real datasets, most processes are very long and computationall
 
 **Exercise:** Finally, test the effect of the number of threads on the workflow's runtime. What command will you use to run the workflow? Does the workflow run faster?
 
-??? done "Answer"
+??? success "Answer"
     The command to use is:
 
     `snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
@@ -204,10 +204,10 @@ rule example:
 
 **Exercise:** Replace the two hard-coded paths mentioned earlier by `params`.
 
-!!! hint
+??? tip
     Add a `params` directive to the rules, name the parameter and replace the path by the placeholder in the shell command.
 
-??? done "Answer"
+??? success "Answer"
     Note: for clarity, only the lines that changed are shown below.
 
     * `rule read_mapping`
@@ -271,7 +271,7 @@ config['resources']['threads']  # --> 4
 
 **Exercise:** Create a config file in YAML format and fill it with adapted variables and values to replace the 2 hard-coded parameters in rules `read_mapping` and `reads_quantification_genes`. Then replace the hard-coded parameters by values from the config file and add its path on top of your Snakefile.
 
-??? done "Answer"
+??? success "Answer"
     Note: for clarity, only the lines that changed are shown below. The first step is to create the subfolder and an empty config file:
 
     ```sh
@@ -330,12 +330,12 @@ The next paragraphs will show how to use some of these properties.
 
 **Exercise:** Can you think of a convenient use of `temp()` command?
 
-??? done "Answer"
+??? success "Answer"
     The `temp()` command is extremely useful to automatically remove intermediary outputs that are no longer needed.
 
 **Exercise:** In your workflow, identify outputs that are intermediary and mark them as temporary with `temp()`.
 
-??? done "Answer"
+??? success "Answer"
     The unsorted .bam and the .sam outputs seem like great candidates to be marked as temporary. One could also argue that the trimmed FASTQ files are also temporary, but we will keep them for now. Note: for clarity, only the lines that changed are shown below.
 
     * `rule read_mapping`
@@ -357,7 +357,7 @@ The next paragraphs will show how to use some of these properties.
 
 **Exercise:** On the contrary, is there a file of your workflow that you would like to protect with `protected()`
 
-??? done "Answer"
+??? success "Answer"
     This is debatable, but one could argue that the sorted .bam file is a good candidate for protection.
 
     * `rule sam_to_bam`
@@ -418,7 +418,7 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
 
     **Exercise:** Implement a single rule to run FastQC on both the original and the trimmed FASTQ files (4 files in total) using directories as ouputs with the `directory()` command.
 
-    ??? done "Answer"
+    ??? success "Answer"
         This makes the rule definition quite 'simple':
 
         ```python
@@ -469,7 +469,7 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
 
     **Exercise:** Implement a single rule to run FastQC on both the original and the trimmed FASTQ files (4 files in total) and rename the files created by FastQC to precise output names using the `mv` command.
 
-    ??? done "Answer"
+    ??? success "Answer"
         This makes the rule definition (much) more complicated than the other solution:
 
         ```python
@@ -545,7 +545,7 @@ Several interesting things are happening in both versions of this rule:
 !!! note "Directory creation"
     Remember that in most cases it is not necessary to manually create directories because Snakemake will do it for you. Even when using a `directory(`) output, Snakemake will not create the directory itself but most applications will make the directory for you; FastQC is an exception.
 
-!!! hint
+??? tip
     If you want to make sure that a certain rule is executed before another, you can write the outputs of the first rule as inputs of the second one, even if you don't use them in the rule. For example, we could force the execution of FastQC before mapping the reads with only a few modifications to `rule read_mapping`:
 
     ```
@@ -596,7 +596,7 @@ In this course, we will only use the 2<sup>nd</sup> level of modularisation. In 
 
 **Exercise:** Move your current Snakefile into the subfolder `workflow/rules` and rename it to `read_mapping.smk`. Then create a new Snakefile in `workflow/` and import `read_mapping.smk` in it using the `include` syntax. You should also move the importation of the config file from the modular Snakefile to the main one.
 
-??? done "Answer"
+??? success "Answer"
     We will solve this problem step by step. First, create the new file structure:
 
     ```sh
@@ -646,11 +646,11 @@ rule all:
 
 **Exercise:** Implement a special rule in the Snakefile so that the final output is generated by default when running `snakemake` without specifying a target, then test your workflow with a dry-run.
 
-!!! hint
+??? tip
     * Remember that a rule is not required to have an output nor a shell command
     * The inputs of `rule all` should be the final outputs that you want to generate (those from the last rule you wrote)
 
-??? done "Answer"
+??? success "Answer"
     If we consider that the last outputs are the ones produced by `rule reads_quantification_genes`, we can write the target rule like this:
 
     ```python
@@ -693,7 +693,7 @@ Using a target rule like the one presented in the previous paragraph gives anoth
 
 **Exercise:** Write an `expand()` syntax to generate a list of outputs from `rule reads_quantification_genes` **with all the RNAseq samples**. What do you need to write this?
 
-??? done "Answer"
+??? success "Answer"
     The output of `rule reads_quantification_genes` has the following syntax: `'results/{sample}/{sample}_genes_read_quantification.tsv'`.
 
     First, we need to create a Python list containing all the values that the `{sample}` wildcards can take:
@@ -706,7 +706,7 @@ Using a target rule like the one presented in the previous paragraph gives anoth
 
 **Exercise:** Use these two elements (the list of samples and the `expand()` syntax) in the target rule to ask Snakemake to generate all the outputs.
 
-??? done "Answer"
+??? success "Answer"
     You need to add the sample list to the Snakefile before the `rule all` and replace the value of the `input` directive:
 
     ```python
@@ -747,7 +747,7 @@ But we can do even better! At the moment, samples are defined in a list at the t
 
 **Exercise:** Implement a parameter in the config file to specify sample names and modify `rule all` to use this parameter in the `expand()` syntax.
 
-??? done "Answer"
+??? success "Answer"
     First, we need to modify the config file:
 
     ```yaml
@@ -794,7 +794,7 @@ But we can do even better! At the moment, samples are defined in a list at the t
 
 **Exercise:** Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.
 
-??? done "Answer"
+??? success "Answer"
     * Touch the existing files: `snakemake --cores 1 --touch`
     * Run the workflow `snakemake --cores 4 -r -p`
 
@@ -802,7 +802,7 @@ Thanks to the parallelisation, the workflow execution should take less than 10 m
 
 **Exercise:** Generate the workflow DAG and filegraph.
 
-??? done "Answer"
+??? success "Answer"
     * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
     * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
 

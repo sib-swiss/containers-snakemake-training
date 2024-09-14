@@ -140,7 +140,7 @@ Usually, the first step in dealing with sequencing data is to improve the reads 
 
 **Exercise:** Implement a rule to trim the reads contained in .fastq files using [atropos](https://peerj.com/articles/3720/).
 
-!!! hint
+??? tip
     * You can find information on how to use atropos and its parameters with `atropos trim -h`
     * The files to trim are located in `data/`
     * The base of the trimming command is `atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}"`
@@ -151,7 +151,7 @@ Usually, the first step in dealing with sequencing data is to improve the reads 
 
 Please give it a try before looking at the answer!
 
-??? done "Answer"
+??? success "Answer"
     This is one way of writing this rule, but definitely not the only way! This is true for all the rules presented here.
 
     ```python
@@ -199,7 +199,7 @@ Please give it a try before looking at the answer!
 
 **Exercise:** If you had to run the workflow by specifying only one output, what command would you use?
 
-??? done "Answer"
+??? success "Answer"
     `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq`
 
     If you run it now, don't forget to have a look at the log and benchmark files!
@@ -225,7 +225,7 @@ Once we have trimmed reads, the next step is to map those reads onto a reference
     To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
     <br>`-p` is the number of threads to use, `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format) and `Scerevisiae_index` is the global name shared by all the index files.
 
-!!! hint
+??? tip
     * You can find information on how to use HISAT2 and its parameters with `hisat2 -h`
     * The base of the mapping command is `hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal`
         * If you are interested in what these options mean, see [below](#hisat2-options) for an explanation
@@ -238,7 +238,7 @@ Once we have trimmed reads, the next step is to map those reads onto a reference
 
 Please give it a try before looking at the answer!
 
-??? done "Answer"
+??? success "Answer"
     ```python
     rule read_mapping:
         '''
@@ -269,7 +269,7 @@ Please give it a try before looking at the answer!
 
 **Exercise:** If you had to run the workflow by specifying only one output, what command would you use?
 
-??? done "Answer"
+??? success "Answer"
     `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam`
 
     If you run it now, don't forget to have a look at the log and benchmark files!
@@ -297,7 +297,7 @@ HISAT2 only outputs mapped reads in the [SAM format](https://en.wikipedia.org/wi
 1. Sort the BAM files using Samtools
 1. Index the sorted BAM files using Samtools
 
-!!! hint
+??? tip
     * You can find information on how to use Samtools and its parameters with `samtools --help`
     * You need to write 3 commands that will be executed sequentially: the output of command 1 will be the input of command 2 etc...
         * No panic! These commands are pretty simple and do not use many options!
@@ -310,7 +310,7 @@ HISAT2 only outputs mapped reads in the [SAM format](https://en.wikipedia.org/wi
 
 Please give it a try before looking at the answer!
 
-??? done "Answer"
+??? success "Answer"
     ```python
     rule sam_to_bam:
         '''
@@ -342,7 +342,7 @@ Please give it a try before looking at the answer!
 
 **Exercise:** If you had to run the workflow by specifying only one output, what command would you use?
 
-??? done "Answer"
+??? success "Answer"
     `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam`
 
     If you run it now, don't forget to have a look at the log and benchmark files!
@@ -370,7 +370,7 @@ Most of the analyses happening downstream the alignment step, including Differen
 
 **Exercise:** Implement a rule to count the reads mapping on each gene of the _S. cerevisiae_ genome using [featureCounts](https://academic.oup.com/bioinformatics/article/30/7/923/232889).
 
-!!! hint
+??? tip
     * You can find information on how to use featureCounts and its parameters with `featureCounts -h`
     * The base of the mapping command is `featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF`
         * If you are interested in what these options mean, see [below](#featurecounts-options) for an explanation
@@ -383,7 +383,7 @@ Most of the analyses happening downstream the alignment step, including Differen
 
 Please give it a try before looking at the answer!
 
-??? done "Answer"
+??? success "Answer"
     ```python
     rule reads_quantification_genes:
         '''
@@ -431,7 +431,7 @@ Please give it a try before looking at the answer!
 
 **Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it?
 
-??? done "Answer"
+??? success "Answer"
     Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules:
 
     `snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
@@ -440,7 +440,7 @@ Please give it a try before looking at the answer!
 
 **Exercise:** Check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially the wildcard values, input and output names etc...?
 
-??? done "Answer"
+??? success "Answer"
     `cat .snakemake/log/<latest_log>`
 
 ### Visualising the DAG of the workflow
@@ -449,12 +449,12 @@ We have now implemented and run the main steps of our workflow. It is always a g
 
 **Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using the `--dag` flag. Do you need to specify a target?
 
-!!! hint
+??? tip
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
     * Snakemake prints a DAG in text format, so we need to use the `dot` command to transform it into a picture
     * Save the result as a PNG picture
 
-??? done "Answer"
+??? success "Answer"
     If we run the command without target: `snakemake --cores 1 --dag -F | dot -Tpng > images/dag.png`, we will get a `Target rules may not contain wildcards.` error, which means we need to add a target. Same as before, it makes sense to use one of the final outputs to get the entire workflow: `snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png`.
 
     But once again, we will get an error: `BrokenPipeError: [Errno 32] Broken pipe`. This is because we are piping the command output to a folder (`images/`) that does not exist yet The folder is not created by Snakemake because it isn't handled as part of an actual run. So we have to create the folder before generating the DAG:
@@ -484,7 +484,7 @@ There are actually 3 types of DAG:
 
 **Exercise:** Generate the filegraph and rulegraph of your workflow. Feel free to try different pictures format. What are the differences between the plots?
 
-??? done "Answer"
+??? success "Answer"
     * Generate the rulegraph: `snakemake --cores 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf > images/rulegraph.pdf`
     * Generate the filegraph: `snakemake --cores 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg > images/filegraph.jpg`
 
