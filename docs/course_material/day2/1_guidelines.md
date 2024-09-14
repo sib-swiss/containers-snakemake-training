@@ -10,7 +10,21 @@ All the software needed in this workflow is either:
 * Already installed in a Docker container
 * Will be installed via a conda environment during today's exercises
 
-All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.19.3/) for Snakemake version `8.19.3`.
+All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/) for Snakemake version `8.20.3`.
+
+## Website colour code explanation
+
+We tried to use a colour code throughout the website to make the different pieces of information easily distinguishable. Here's a quick summary about the colour blocks you will encounter:
+
+!!! info "This is a supplementary piece of information"
+
+!!! tip "This is a tip to help you solve an exercise"
+
+!!! success "This is the answer to an exercise"
+
+!!! warning "This is a warning about a potential problem"
+
+!!! bug "This is an explanation about a common bug/error"
 
 ## Exercises
 
