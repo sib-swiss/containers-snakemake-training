@@ -30,15 +30,23 @@ We tried to use a colour code throughout the website to make the different piece
 
 Each series of exercises is divided into multiple questions. Each question provides a background explanation, a description of the task at hand and additional details when required.
 
-!!! note "Hints for challenging questions"
-    For the most challenging questions, we also provide hints, but you should first try to solve the problems without using those!
+!!! tip "Hints for challenging questions"
+    For the most challenging questions, hints will be provided. However, you should first try to solve the problems without the tips!
 
 ## Answers
 
 Do not hesitate to modify and overwrite your code from previous answers as the difficulty is incremental. The questions are designed to incite you to build your answers upon the previous ones.
 
-!!! note "Restarting from a clean Snakefile"
+!!! info "Restarting from a clean Snakefile"
     * If you feel that you drifted too far apart from the solution, you can always restart from the files provided in the [solutions folder](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/) of the course repository.
     * At the start of session 2, 3 and 4, you will also find a short note showing the command to download the Snakefile that should have been written at the end of the previous session.
 
 If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/index.html) for more information.
+
+## Computing environment
+
+!!! warning "Development and computation"
+    You can develop and write your scripts in a distant folder (using an `ssh` connection via VS code) or locally (if you do so, you will need to copy them on the server (with `scp`) before running them), but **remember that all the computations should be performed on the server, so don't forget to log in with `ssh -i key_username.pem username@18.195.170.182`**
+
+!!! bug "`Error: Command not found`"
+    If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably not in the right conda environment. To list them, use `conda env list`. Then activate the right environment with `conda activate <env_name>`. You can deactivate an environment with `conda deactivate`. To list the packages installed in an environment, activate it and use `conda list`. **The computing environment on the server is called `snake_course`.**
