@@ -149,26 +149,36 @@ At the end of this series of exercises, your workflow DAG should look like this:
 
 ### Creating a rule to trim reads
 
-Usually, the first step in dealing with sequencing data is to improve the reads quality by removing low quality bases, stretches of As and Ns and reads that are too short.
+Usually, the first step when dealing with sequencing data is to improve read quality by removing low quality bases, stretches of As and Ns and reads that are too short.
 
-!!! note "Adapters trimming"
-    In theory, trimming also removes sequencing adapters, but we will not do it here to keep computation time low and avoid having to parse other files to extract the adapter sequences.
+??? info "Trimming sequencing adapters"
+    In theory, trimming should also remove sequencing adapters, but we will not do it here to keep computation time low and avoid parsing other files to extract the adapter sequences.
 
-**Exercise:** Implement a rule to trim the reads contained in .fastq files using [atropos](https://peerj.com/articles/3720/).
+Here, we will use [atropos](https://peerj.com/articles/3720/) to trim the reads. The base of the command is:
+```
+atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}"
+```
 
-??? tip
-    * You can find information on how to use atropos and its parameters with `atropos trim -h`
-    * The files to trim are located in `data/`
-    * The base of the trimming command is `atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}"`
-        * If you are interested in what these options mean, see [below](#atropos-options) for an explanation
+??? info "Explanation of atropos options (read when you have time!)"
+    * `-q 20,20`: trim low-quality bases from 5', 3' ends of each read before adapter removal
+    * `--minimum-length 25`: discard trimmed reads that are shorter than 25 bp
+    * `--trim-n`: trim N's on ends of reads
+    * `--preserve-order`: preserve order of reads in input files
+    * `--max-n 10`: discard reads with more than 10 N
+    * `--no-cache-adapters`: do not cache adapters list as '.adapters' in the working directory
+    * `-a "A{{20}}" -A "A{{20}}"`: remove series of 20 As in the adapter sequence (`-a` for the first read of the pair, `-A` for the second one)
+        * The usual command-line syntax is `-a "A{20}"`. Here, brackets were doubled to prevent Snakemake from interpreting `{20}` as a wildcard
+
+**Exercise:** Complete the atropos command given above with options to specify inputs and outputs. You can find information on how to use `atropos` and its parameters with `atropos trim -h`. Then, implement a rule containing your command to trim the reads contained in .fastq files.
+
+??? tip "atropos inputs and outputs"
+    * The fastq files to trim are located in `data/`
     * The paths of the files to trim (_i.e._ input files, in FASTQ format) are specified with the options `-pe1` (first read) and `-pe2` (second read)
     * The paths of the trimmed files (_i.e._ output files, also in FASTQ format) are specified with the options `-o` (first read) and `-p` (second read)
-    * atropos outputs some information as well as its trimming report in the terminal (stdout to be exact); do not forget to redirect these information to the log file with `>> {log}`
-
-Please give it a try before looking at the answer!
+    * atropos outputs some information as well as its trimming report in the terminal (`stdout` to be exact); do not forget to redirect these information to the log file with `>> {log}`
 
 ??? success "Answer"
-    This is one way of writing this rule, but definitely not the only way! This is true for all the rules presented here.
+    This is one way of writing this rule, but definitely not the only way! This is true for all the rules presented in these exercises.
 
     ```python linenums="1"
     rule fastq_trim:
@@ -188,48 +198,31 @@ Please give it a try before looking at the answer!
             'logs/{sample}/{sample}_atropos_trimming.log'
         benchmark:
             'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-        resources:
-            mem_mb = 500
         shell:
             '''
             echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
             atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
             --no-cache-adapters -a "A{{20}}" -A "A{{20}}" \
             -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
-            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
+            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> " >> {log}
             echo "Trimming report saved in <{log}>" >> {log}
             '''
     ```
 
-    Note the three things that are happening here:
+    There are three interesting things happening here:
 
-    1. We used the `{sample}` wildcards twice in the output paths. This is because we prefer to have all the files linked to a sample in the same directory
-    1. We added a memory limit for this job: 500 MB. Because we have limited resources in this server compared to a High Performance Computing cluster (HPC), this will help Snakemake to better allocate resources and parallelise jobs. You can determine the maximum amount of memory used by a rule thanks to the max_rss column in a benchmark result (results are shown in MB). More information [here](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules)
-    1. We used a backslash `\` to split a very long line in smaller lines. This is purely 'cosmetic', to avoid very long lines that are painful to read, copy...
-
-!!! warning "Paths in Snakemake"
-    All the paths in the Snakefile are relative to the working directory in which the `snakemake` command is executed.
-
-    * If you execute Snakemake in `snakemake_rnaseq/`, the relative path to the input files in the rule is `data/<sample>.fastq`
-    * If you execute Snakemake in `snakemake_rnaseq/workflow/`, the relative path to the input files in the rule is `../data/<sample>.fastq`
+    1. We added a comment between double quotes under the rule name. In Python, it is called a docstring. While it is not mandatory, it is good practice (and very recommended) to write docstrings to explain what a rule does, what are its inputs, outputs, parameters...
+    1. We used the `{sample}` wildcards twice in the output paths (L12-13). This is because we prefer to have all the files linked to a sample in the same directory
+    1. We used a backslash `\` to split a very long line in smaller lines (L21-23). This is purely 'cosmetic' and avoids very long lines that are painful to read, copy...
 
 **Exercise:** If you had to run the workflow by specifying only one output, what command would you use?
 
 ??? success "Answer"
-    `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq`
+    You would use the command `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq`
 
-    If you run it now, don't forget to have a look at the log and benchmark files!
+### Creating a rule to map trimmed reads onto a reference genome
 
-#### atropos options
-
-* `-q 20,20`: trim low-quality bases from 5', 3' ends of each read before adapter removal
-* `--minimum-length 25`: discard trimmed reads that are shorter than 25 bp
-* `--trim-n`: trim N's on ends of reads
-* `--preserve-order`: preserve order of reads in input files
-* `--max-n 10`: discard reads with more than 10 N
-* `--no-cache-adapters`: do not cache adapters list as '.adapters' in the working directory
-* `-a "A{{20}}" -A "A{{20}}"`: remove series of 20 As in the adapter sequence (`-a` for the first read of the pair, `-A` for the second one)
-    * The usual command-line syntax is `-a "A{20}"`. Here, brackets were doubled to prevent Snakemake from interpreting `{20}` as a wildcard
+Once the reads are trimmed, the next step is to map those reads onto a reference assembly, here _S. cerevisiae_ strain S288C, to eventually obtain read counts. The assembly used in this exercise is [RefSeq GCF_000146045.2](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) and was retrieved via the NCBI genome website.
 
 ### Creating a rule to map trimmed reads on a reference genome
 
