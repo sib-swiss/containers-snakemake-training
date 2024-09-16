@@ -4,67 +4,51 @@
 
 * Create rules with multiple inputs and outputs
 * Make the code shorter and more general by using placeholders and wildcards
-* Optimise the memory usage of a workflow and checking its performances
+* Check the workflow behaviour
 * Visualise a workflow DAG
 
 ## Material
 
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/2_generalising_snakemake.pdf){: .md-button }
 
-## Data origin
-
-The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different amount of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high CO<sub>2</sub>**) and **down-sampled** them to **1 million read-pairs each** to reduce computation times.
-
-## Exercises
-
-One of the aims of today's course is to develop a basic, yet efficient, workflow to analyse RNAseq data. This workflow takes reads coming from RNA sequencing as inputs and outputs a list of genes that are differentially expressed between two conditions. The files containing the reads are in [FASTQ format](https://en.wikipedia.org/wiki/FASTQ_format) and the output will be a tab-separated file containing a list of genes with expression changes, results of statistical tests...
-
-In this series of exercises, we will create the 'backbone' of the workflow, _i.e._ the rules that are the most computationally expensive, namely:
-
-* A rule to trim poor-quality reads
-* A rule to map the trimmed reads on a reference genome
-* A rule to convert and sort files from the SAM format to the BAM format
-* A rule to count the reads mapping on each gene
-
-At the end of this series of exercises, the DAG of your workflow should look like this:
-<figure markdown align="center">
-  ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png)
-  <figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
-</figure>
-
-!!! note "Designing and debugging a workflow"
-    If you have problems designing your Snakemake workflow or debugging it, you can find some help [here](#designing-a-snakemake-workflow-and-debugging-it).
-
-### General instructions and reminders
+## General advice and reminders
 
 In each rule, you should try (as much as possible) to:
 
 * Choose meaningful rule names
 * Use rules dependency, with the syntax `rules.<rule_name>.output`
+    * If you use named outputs (recommended), the syntax becomes `rules.<rule_name>.output.<output_name>`
     * If you use numbered outputs, the syntax becomes `rules.<rule_name>.output[n]` (with `n` starting at 0)
-    * If you use named outputs, the syntax becomes `rules.<rule_name>.output.<output_name>`
+* Use multiple inputs/outputs when needed/possible
+* Create a log file with the `log` directive
+* Create a benchmark file with the `benchmark` directive
 * Use placeholders
 * Use wildcards
     * Choose meaningful wildcard names
     * The `output`, `log`, and `benchmark` directives must have the same wildcard names!
-    * You can use the same wildcard names in multiple rules for consistency and readability, but Snakemake will treat them as independent wildcards and their values will not be shared: rules are self-contained and wildcards are local to each rule ([see a very nice summary on wildcards](http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html))
-* Use multiple inputs/outputs (when needed/possible)
-* Create a log file with the `log` directive
-* Create a benchmark file with the `benchmark` directive
+    * You can use the same wildcard names in multiple rules for consistency and readability, but Snakemake will treat them as independent wildcards and their values will not be shared: rules are self-contained and wildcards are local to each rule (see this [very nice summary](http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html) on wildcards)
 
-If you have a doubt, do not hesitate to test your workflow logic with a dry-run (the `-n` flag): `snakemake --cores 1 -n <target>`. Snakemake will then display all the jobs required to generate the target. To obtain additional information on why a specific job is necessary, run Snakemake with the `-r` flag (which can be -and usually is- combined with `-n`): `snakemake --cores 1 -n -r <target>`. For each job, Snakemake will print a *reason* field explaining why the job was required. To visualize the exact command executed by each job (with the placeholders and wildcards replaced by their values), run snakemake with the `-p` flag: `snakemake --cores 1 -n -r -p <target>`.
+### Testing your workflow logic
 
-### Downloading the data and setting up the directory structure
+* If you have a doubt, do not hesitate to test your workflow logic with a **dry-run** (the `-n` flag): `snakemake --cores 1 -n <target>`. Snakemake will then display all the jobs required to generate the target.
+* To obtain additional information on why a specific job is necessary, run Snakemake with the `-r` flag (which can -and usually is- combined with `-n`): `snakemake --cores 1 -n -r <target>`. For each job, Snakemake will print a **reason** field explaining why the job is required.
+* To visualise the exact command executed by each job (with the placeholders and wildcards replaced by their values), run snakemake with the `-p` flag: `snakemake --cores 1 -n -r -p <target>`.
 
-In this part, we will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html). We already starting doing so in the previous series of exercises and ultimately, it should resemble this:
+## Data origin
+
+The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different concentrations of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high CO<sub>2</sub>**) and **down-sampled** them to **1 million read-pairs each** to reduce computation time.
+
+## Downloading the data and setting up the folder structure
+
+In this part, we will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html). We already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
 
 ```
 │── .gitignore
 │── README.md
 │── LICENSE.md
 │── benchmarks
-│   │── sample1.fastq
-│   └── sample2.fastq
+│   │── sample1.txt
+│   └── sample2.txt
 │── config
 │   │── config.yaml
 │   └── some-sheet.tsv
@@ -98,38 +82,70 @@ In this part, we will download the data and start building the directory structu
     └── Snakefile
 ```
 
-For now, the main thing to remember is that the workflow code goes into a subfolder called `workflow` and the rest is mostly input/output files, except for the `config` subfolder, which will be explained later. All output files generated in the workflow should be stored under `results/`.
+For now, the main thing to remember is that the **code** goes into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**, except for the **`config` subfolder**, which will be **explained later**. All **output files** generated in the workflow should be stored under **`results/`**.
 
 Now, let's download the data, uncompress it and build the first part of the directory structure.
 
-```sh
-ssh -i ~/.ssh/key_username.pem username@18.195.170.182  # Connect to the server
-wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download the data
-tar -xvf snakemake_rnaseq.tar.gz  # Uncompress the archive
-rm snakemake_rnaseq.tar.gz  # Delete the archive
+```sh linenums="1"
+ssh -i ~/.ssh/key_username.pem username@18.195.170.182  # Connect to the server; don't forget to change key_username and username
+wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download data
+tar -xvf snakemake_rnaseq.tar.gz  # Uncompress archive
+rm snakemake_rnaseq.tar.gz  # Delete archive
 cd snakemake_rnaseq/  # Start developing in a new folder
 ```
 
-In this new folder, you should now see 2 subfolders:
+In the ` snakemake_rnaseq/` folder, you should now see 2 subfolders:
 
 * `data/`, which contains the data to analyse
 * `resources/`, which contains retrieved resources, here the assembly, the genome indices and the annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow via git
 
-Let's create another subfolder, this time to host all the files containing the code, as well as the Snakefile:
+Let's create the other missing subfolders and the Snakefile:
 
-```sh
-mkdir workflow  # Create a new folder
-touch workflow/Snakefile  # Create an empty Snakefile
+```sh linenums="1"
+mkdir -p config/ images/ workflow/envs workflow/rules workflow/scripts  # Create subfolder structure
+touch workflow/Snakefile  # Create empty Snakefile
 ```
 
-The Snakefile marks the entrypoint of the workflow. It will be automatically discovered when running Snakemake from the root of the structure, here `snakemake_rnaseq/`. We can also tell Snakemake to use a specific Snakefile with the `-s` flag: `snakemake --cores 1 -s <Snakefile_path> <target>`, but it is highly discouraged as it hampers reproducibility.
+??? info "What does `-p` do?"
+    The `-p` flag of `mkdir` make parent directories as needed and does not return an error if the directory already exists.
 
-If you followed the [general instructions](#general-instructions-and-reminders), Snakemake should create all the other missing folders by itself (except one that you will discover at the end of this series of exercises), so it is now time to create the rules mentioned [earlier](#exercises). Have a look [here](#designing-a-workflow) for a few pieces of advice on workflow design.
+??? warning "Relative paths in Snakemake"
+    All the paths in a Snakefile are relative to the working directory in which the `snakemake` command is executed.
 
-!!! note "'bottom-up' or 'top-down' development?"
+    * If you execute Snakemake in `snakemake_rnaseq/`, the relative path to the input files in the rule is `data/<sample>.fastq`
+    * If you execute Snakemake in `snakemake_rnaseq/workflow/`, the relative path to the input files in the rule is `../data/<sample>.fastq`
+
+The **Snakefile** marks the **entrypoint** of the workflow. It will be automatically discovered when running Snakemake from the root of the structure, here `snakemake_rnaseq/`.
+
+??? info "Using a Snakefiles from non-default location"
+    Snakemake can use a Snakefile from a non-default location thanks the `-s` flag: `snakemake --cores 1 -s <Snakefile_path> <target>`. However, it is **highly discouraged** as it **hampers reproducibility**.
+
+If you followed the [general advice](#general-advice-and-reminders), Snakemake should create all the other missing folders by itself, so it is now time to create the rules mentioned [earlier](#exercises). If needed, you can check [here](#designing-a-workflow) for a few pieces of advice on workflow design.
+
+??? info "'bottom-up' or 'top-down' development?"
     Even if it is often easier to start from the final outputs and work backwards to the first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand. That being said, feel free to work and develop your code in the order you prefer!
 
-**Even if we asked you to use wildards, do not try to process all the samples yet. Choose and work with one sample (which means two .fastq files because reads are paired-end) in this series of exercises. We will see an efficient way to process list of files in the next series of exercises.**
+**Do not try to process all the samples yet, even if we asked you to use wildards. For now, choose only one sample (which means two .fastq files because reads are paired-end). We will see an efficient way to process list of files in the next series of exercises.**
+
+## Exercises
+
+One of the aims of today's course is to develop a simple, yet efficient, workflow to analyse bulk RNAseq data. This workflow takes reads coming from RNA sequencing as inputs and produces a list of genes that are differentially expressed between the two conditions. The files containing the reads are in [FASTQ format](https://en.wikipedia.org/wiki/FASTQ_format) and the output will be a tab-separated file containing a list of genes with expression changes, results of statistical tests...
+
+In this series of exercises, we will create the 'backbone' of the workflow, _i.e._ the rules that are the most computationally expensive, namely:
+
+* A rule to trim poor-quality reads
+* A rule to map the trimmed reads on a reference genome
+* A rule to convert and sort files from the SAM format to the BAM format
+* A rule to count the reads mapping on each gene
+
+??? tip "Designing and debugging a workflow"
+    If you have problems designing your Snakemake workflow or debugging it, you can find some help [here](#designing-a-snakemake-workflow-and-debugging-it).
+
+At the end of this series of exercises, your workflow DAG should look like this:
+<figure markdown align="center">
+  ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png)
+  <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
+</figure>
 
 ### Creating a rule to trim reads
 
@@ -154,14 +170,14 @@ Please give it a try before looking at the answer!
 ??? success "Answer"
     This is one way of writing this rule, but definitely not the only way! This is true for all the rules presented here.
 
-    ```python
+    ```python linenums="1"
     rule fastq_trim:
-        '''
+        """
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
         - Low quality bases
         - A stretches longer than 20 bases
         - N stretches
-        '''
+        """
         input:
             reads1 = 'data/{sample}_1.fastq',
             reads2 = 'data/{sample}_2.fastq',
@@ -239,11 +255,11 @@ Once we have trimmed reads, the next step is to map those reads onto a reference
 Please give it a try before looking at the answer!
 
 ??? success "Answer"
-    ```python
+    ```python linenums="1"
     rule read_mapping:
-        '''
+        """
         This rule maps trimmed reads of a fastq on a reference assembly.
-        '''
+        """
         input:
             trim1 = rules.fastq_trim.output.trim1,
             trim2 = rules.fastq_trim.output.trim2
@@ -254,8 +270,6 @@ Please give it a try before looking at the answer!
             'logs/{sample}/{sample}_mapping.log'
         benchmark:
             'benchmarks/{sample}/{sample}_mapping.txt'
-        resources:
-            mem_gb = 2
         shell:
             '''
             echo "Mapping the reads" > {log}
@@ -311,11 +325,11 @@ HISAT2 only outputs mapped reads in the [SAM format](https://en.wikipedia.org/wi
 Please give it a try before looking at the answer!
 
 ??? success "Answer"
-    ```python
+    ```python linenums="1"
     rule sam_to_bam:
-        '''
+        """
         This rule converts a sam file to bam format, sorts it and indexes it.
-        '''
+        """
         input:
             sam = rules.read_mapping.output.sam
         output:
@@ -326,8 +340,6 @@ Please give it a try before looking at the answer!
             'logs/{sample}/{sample}_mapping_sam_to_bam.log'
         benchmark:
             'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-        resources:
-            mem_mb = 250
         shell:
             '''
             echo "Converting <{input.sam}> to BAM format" > {log}
@@ -384,12 +396,12 @@ Most of the analyses happening downstream the alignment step, including Differen
 Please give it a try before looking at the answer!
 
 ??? success "Answer"
-    ```python
+    ```python linenums="1"
     rule reads_quantification_genes:
-        '''
+        """
         This rule quantifies the reads of a bam file mapping on genes and produces
         a count table for all genes of the assembly.
-        '''
+        """
         input:
             bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
         output:
@@ -399,8 +411,6 @@ Please give it a try before looking at the answer!
             'logs/{sample}/{sample}_genes_read_quantification.log'
         benchmark:
             'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-        resources:
-            mem_mb = 500
         shell:
             '''
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
@@ -459,7 +469,7 @@ We have now implemented and run the main steps of our workflow. It is always a g
 
     But once again, we will get an error: `BrokenPipeError: [Errno 32] Broken pipe`. This is because we are piping the command output to a folder (`images/`) that does not exist yet The folder is not created by Snakemake because it isn't handled as part of an actual run. So we have to create the folder before generating the DAG:
 
-    ```
+    ```sh linenums="1"
     mkdir images
     snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
     ```
@@ -503,52 +513,51 @@ The differences between these plots are:
 * `--filegraph`: dependency graph of rules with inputs and outputs (rule appears once, with wildcards)
 * `--rulegraph`: dependency graph of rules (rule appears once)
 
+## Designing a Snakemake workflow... and debugging it!
 
-### Designing a Snakemake workflow... and debugging it!
-
-#### Designing a workflow
+### Designing a workflow
 
 There are many ways to design a new workflow, but these few pieces of advice will be useful in most cases:
 
 * Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!
     * Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first
     * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)
-* Make sure your input and output directives are right before worrying about anything else, especially the shell sections.
+* Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!
     * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `--dryrun` option to test the workflow before running it. You can even do that without writing all the shell commands!
-* List any parameters or settings that might need to be adjusted
-* Choose meaningful and easy-to-understand names for your inputs, outputs, parameters, wildcards... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
+* List any parameters or settings that might need to be adjusted later
+* Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, wildcards... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
 
-#### Debugging a workflow
+### Debugging a workflow
 
 It is very likely you will see bugs and errors the first time you try to run a new Snakefile: don’t be discouraged, this is normal!
 
-**Order of operations in Snakemake**
+#### Order of operations in Snakemake
 
 The topic was tackled when DAGs were mentioned, but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command `snakemake --cores 1 <target>`. There are 3 main phases:
 
 1. Prepare to run:
     1. Read all the rule definitions from the Snakefile
-1. Resolve the DAG (when Snakemake says ‘Building DAG of jobs’):
+1. Resolve the DAG (happens when Snakemake says ‘Building DAG of jobs’):
     1. Check what output(s) are required
-    1. Look for a matching rule by looking at the outputs of all the rules
-    1. Fill in the wildcards to determine the input of the matching rule
-    1. Check whether this input is available; if not, repeat Step 2 until everything is resolved
+    1. Look for matching input(s) by looking at the outputs of all the rules
+    1. Fill in the wildcards to determine the exact input(s) of the matching rule(s)
+    1. Check whether this(these) input(s) is(are) available; if not, repeat Step 2 until everything is resolved
 1. Run:
-    1. If needed, create the folder for the output(s)
+    1. If needed, create the output(s) folder path
     1. If needed, remove the outdated output(s)
-    1. Run the shell command with the placeholders replaced
-    1. Check that the command ran without errors and produced the expected output(s)
+    1. Fill in the placeholders and run the shell commands
+    1. Check that the commands ran without errors and produced the expected output(s)
 
-**Debugging advice**
+#### Debugging advice
 
-Sometimes, Snakemake will give you a precise error report, but other times less so. Try to identify which phase of execution failed (see previous paragraph on order of operations) and double-check the most common error causes for that phase:
+Sometimes, Snakemake will give you a precise error report, but other times... less so. Try to identify which phase of execution failed (see [previous paragraph](3_generalising_snakemake.md#order-of-operations-in-snakemake) on order of operations) and double-check the most common error causes for that phase:
 
 1. Parsing phase failures (phase 1):
     * Syntax errors, among which (but not limited to):
-        * _This errors can be easily solved using a text editor with Python/Snakemake text colouring_
         * Missing commas/colons/semicolons
         * Unbalanced quotes/brackets/parenthesis
         * Wrong indentation
+        * _These errors can be easily solved using a text editor with Python/Snakemake text colouring_
     * Failure to evaluate expressions
         * Problems in functions (`expand()`, input functions...) in input/output directives
         * Python logic added outside of rules
@@ -560,11 +569,11 @@ Sometimes, Snakemake will give you a precise error report, but other times less 
     * Failure to determine the target
     * Ambiguous rules making the same output(s)
     * On the contrary, no rule making the required output(s)
-    * Circular dependency (violating the 'Acyclic' property of a D**A**G).
+    * Circular dependency (violating the **'Acyclic'** property of a D**A**G).
     * Write-protected output(s)
-1. DAG running failures (phase 3, `--dry-run` works and builds the DAG, but the real execution fails):
-    * _When a job fails, Snakemake reports an error, deletes all output file(s) for that job (potential corruption), and stops_
+1. DAG running failures (phase 3, `--dry-run` works and builds the DAG, but the jobs execution fails):
     * Shell command returning non-zero status
     * Missing output file(s) after the commands have run
     * Reference to a `$shell_variable` before it was set
     * Use of a wrong/unknown placeholder inside `{ }`
+    * _When a job fails, Snakemake reports an error, deletes all output file(s) for that job (because of potential corruption), and stops_
