@@ -27,7 +27,7 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 After this course, you will be able to:
 
 * Understand the basic concepts and terminology associated with virtualization with containers
-* Customize, store, manage and share containerized environments with Docker
+* Customise, store, manage and share containerised environments with Docker
 * Use Apptainer to run containers on a shared computer environment (e.g. a HPC cluster)
 * Understand the basic concepts and terminology associated with workflow management systems
 * Create a computational workflow that uses containers and package managers with Snakemake

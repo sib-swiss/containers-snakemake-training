@@ -238,7 +238,7 @@ rule example:
 
 #### Config files
 
-That being said, there is an even better way to handle parameters like the we just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a [Python dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) named `config`. The path to the config file can be specified either in the Snakefile with the line `configfile: <path/to/file.yaml>` at the top of the file, or it can be specified at runtime with the execution parameter `--configfile <path/to/file.yaml>`.
+That being said, there is an even better way to handle parameters like the ones we just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a [Python dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) named `config`. The path to the config file can be specified either in the Snakefile with the line `configfile: <path/to/file.yaml>` at the top of the file, or it can be specified at runtime with the execution parameter `--configfile <path/to/file.yaml>`.
 
 Config files are stored in the `config` subfolder and written in the [JSON](https://en.wikipedia.org/wiki/JSON) or [YAML](https://en.wikipedia.org/wiki/YAML) format. We will use the latter for this course as it is the most user-friendly and the recommended one. Briefly, in the YAML format, parameters are defined with the syntax `<name>: <value>`. Values can be strings, integers, floating points, booleans ... For a complete overview of available value types, see [this list](https://learnxinyminutes.com/docs/yaml/). A parameter can have multiple values, which are then each listed on an indented single line starting with "**-**". These values will be stored in a Python list when Snakemake parses the config file. Finally, parameters can be nested on indented single lines, and they will be stored as a dictionary when Snakemake parses the config file.
 
@@ -540,7 +540,6 @@ Several interesting things are happening in both versions of this rule:
 
 * Much like for the outputs, it is possible to refer to the inputs of a rule directly in another rule with the syntax `rules.<rule_name>.input.<input_name>`
 * FastQC doesn't create the output directory by itself (other programs might insist that the output directory **does not** already exist), so we have to create it manually  with `mkdir` in the shell command before running FastQC
-* The `-p` flag of `mkdir` make parent directories as needed and does not return an error if the directory already exists
 
 !!! note "Directory creation"
     Remember that in most cases it is not necessary to manually create directories because Snakemake will do it for you. Even when using a `directory(`) output, Snakemake will not create the directory itself but most applications will make the directory for you; FastQC is an exception.
@@ -592,7 +591,7 @@ If you keep developing a workflow long enough, you are bound to encounter some c
 In this course, we will only use the 2<sup>nd</sup> level of modularisation. In more details, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefiles containing the rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefiles in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
 
 !!! note "Rules organisation"
-    How to organize rules is up to you, but a common approach would be to create "thematic" modules, *i.e.* regroup rules involved in the same general step of the workflow.
+    How to organise rules is up to you, but a common approach would be to create "thematic" modules, *i.e.* regroup rules involved in the same general step of the workflow.
 
 **Exercise:** Move your current Snakefile into the subfolder `workflow/rules` and rename it to `read_mapping.smk`. Then create a new Snakefile in `workflow/` and import `read_mapping.smk` in it using the `include` syntax. You should also move the importation of the config file from the modular Snakefile to the main one.
 

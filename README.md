@@ -24,7 +24,7 @@ This is a combination of the [introduction to containers course](https://github.
 git clone https://github.com/sib-swiss/containers-snakemake-training.git
 ```
 
-Then initialize the submodules:
+Then initialise the submodules:
 
 ```bash
 git submodule update --init --recursive

@@ -32,7 +32,7 @@ We will see other directives throughout the course.
 
 **Exercise:** The following example shows the minimal syntax to implement a rule. What do you think it does? Does it create a file? If so, how is it called?
 
-```python
+```python linenums="1"
 rule first_step:
     output:
         'results/first_step.txt'
@@ -92,13 +92,13 @@ During the workflow execution, Snakemake automatically created the **missing fol
 
 In the previous example, the values of the two rule directives are **strings**. For the `shell` directive (we will see other types of values later in the course), long strings (which includes software commands) can be written on multiple lines for clarity, simply using a set of quotes for each line:
 
-```python
+```python linenums="1"
 rule first_step:
     output:
         'results/first_step.txt'
     shell:
-        'echo "I want to print a very very very very very very '
-        'very very very very long string in my output" > results/first_step.txt'
+        'echo "I want to print a very very very very very '
+        'very very very long string in my output" > results/first_step.txt'
 ```
 
 Here, Snakemake will concatenate the two lines (_i.e._ paste the two lines together) and execute the resulting command (`echo "I want to print a very very very very very very very very very very long string in my output" > results/first_step.txt`).
@@ -107,7 +107,7 @@ Here, Snakemake will concatenate the two lines (_i.e._ paste the two lines toget
 
 Another directive used by most rules is the `input` directive. It usually indicates the path to a file that is required by the rule to generate the output. In the following example, we wrote a rule that uses the file `results/first_step.txt` as an input, and copies its content to `results/second_step.txt`:
 
-```python
+```python linenums="1"
 rule second_step:
     input:
         'results/first_step.txt'
@@ -128,7 +128,7 @@ As you may have guessed from the previous rule, the `input` and `output` directi
 **Exercise:** Add the rule `second_step` to your Snakefile, **after** the `first_step` rule. Then, run the workflow **without specifying an output** with `snakemake --cores 1`. What happens?
 
 ??? tip "Your Snakefile should look like this"
-    ```python
+    ```python linenums="1"
     rule first_step:
         output:
             'results/first_step.txt'
@@ -158,7 +158,7 @@ Now, let's try to understand how rule dependencies work in Snakemake.
 
 #### Chaining rules
 
-The core principle of Snakemake's execution is to compute a **Directed Acyclic Graph (DAG)** that summarizes **dependencies between all the inputs and outputs** required to generate the final desired outputs. Starting from the jobs generating the final outputs, Snakemake checks whether the required inputs exist. If they do not, it looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
+The core principle of Snakemake's execution is to compute a **Directed Acyclic Graph (DAG)** that summarises **dependencies between all the inputs and outputs** required to generate the final desired outputs. Starting from the jobs generating the final outputs, Snakemake checks whether the required inputs exist. If they do not, it looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from the last outputs and go back to the first inputs.
 
 ??? bug "`MissingInputException`"
     The `MissingInputException` error is common in Snakemake. It means that Snakemake couldn't a find to generate the targets during the DAG computation because an input file is missing. This is a case of 'broken dependency' between rules. This error is often caused by typos in input or output paths (for example,  the output of rule `first_step` not matching the input of rule `second_step`), so make sure to double-check them!
@@ -190,7 +190,7 @@ Creating rule dependencies using long filepaths can be cumbersome, especially wh
 
 The following example implements this syntax for the two rules defined above:
 
-```python
+```python linenums="1"
 rule first_step:
     output:
         'results/first_step.txt'
