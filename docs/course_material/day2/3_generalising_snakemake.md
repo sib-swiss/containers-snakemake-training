@@ -224,15 +224,14 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 
 Once the reads are trimmed, the next step is to map those reads onto a reference assembly, here _S. cerevisiae_ strain S288C, to eventually obtain read counts. The assembly used in this exercise is [RefSeq GCF_000146045.2](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) and was retrieved via the NCBI genome website.
 
-### Creating a rule to map trimmed reads on a reference genome
+??? info "HISAT2 genome index (read when you have time!)"
+    To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
 
-Once we have trimmed reads, the next step is to map those reads onto a reference assembly, here _S. cerevisiae_ strain S288C, to eventually obtain read counts. The assembly used in this exercise is [RefSeq GCF_000146045.2](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/) and was retrieved via the NCBI genome website.
+    * `-p` is the number of threads to use
+    * `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format)
+    * `Scerevisiae_index` is the global name shared by all the index files.
 
 **Exercise:** Implement a rule to map the trimmed reads on the _S. cerevisiae_ assembly using [HISAT2](https://www.nature.com/articles/s41587-019-0201-4).
-
-!!! note "HISAT2 genome index"
-    To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command `hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index`.
-    <br>`-p` is the number of threads to use, `-f` is the genomic sequence in [FASTA format](https://en.wikipedia.org/wiki/FASTA_format) and `Scerevisiae_index` is the global name shared by all the index files.
 
 ??? tip
     * You can find information on how to use HISAT2 and its parameters with `hisat2 -h`
@@ -279,17 +278,14 @@ Please give it a try before looking at the answer!
 ??? success "Answer"
     `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam`
 
-    If you run it now, don't forget to have a look at the log and benchmark files!
-
-#### HISAT2 options
-
-* `--dta`: report alignments tailored for transcript assemblers
-* `--fr`: set alignment of -1, -2 mates to forward/reverse (position of reads in a pair relatively to each other)
-* `--no-mixed`: remove unpaired alignments for paired reads
-* `--no-discordant`: remove discordant alignments for paired reads
-* `--time`: print wall-clock time taken by search phases
-* `--new-summary`: print alignment summary in a new style
-* `--no-unal`: suppress SAM records for reads that failed to align
+??? info "Explanation of HISAT2 options (read when you have time!)"
+    * `--dta`: report alignments tailored for transcript assemblers
+    * `--fr`: set alignment of -1, -2 mates to forward/reverse (position of reads in a pair relatively to each other)
+    * `--no-mixed`: remove unpaired alignments for paired reads
+    * `--no-discordant`: remove discordant alignments for paired reads
+    * `--time`: print wall-clock time taken by search phases
+    * `--new-summary`: print alignment summary in a new style
+    * `--no-unal`: suppress SAM records for reads that failed to align
 
 ### Creating a rule to convert and sort SAM files to BAM
 
@@ -350,18 +346,15 @@ Please give it a try before looking at the answer!
 ??? success "Answer"
     `snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam`
 
-    If you run it now, don't forget to have a look at the log and benchmark files!
-
-#### Samtools options
-
-* samtools view
-    * `-b`: flag to tell Samtools to create an output in BAM format
-    * `-o`: path of the output file
-* samtools view
-    * `-O bam`: flag to tell Samtools to create an output in BAM format
-    * `-o`: path of the output file
-* samtools index
-    * `-b`: flag to tell Samtools to create an index in BAI format
+??? info "Explanation of Samtools options (read when you have time!)"
+    * samtools view
+        * `-b`: flag to tell Samtools to create an output in BAM format
+        * `-o`: path of the output file
+    * samtools view
+        * `-O bam`: flag to tell Samtools to create an output in BAM format
+        * `-o`: path of the output file
+    * samtools index
+        * `-b`: flag to tell Samtools to create an index in BAI format
 
 ### Creating a rule to count mapped reads
 
@@ -416,19 +409,18 @@ Please give it a try before looking at the answer!
             '''
     ```
 
-#### featureCounts options
-
-* `-t`: specify on which feature type to count the reads
-* `-g`: specify if and how to gather feature counts. Here, reads are counted by exon (`-t`) and the exon counts are gathered by genes 'meta-features’ (`-g`)
-* `-s`: perform strand-specific read counting
-    * Strandedness is determined by looking at the mRNA library preparation kit. It can also be determined _a posteriori_ with scripts such as [infer_experiment.py](https://rseqc.sourceforge.net/#infer-experiment-py) from the [RSeQC package](http://doi.org/10.1093/bioinformatics/bts356)
-* `-p`: count fragments instead of reads.
-    * If you don't use this option with paired-end reads, featureCounts won't be able to assign the read-pairs to features
-* `-B`: only count read pairs that have both ends aligned
-* `-C`: do not count read pairs that have their two ends mapping to different chromosomes or mapping on the same chromosome but on different strands
-* `--largestOverlap`: assign reads to the meta-feature/feature that has the largest number of overlapping bases
-* `-F`: specify format of the provided annotation file
-* `--verbose`: output verbose information, such as unmatched chromosome/contig names
+??? info "Explanation of featureCounts options (read when you have time!)"
+    * `-t`: specify on which feature type to count the reads
+    * `-g`: specify if and how to gather feature counts. Here, reads are counted by exon (`-t`) and the exon counts are gathered by genes 'meta-features’ (`-g`)
+    * `-s`: perform strand-specific read counting
+        * Strandedness is determined by looking at the mRNA library preparation kit. It can also be determined _a posteriori_ with scripts such as [infer_experiment.py](https://rseqc.sourceforge.net/#infer-experiment-py) from the [RSeQC package](http://doi.org/10.1093/bioinformatics/bts356)
+    * `-p`: count fragments instead of reads.
+        * If you don't use this option with paired-end reads, featureCounts won't be able to assign the read-pairs to features
+    * `-B`: only count read pairs that have both ends aligned
+    * `-C`: do not count read pairs that have their two ends mapping to different chromosomes or mapping on the same chromosome but on different strands
+    * `--largestOverlap`: assign reads to the meta-feature/feature that has the largest number of overlapping bases
+    * `-F`: specify format of the provided annotation file
+    * `--verbose`: output verbose information, such as unmatched chromosome/contig names
 
 ### Running the workflow
 
