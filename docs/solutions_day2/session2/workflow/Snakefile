@@ -20,8 +20,6 @@ rule fastq_trim:
         'logs/{sample}/{sample}_atropos_trimming.log'
     benchmark:
         'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-    resources:
-        mem_mb = 500
     shell:
         '''
         echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
@@ -46,8 +44,6 @@ rule read_mapping:
         'logs/{sample}/{sample}_mapping.log'
     benchmark:
         'benchmarks/{sample}/{sample}_mapping.txt'
-    resources:
-        mem_gb = 2
     shell:
         '''
         echo "Mapping the reads" > {log}
@@ -72,8 +68,6 @@ rule sam_to_bam:
         'logs/{sample}/{sample}_mapping_sam_to_bam.log'
     benchmark:
         'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-    resources:
-        mem_mb = 250
     shell:
         '''
         echo "Converting <{input.sam}> to BAM format" > {log}
@@ -99,8 +93,6 @@ rule reads_quantification_genes:
         'logs/{sample}/{sample}_genes_read_quantification.log'
     benchmark:
         'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-    resources:
-        mem_mb = 500
     shell:
         '''
         echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
