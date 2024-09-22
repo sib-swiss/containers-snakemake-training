@@ -2,9 +2,10 @@
 
 **After having completed this chapter you will be able to:**
 
-* Create and use an input function
-* Deploy a conda environment and run scripts within it
-* Deploy a Docker/Singularity container and run scripts within it
+* Use an input function to work with an unknown number of files
+* Run scripts from other languages
+* Deploy a rule-specific conda environment
+* Deploy a rule-specific Docker/Singularity container
 
 ## Material
 

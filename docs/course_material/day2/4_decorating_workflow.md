@@ -2,9 +2,9 @@
 
 **After having completed this chapter you will be able to:**
 
-* Optimise a workflow by multi-threading
+* Optimise resource usage in a workflow
 * Use non-file parameters and config files in rules
-* Create rules with non-conventional outputs
+* Make a workflow process list of inputs rather than one at a time
 * Modularise a workflow
 * Make a workflow process a list of files rather than one file at a time
 
