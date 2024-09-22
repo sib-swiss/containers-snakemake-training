@@ -24,7 +24,7 @@ In this series of exercises, we will create the last two rules of the workflow. 
 
 To perform a Differential Expression Analysis (DEA), it is easier to have a single file gathering all the read counts of the different samples.
 
-**Exercise:** Implement a rule to list and merge read count files (coming from `rule reads_quantification_genes`) into a single file using the Python script provided [here]https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py).
+**Exercise:** Implement a rule to list and merge read count files (coming from `rule reads_quantification_genes`) into a single file using the Python script provided [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py).
 
 !!! note "Information on the script to compute the table"
     * You can download the script with `wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py`
@@ -81,7 +81,7 @@ You have done that a few times already, so it should not be too difficult.
 
 #### Getting the Python script and running it
 
-**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
+**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
 
 ??? success "Answer"
     ```sh
@@ -306,7 +306,7 @@ You have done that a few times already, so it should not be too difficult.
 
 #### Getting the R script and running it
 
-**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
+**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
 
 ??? success "Answer"
     ```sh
@@ -442,4 +442,4 @@ This is the DAG you should see:
   <img src="../../../assets/images/total_dag.png" width="100%"/>
 </figure>
 
-Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html)!
+Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/best_practices.html)!
