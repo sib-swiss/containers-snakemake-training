@@ -9,7 +9,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/1_introduction_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/2_introduction_snakemake.pdf){: .md-button }
 
 ## Structuring a workflow
 

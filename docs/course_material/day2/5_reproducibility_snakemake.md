@@ -9,7 +9,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/3_reproducibility_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/5_reproducibility_snakemake.pdf){: .md-button }
 
 ## Exercises
 

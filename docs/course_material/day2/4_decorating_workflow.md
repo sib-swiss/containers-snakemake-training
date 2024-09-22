@@ -6,7 +6,12 @@
 * Use non-file parameters and config files in rules
 * Make a workflow process list of inputs rather than one at a time
 * Modularise a workflow
-* Make a workflow process a list of files rather than one file at a time
+* Aggregate outputs into a "master" rule
+* (Create rules with non-conventional outputs)
+
+## Material
+
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/4_optimising_snakemake.pdf){: .md-button }
 
 ## Exercises
 
