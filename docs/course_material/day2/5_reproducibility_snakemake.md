@@ -8,13 +8,7 @@
 
 ## Material
 
-**Reproducibility in Snakemake:**
-
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/3_reproducibility_snakemake.pdf){: .md-button }
-
-**Additional advanced concepts:**
-
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/4_additional_concepts.pdf){: .md-button }
 
 ## Exercises
 
