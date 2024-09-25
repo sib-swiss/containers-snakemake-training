@@ -339,7 +339,245 @@ config['resources']['threads']  # --> 4
     Finally, add the file path on top of the Snakefile:
     `configfile: 'config/config.yaml'`
 
-Now, if we need to change these values, we can easily do it in the config file instead of modifying the code!
+Now, if you need to change these values, you can easily do it in the config file instead of modifying the code!
+
+### Modularising a workflow
+
+If you keep developing a workflow long enough, you are bound to encounter some cluttering problems. Have a look at your current Snakefile: with only 5 rules, it is already almost 200 lines long. Imagine what happens when your workflow comprises dozens of rules?! The `Snakefile` may become messy and harder to maintain and edit. This is why it quickly becomes crucial to modularise your workflow; this is a common practice in programming in general. This approach also makes it easier to re-use pieces of workflow in the future. Modularisation comes at 4 different levels:
+
+1. The most fine-grained level are wrappers. Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility, however their implementation can sometimes be 'rigid' and you may have to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#wrappers) for more explanations
+1. For larger, reusable parts belonging to the same workflow, it is recommended to write smaller snakefiles and include them into a main Snakefile with the `include` statement. Note that in this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#includes) for more explanations
+1. The next level of modularisation is provided via the `module` statement, which enables arbitrary combination and re-use of rules in the same workflow and between workflows. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#snakefiles-modules) for more explanations
+1. Finally, Snakemake also provides a syntax to define subworkflows, but this syntax is currently being deprecated in favor of the `module` statement. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#sub-workflows) for more explanations
+
+In this course, you will only use the 2<sup>nd</sup> level of modularisation. In more details, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefiles containing the rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefiles in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
+
+??? info "Rules organisation"
+    How to organise rules is up to you, but a common approach would be to create "thematic" modules, *i.e.* regroup rules involved in the same general step of the workflow.
+
+**Exercise:** Move your current Snakefile into the subfolder `workflow/rules` and rename it to `read_mapping.smk`. Then create a new Snakefile in `workflow/` and import `read_mapping.smk` in it using the `include` syntax. You should also move the importation of the config file from the modular Snakefile to the main one.
+
+??? success "Answer"
+    We will solve this problem step by step. First, create the new file structure:
+
+    ```sh
+    mkdir workflow/rules  # Create a new folder
+    mv workflow/Snakefile workflow/rules/read_mapping.smk  # Move and rename the modular snakefile
+    touch workflow/Snakefile  # Recreate the main Snakefile
+    ```
+
+    Then, fill the main Snakefile with `include` and `configfile`:
+
+    ```python
+    '''
+    Main Snakefile of the RNAseq analysis workflow. This workflow can clean and
+    map reads, and perform Differential Expression Analyses.
+    '''
+
+    # Path of the config file
+    configfile: 'config/config.yaml'
+
+    # Rules to execute the workflow
+    include: 'rules/read_mapping.smk'
+    ```
+
+    Finally, do not forget to remove the config file import (`configfile: 'config/config.yaml'`) from the snakefiles (`workflow/rules/read_mapping.smk`)
+
+??? info "Relative paths"
+    * Includes are relative to the directory of the Snakefile in which they occur. For example, if the Snakefile resides in `workflow`, then Snakemake will search for the included snakefiles in `workflow/path/to/other/snakefile`, regardless of the working directory
+    * You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. **However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called** (this will be discussed in the last series of exercises)
+
+In practice, you can imagine that the line `include: <path/to/snakefile.smk>` is replaced by the entire content of `snakefile.smk` in `Snakefile`. This means that syntaxes like `rules.<rule_name>.output.<output_name>` can still be used in snakefiles, even if the rule `<rule_name>` was defined in another snakefile, **as long as the snakefile in which `<rule_name>` is defined is included before the snakefile that uses `rules.<rule_name>.output`**. This also works for input and output functions.
+
+### Using a target rule and aggregating outputs
+
+#### Creating a target rule
+
+Modularisation also offers a great opportunity to facilitate the execution of the workflow. By default, if no target is given at the command line, Snakemake executes the first rule in the Snakefile. Hence, we have always executed the workflow by specifying a target file in the command line to avoid this behaviour. But we can actually use this property to make the execution easier by writing a pseudo-rule (also called target-rule and usually named `rule all`) in the Snakefile which has all the desired outputs (or a particular subsets of them) files as input files. This rule will look like this:
+
+```python
+rule all:
+    input:
+        'path/to/ouput1',
+        'path/to/ouput2'
+```
+
+??? note "Order of rules in Snakefile/snakefiles"
+    Apart from Snakemake considering the first rule of the workflow as the default target, the order of rules in the Snakefile/snakefiles is arbitrary and does not influence the DAG of jobs.
+
+**Exercise:** Implement a special rule in the Snakefile so that the final output is generated by default when running `snakemake` without specifying a target, then test your workflow with a dry-run.
+
+??? tip
+    * Remember that a rule is not required to have an output nor a shell command
+    * The inputs of `rule all` should be the final outputs that you want to generate (those from the last rule you wrote)
+
+??? success "Answer"
+    If we consider that the last outputs are the ones produced by `rule reads_quantification_genes`, we can write the target rule like this:
+
+    ```python
+    # Master rule that launches the workflow
+    rule all:
+        '''
+        Dummy rule to automatically generate the required outputs.
+        '''
+        input:
+            'results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv'
+    ```
+
+    <!-- Note that we used only one of the two outputs of `rule reads_quantification_genes`. We do this because it is enough to trigger the execution and if the rule didn't produce both outputs, Snakemake would crash and report it this error. -->
+
+    Now, let's try to do a dry-run with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing thanks to the `-F` flag, including:
+
+    ```sh
+    localrule all:
+        input: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+        jobid: 0
+        reason: Input files updated by another job: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+        resources: tmpdir=/tmp
+
+    Job stats:
+    job                           count
+    --------------------------  -------
+    all                               1
+    fastq_qc_sol4                     1
+    fastq_trim                        1
+    read_mapping                      1
+    reads_quantification_genes        1
+    sam_to_bam                        1
+    total                             6
+    ```
+
+
+#### Aggregating outputs
+
+Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the rule you just created, you used a hard-coded input and by now, you know that this is not an optimal solution and that you should avoid this as much as possible, especially if you have many samples to process. To solve this problem, we will rely on the [expand function](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/rules.html#the-expand-function).
+
+**Exercise:** Write an `expand()` syntax to generate a list of outputs from `rule reads_quantification_genes` **with all the RNAseq samples**. What do you need to write this?
+
+??? success "Answer"
+    The output of `rule reads_quantification_genes` has the following syntax: `'results/{sample}/{sample}_genes_read_quantification.tsv'`.
+
+    First, we need to create a Python list containing all the values that the `{sample}` wildcards can take:
+
+    `SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']`
+
+    Then, we can transform the output syntax with `expand()`:
+
+    `expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)`
+
+**Exercise:** Use these two elements (the list of samples and the `expand()` syntax) in the target rule to ask Snakemake to generate all the outputs.
+
+??? success "Answer"
+    You need to add the sample list to the Snakefile before the `rule all` and replace the value of the `input` directive:
+
+    ```python
+    # Sample list
+    SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']
+
+    # Master rule that launches the workflow
+    rule all:
+        '''
+        Dummy rule to automatically generate the required outputs.
+        '''
+        input:
+            expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)
+    ```
+
+    If you launch the workflow in dry-run mode with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing 5 times (1 for each sample that hasn't been processed yet):
+
+    ```sh
+    localrule all:
+        input: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv, results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv, results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv, results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv, results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv, results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv
+        jobid: 0
+        reason: Input files updated by another job: results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv, results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv, results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv, results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv, results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv
+        resources: tmpdir=/tmp
+
+    Job stats:
+    job                           count
+    --------------------------  -------
+    all                               1
+    fastq_qc_sol4                     5
+    fastq_trim                        5
+    read_mapping                      5
+    reads_quantification_genes        5
+    sam_to_bam                        5
+    total                            26
+    ```
+
+But we can do even better! At the moment, samples are defined in a list at the top of the Snakefile. To further improve the workflow's usability, we can define samples in the config file, so they can easily be added, removed, or modified by the user.
+
+**Exercise:** Implement a parameter in the config file to specify sample names and modify `rule all` to use this parameter in the `expand()` syntax.
+
+??? success "Answer"
+    First, we need to modify the config file:
+
+    ```yaml
+    # Configuration options of RNAseq-analysis workflow
+
+    # Location of the genome indices
+    index: 'resources/genome_indices/Scerevisiae_index'
+
+    # Location of the annotation file
+    annotations: 'resources/Scerevisiae.gtf'
+
+    # Sample names
+    samples:
+      - highCO2_sample1
+      - highCO2_sample2
+      - highCO2_sample3
+      - lowCO2_sample1
+      - lowCO2_sample2
+      - lowCO2_sample3
+    ```
+
+    Then, we need to use the config file in the `expand()` syntax (and remove `SAMPLES` from the Snakefile, because we don't need this variable anymore):
+
+    ```python
+    # Master rule that launches the workflow
+    rule all:
+        '''
+        Dummy rule to automatically generate the required outputs.
+        '''
+        input:
+            expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=config['samples'])
+    ```
+
+    Here, `config['samples']` is a Python list containing strings, each string being a sample name. This is because a list of parameters become a list during the config file parsing.
+
+??? info "An even more Snakemake-idiomatic solution"
+    There is an even better and more Snakemake-idiomatic version of the `expand()` syntax:
+
+    `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`.
+
+    While it may not seem easy to use and understand, this entirely removes the need to write the output paths!
+
+### Running the other samples of the workflow
+
+**Exercise:** Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.
+
+??? success "Answer"
+    * Touch the existing files: `snakemake --cores 1 --touch`
+    * Run the workflow `snakemake --cores 4 -r -p`
+
+Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!
+
+**Exercise:** Generate the workflow DAG and filegraph.
+
+??? success "Answer"
+    * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
+    * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
+
+Your DAG should resemble this:
+
+<figure align="center">
+  <img src="../../../assets/images/all_samples_dag.png" width="100%"/>
+</figure>
+
+And this should be your filegraph (open the picture in a new tab to zoom in):
+
+<figure align="center">
+  <img src="../../../assets/images/all_samples_filegraph.png" width="30%" height="450"/>
+</figure>
 
 ### Using non-conventional outputs
 
@@ -607,241 +845,3 @@ Several interesting things are happening in both versions of this rule:
             echo "Mapping report saved in <{output.report}>" >> {log}
             '''
     ```
-
-### Modularising a workflow
-
-If you keep developing a workflow long enough, you are bound to encounter some cluttering problems. Have a look at your current Snakefile: with only 5 rules, it is already almost 200 lines long. Imagine what happens when your workflow comprises dozens of rules?! The `Snakefile` may become messy and harder to maintain and edit. This is why it quickly becomes crucial to modularise your workflow; this is a common practice in programming in general. This approach also makes it easier to re-use pieces of workflow in the future. Modularisation comes at 4 different levels:
-
-1. The most fine-grained level are wrappers. Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility, however their implementation can sometimes be 'rigid' and you may have to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#wrappers) for more explanations
-1. For larger, reusable parts belonging to the same workflow, it is recommended to write smaller snakefiles and include them into a main Snakefile with the `include` statement. Note that in this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#includes) for more explanations
-1. The next level of modularisation is provided via the `module` statement, which enables arbitrary combination and re-use of rules in the same workflow and between workflows. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#snakefiles-modules) for more explanations
-1. Finally, Snakemake also provides a syntax to define subworkflows, but this syntax is currently being deprecated in favor of the `module` statement. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/modularization.html#sub-workflows) for more explanations
-
-In this course, we will only use the 2<sup>nd</sup> level of modularisation. In more details, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefiles containing the rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefiles in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
-
-!!! note "Rules organisation"
-    How to organise rules is up to you, but a common approach would be to create "thematic" modules, *i.e.* regroup rules involved in the same general step of the workflow.
-
-**Exercise:** Move your current Snakefile into the subfolder `workflow/rules` and rename it to `read_mapping.smk`. Then create a new Snakefile in `workflow/` and import `read_mapping.smk` in it using the `include` syntax. You should also move the importation of the config file from the modular Snakefile to the main one.
-
-??? success "Answer"
-    We will solve this problem step by step. First, create the new file structure:
-
-    ```sh
-    mkdir workflow/rules  # Create a new folder
-    mv workflow/Snakefile workflow/rules/read_mapping.smk  # Move and rename the modular snakefile
-    touch workflow/Snakefile  # Recreate the main Snakefile
-    ```
-
-    Then, fill the main Snakefile with `include` and `configfile`:
-
-    ```python
-    '''
-    Main Snakefile of the RNAseq analysis workflow. This workflow can clean and
-    map reads, and perform Differential Expression Analyses.
-    '''
-
-    # Path of the config file
-    configfile: 'config/config.yaml'
-
-    # Rules to execute the workflow
-    include: 'rules/read_mapping.smk'
-    ```
-
-    Finally, do not forget to remove the config file import (`configfile: 'config/config.yaml'`) from the snakefiles (`workflow/rules/read_mapping.smk`)
-
-!!! note "Relative paths"
-    * Includes are relative to the directory of the Snakefile in which they occur. For example, if the Snakefile resides in `workflow`, then Snakemake will search for the included snakefiles in `workflow/path/to/other/snakefile`, regardless of the working directory
-    * You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. **However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called** (this will be discussed in the last series of exercises)
-
-In practice, you can imagine that the line `include: <path/to/snakefile.smk>` is replaced by the entire content of `snakefile.smk` in `Snakefile`. This means that syntaxes like `rules.<rule_name>.output.<output_name>` can still be used in snakefiles, even if the rule `<rule_name>` was defined in another snakefile, **as long as the snakefile in which `<rule_name>` is defined is included before the snakefile that uses `rules.<rule_name>.output`**. This also works for input and output functions.
-
-### Using a target rule and aggregating outputs
-
-#### Creating a target rule
-
-Modularisation also offers a great opportunity to facilitate the execution of the workflow. By default, if no target is given at the command line, Snakemake executes the first rule in the Snakefile. Hence, we have always executed the workflow by specifying a target file in the command line to avoid this behaviour. But we can actually use this property to make the execution easier by writing a pseudo-rule (also called target-rule and usually named `rule all`) in the Snakefile which has all the desired outputs (or a particular subsets of them) files as input files. This rule will look like this:
-
-```python
-rule all:
-    input:
-        'path/to/ouput1',
-        'path/to/ouput2'
-```
-
-!!! note "Order of rules in Snakefile/snakefiles"
-    Apart from Snakemake considering the first rule of the workflow as the default target, the order of rules in the Snakefile/snakefiles is arbitrary and does not influence the DAG of jobs.
-
-**Exercise:** Implement a special rule in the Snakefile so that the final output is generated by default when running `snakemake` without specifying a target, then test your workflow with a dry-run.
-
-??? tip
-    * Remember that a rule is not required to have an output nor a shell command
-    * The inputs of `rule all` should be the final outputs that you want to generate (those from the last rule you wrote)
-
-??? success "Answer"
-    If we consider that the last outputs are the ones produced by `rule reads_quantification_genes`, we can write the target rule like this:
-
-    ```python
-    # Master rule that launches the workflow
-    rule all:
-        '''
-        Dummy rule to automatically generate the required outputs.
-        '''
-        input:
-            'results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv'
-    ```
-
-    Note that we used only one of the two outputs of `rule reads_quantification_genes`. We do this because it is enough to trigger the execution and if the rule didn't produce both outputs, Snakemake would crash and report it this error.
-
-    Now, let's try to do a dry-run with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing thanks to the `-F` flag, including:
-
-    ```sh
-    localrule all:
-        input: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
-        jobid: 0
-        reason: Input files updated by another job: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
-        resources: tmpdir=/tmp
-
-    Job stats:
-    job                           count
-    --------------------------  -------
-    all                               1
-    fastq_qc_sol4                     1
-    fastq_trim                        1
-    read_mapping                      1
-    reads_quantification_genes        1
-    sam_to_bam                        1
-    total                             6
-    ```
-
-
-#### Aggregating outputs
-
-Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the rule we just created, we used a hard-coded input and by now, you should know that this is not an optimal solution and that we should avoid this as much as possible, especially if you have many samples to process. To solve this problem, we will rely on the [expand function](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/rules.html#the-expand-function).
-
-**Exercise:** Write an `expand()` syntax to generate a list of outputs from `rule reads_quantification_genes` **with all the RNAseq samples**. What do you need to write this?
-
-??? success "Answer"
-    The output of `rule reads_quantification_genes` has the following syntax: `'results/{sample}/{sample}_genes_read_quantification.tsv'`.
-
-    First, we need to create a Python list containing all the values that the `{sample}` wildcards can take:
-
-    `SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']`
-
-    Then, we can transform the output syntax with `expand()`:
-
-    `expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)`
-
-**Exercise:** Use these two elements (the list of samples and the `expand()` syntax) in the target rule to ask Snakemake to generate all the outputs.
-
-??? success "Answer"
-    You need to add the sample list to the Snakefile before the `rule all` and replace the value of the `input` directive:
-
-    ```python
-    # Sample list
-    SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']
-
-    # Master rule that launches the workflow
-    rule all:
-        '''
-        Dummy rule to automatically generate the required outputs.
-        '''
-        input:
-            expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)
-    ```
-
-    If you launch the workflow in dry-run mode with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing 5 times (1 for each sample that hasn't been processed yet):
-
-    ```sh
-    localrule all:
-        input: results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv, results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv, results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv, results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv, results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv, results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv
-        jobid: 0
-        reason: Input files updated by another job: results/lowCO2_sample1/lowCO2_sample1_genes_read_quantification.tsv, results/lowCO2_sample2/lowCO2_sample2_genes_read_quantification.tsv, results/lowCO2_sample3/lowCO2_sample3_genes_read_quantification.tsv, results/highCO2_sample3/highCO2_sample3_genes_read_quantification.tsv, results/highCO2_sample2/highCO2_sample2_genes_read_quantification.tsv
-        resources: tmpdir=/tmp
-
-    Job stats:
-    job                           count
-    --------------------------  -------
-    all                               1
-    fastq_qc_sol4                     5
-    fastq_trim                        5
-    read_mapping                      5
-    reads_quantification_genes        5
-    sam_to_bam                        5
-    total                            26
-    ```
-
-But we can do even better! At the moment, samples are defined in a list at the top of the Snakefile. To further improve the workflow's usability, we can define samples in the config file, so they can easily be added, removed, or modified by the user.
-
-**Exercise:** Implement a parameter in the config file to specify sample names and modify `rule all` to use this parameter in the `expand()` syntax.
-
-??? success "Answer"
-    First, we need to modify the config file:
-
-    ```yaml
-    # Configuration options of RNAseq-analysis workflow
-
-    # Location of the genome indices
-    index: 'resources/genome_indices/Scerevisiae_index'
-
-    # Location of the annotation file
-    annotations: 'resources/Scerevisiae.gtf'
-
-    # Sample names
-    samples:
-      - highCO2_sample1
-      - highCO2_sample2
-      - highCO2_sample3
-      - lowCO2_sample1
-      - lowCO2_sample2
-      - lowCO2_sample3
-    ```
-
-    Then, we need to use the config file in the `expand()` syntax (and remove `SAMPLES` from the Snakefile, because we don't need this variable anymore):
-
-    ```python
-    # Master rule that launches the workflow
-    rule all:
-        '''
-        Dummy rule to automatically generate the required outputs.
-        '''
-        input:
-            expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=config['samples'])
-    ```
-
-    Here, `config['samples']` is a Python list containing strings, each string being a sample name. This is because a list of parameters become a list during the config file parsing.
-
-!!! note "An even more Snakemake-idiomatic solution"
-    There is an even better and more Snakemake-idiomatic version of the `expand()` syntax:
-
-    `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`.
-
-    While it may not seem easy to use and understand, this entirely removes the need to write the output paths!
-
-### Running the other samples of the workflow
-
-**Exercise:** Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.
-
-??? success "Answer"
-    * Touch the existing files: `snakemake --cores 1 --touch`
-    * Run the workflow `snakemake --cores 4 -r -p`
-
-Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!
-
-**Exercise:** Generate the workflow DAG and filegraph.
-
-??? success "Answer"
-    * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
-    * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
-
-Your DAG should resemble this:
-
-<figure align="center">
-  <img src="../../../assets/images/all_samples_dag.png" width="100%"/>
-</figure>
-
-And this should be your filegraph (open the picture in a new tab to zoom in):
-
-<figure align="center">
-  <img src="../../../assets/images/all_samples_filegraph.png" width="30%" height="450"/>
-</figure>
