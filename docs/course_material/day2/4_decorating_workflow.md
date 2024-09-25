@@ -15,34 +15,50 @@
 
 ## Exercises
 
-In this series of exercises, we will create only one new rule to add to our workflow, because this part aims mainly to show how to improve the rules we previously wrote.
+This series of exercises focuses on how to improve the workflow that you developed at the end of the previous part. You will add only one rule to your workflow, but it's a crucial one!
 
-!!! note "Development and back-up"
-    During this session, we will modify our Snakefile quite heavily, so it may be a good idea to start by making a back-up: `cp worklow/Snakefile worklow/Snakefile_backup`. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up.
+??? tip "Snakefile from the previous part"
+    If you want to restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules, you can manually get it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with the command:
+    ```
+    wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
+    ```
 
-### Optimising a workflow by multi-threading
+??? tip "Development and back-up"
+    During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with the `cp` command or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
 
-When working with real datasets, most processes are very long and computationally expensive. Fortunately, they can be parallelised very efficiently to decrease the computation time by using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) for a single job.
+### Optimising resource usage in a workflow
 
-**Exercise:** Parallelise as much processes as possible using the `threads` directive and test its effect:
+#### Multi-threading
 
-1. Identify which software can make use of parallelisation
-1. Identify in each software the parameter that controls multi-threading
-1. Implement the multi-threading
+When working with real, larger, datasets, most processes are very long and computationally expensive. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
 
-??? tip
-    * Check the software documentation and parameters with the `-h/--help` flags
-    * Remember that multi-threading only applies to software that can make use of a threads parameters, Snakemake itself cannot parallelise a software automatically
-    * Remember that you need to add threads to the Snakemake rule but also to the commands! Just increasing the number of threads in Snakemake will not magically run a command with multiple threads
-    * Remember that you have 4 threads in total, so even if you ask for more in a rule, Snakemake will cap this value at 4. And if you use 4 threads in a rule, that means that no other job can run parallel!
+**Exercise:** What are the two things you need to add to a rule to enable multi-threading?
 
 ??? success "Answer"
-    It turns out that all the software except `samtools index` can handle multi-threading:
+    1. The `threads` directive to tell Snakemake that it needs to allocate several threads to this rule
+    1. The software-specific parameters in the `shell` directive to tell a software that it can use several threads
 
-    * `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` use the `--threads` option
-    * `featureCounts` uses the `-T` option
+    If you add only the first element, the software will not be aware of the number of threads allocated to it and will use its default number of threads (usually 1). If you add only the second element, Snakemake will only allocate 1 thread to the software, which may cause a crash (the software expects multiple threads but only gets one).
 
-    Let's use 4 threads for the mapping step and 2 for the other steps. Your Snakefile should look like this:
+Usually, you need to read the software documentation to identify which software can make use of multi-threading and which parameters control multi-threading. Here, we did it for you to save some time:
+
+* `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` can parallelise with the `--threads <nb_thread>` parameter
+* `featureCounts` can parallelise with the `-T <nb_thread>` parameter
+* `samtools index` can't parallelise. Remember that multi-threading only applies to software that were developped to use multiple threads, Snakemake itself cannot parallelise a software automatically!
+
+Unfortunately, there is no easy way to find the optimal number of threads for a job. It depends on the task, the dataset, the software, the resources you have at your disposal... It is often trial and error to see what works best. Here, we decided in advance the number of threads to use for each software:
+
+* 4 threads for `hisat2`
+* 2 for all the other software
+
+**Exercise:** Implement multi-threading in the rule of your choice (most of time, we start by multi-threading the longest jobs, here the mapping step, but with our small example dataset, it doesn't matter too much).
+
+??? tip "Explicit is better than implicit and placeholders"
+    * Even if a software cannot multi-thread, it is useful to add `threads: 1` to keep a consistency between rules and clearly state that the software works with a single thread.
+    * The `threads` directive can also be used as a placeholder in the `shell` directive!
+
+??? success "Answer"
+    We implemented multi-threading in all the rules so that you can check everything. Feel free to copy this in your Snakefile.
     ```
     rule fastq_trim:
         '''
@@ -61,14 +77,12 @@ When working with real datasets, most processes are very long and computationall
             'logs/{sample}/{sample}_atropos_trimming.log'
         benchmark:
             'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-        resources:
-            mem_mb = 500
-        threads: 2
+        threads: 2  # Add directive
         shell:
             '''
             echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
             atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
-            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
+            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \  # Add multithreading to software
             -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
             echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
             echo "Trimming report saved in <{log}>" >> {log}
@@ -88,14 +102,12 @@ When working with real datasets, most processes are very long and computationall
             'logs/{sample}/{sample}_mapping.log'
         benchmark:
             'benchmarks/{sample}/{sample}_mapping.txt'
-        resources:
-            mem_gb = 2
-        threads: 4
+        threads: 4  # Add directive
         shell:
             '''
             echo "Mapping the reads" > {log}
             hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
+            -x resources/genome_indices/Scerevisiae_index --threads {threads} \  # Add multithreading to software
             -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}
@@ -115,15 +127,13 @@ When working with real datasets, most processes are very long and computationall
             'logs/{sample}/{sample}_mapping_sam_to_bam.log'
         benchmark:
             'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-        resources:
-            mem_mb = 250
-        threads: 2
+        threads: 2  # Add directive
         shell:
             '''
             echo "Converting <{input.sam}> to BAM format" > {log}
-            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}
+            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  # Add multithreading to software
             echo "Sorting BAM file" >> {log}
-            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}
+            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  # Add multithreading to software
             echo "Indexing the sorted BAM file" >> {log}
             samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
             echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
@@ -144,14 +154,12 @@ When working with real datasets, most processes are very long and computationall
             'logs/{sample}/{sample}_genes_read_quantification.log'
         benchmark:
             'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-        resources:
-            mem_mb = 500
-        threads: 2
+        threads: 2  # Add directive
         shell:
             '''
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}  # Add multithreading to software
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
             echo "Results saved in <{output.gene_level}>" >> {log}
@@ -159,7 +167,25 @@ When working with real datasets, most processes are very long and computationall
             '''
     ```
 
-**Exercise:** Finally, test the effect of the number of threads on the workflow's runtime. What command will you use to run the workflow? Does the workflow run faster?
+**Exercise:** What Snakemake command should you use to run the workflow with 4 cores?
+
+??? success "Answer"
+    You need to provide additional cores to Snakemake in the execution command with `--cores 4`:
+    ```
+    snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    ```
+    The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you leave this number at the default value (1), Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap the rule threads at `--cores` to avoid requesting too many cores. Another benefit of increasing the value of `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running 2 jobs using 2 threads each).
+
+If you run the workflow from scratch with all the multihreading settings mentioned earlier, it should now take ~6 min, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
+
+??? warning "Things to keep in mind when using parallel execution"
+    * The on-screen output from parallel jobs will be mixed, so save any output to log files instead
+    * Parallel jobs will use more RAM. If you run out then either your OS will swap data to disk (which slows data access), or a process will die (which can crash Snakemake)
+    * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down the computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop).
+
+
+
+<!-- **Exercise:** Finally, test the effect of the number of threads on the workflow's runtime. What command will you use to run the workflow? Does the workflow run faster?
 
 ??? success "Answer"
     The command to use is:
@@ -167,13 +193,11 @@ When working with real datasets, most processes are very long and computationall
     `snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
 
     Do not forget to provide additional cores to Snakemake in the execution command with `--cores 4`. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing `--cores` allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
+ -->
 
-!!! note "Explicit is better than implicit"
-    Even if a software cannot multi-thread, it is useful to add `threads: 1` in the rule to keep the rule consistency and clearly state that the software works with a single thread.
 
-!!! note "Things to keep in mind when using parallel execution"
-    * Parallel jobs will use more RAM. If you run out then either your OS will swap data to disk, or a process will crash
-    * The on-screen output from parallel jobs will be mixed, so save any output to log files instead
+#### Controlling memory usage and runtime
+
 
 ### Using non-file parameters and config files
 
