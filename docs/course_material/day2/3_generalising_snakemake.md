@@ -252,9 +252,9 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 
 ??? tip "HISAT2 inputs and outputs"
     * The paths of the trimmed files (_i.e._ input files) are specified with the parameters `-1` (first read) and `-2` (second read)
-    * The basename of the genome indices (binary format) is specified with the option `-x`. The files have a shared name of `resources/genome_indices/Scerevisiae_index`, which is the value you need to use for `-x`
-    * The path of the mapped reads file (_i.e._ output file, in SAM format) is specified with the option `-S` (do not forget the .sam extension at the end of the file)
-    * The path of the mapping report (_i.e._ output file, in text format) is specified with the option `--summary-file`
+    * The basename of the genome indices (binary format) is specified with the parameter `-x`. The files have a shared name of `resources/genome_indices/Scerevisiae_index`, which is the value you need to use for `-x`
+    * The path of the mapped reads file (_i.e._ output file, in SAM format) is specified with the parameter `-S` (do not forget the .sam extension at the end of the file)
+    * The path of the mapping report (_i.e._ output file, in text format) is specified with the parameter `--summary-file`
 
 ??? success "Answer"
     ```python linenums="1"
@@ -276,10 +276,10 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
             '''
     ```
 
-**Exercise:** What do you think about the value of the `-x` option?
+**Exercise:** What do you think about the value of the `-x` parameter?
 
 ??? success "Answer"
-    Something very interesting is happening here: to run, HISAT2 requires several genome index files. As such, they could (should?) be considered as inputs... and this is a problem: on one hand, the `-x` option only accepts strings containing the files path and common name. This means that if you were to manually add all the index files as inputs, HISAT2 would not recognize them and crash. On the other hand, if you were add the value of `-x` as input, Snakemake would look for a file called `resources/genome_indices/Scerevisiae_index`... and crash because such a file doesn't exist! This highlights the fact that **inputs must be files** and this is why we directly added the value of `-x` in the `shell` command. However, this is not very convenient: we will see later a better way to deal with this problem.
+    Something very interesting is happening here: to run, HISAT2 requires several genome index files. As such, they could (should?) be considered as inputs... and this is a problem: on one hand, the `-x` parameter only accepts strings containing the files path and common name. This means that if you were to manually add all the index files as inputs, HISAT2 would not recognize them and crash. On the other hand, if you were add the value of `-x` as input, Snakemake would look for a file called `resources/genome_indices/Scerevisiae_index`... and crash because such a file doesn't exist! This highlights the fact that **inputs must be files** and this is why we directly added the value of `-x` in the `shell` command. However, this is not very convenient: we will see later a better way to deal with this problem.
 
 Using the same sample than before (`highCO2_sample1`), the workflow can be run with:
 
@@ -396,7 +396,7 @@ rule reads_quantification_genes:
     * `-s`: perform strand-specific read counting
         * Strandedness is determined by looking at the mRNA library preparation kit. It can also be determined _a posteriori_ with scripts such as [infer_experiment.py](https://rseqc.sourceforge.net/#infer-experiment-py) from the [RSeQC package](http://doi.org/10.1093/bioinformatics/bts356)
     * `-p`: count fragments instead of reads
-        * If you don't use this option with paired-end reads, `featureCounts` won't be able to assign the read-pairs to features
+        * If you don't use this parameter with paired-end reads, `featureCounts` won't be able to assign the read-pairs to features
     * `-B`: only count read pairs that have both ends aligned
     * `-C`: do not count read pairs that have their two ends mapping to different chromosomes or mapping on the same chromosome but on different strands
     * `--largestOverlap`: assign reads to the meta-feature/feature that has the largest number of overlapping bases
@@ -404,12 +404,12 @@ rule reads_quantification_genes:
     * `-F`: specify format of the provided annotation file
     * `-a`: specify path of file containing the annotations (_i.e._ input files, in GTF format)
     * `-o`: specify path of file containing the count results (_i.e._ output file, in tsv format)
-    * Paths of the sorted BAM file(s) (_i.e._ input file(s)) are not specified with an option, they are simply added at the end of the command
+    * Paths of the sorted BAM file(s) (_i.e._ input file(s)) are not specified with an parameter, they are simply added at the end of the command
 
 **Exercise:** What does L19 do? Why did we add it?
 
 ??? success "Answer"
-    The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about the read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, the summary will be printed in `test.tsv.summary`. However, there is no option available to choose the filename, so if we need this file as an output, we have to manually rename it.
+    The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about the read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, the summary will be printed in `test.tsv.summary`. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.
 
 It would be interesting to know what is happening when featureCounts runs. This is where the `log` and `benchmark` directives play a role!
 
@@ -499,13 +499,13 @@ We have now implemented and run the main steps of our workflow. It is always a g
     ```
     We added the `-F` parameter to force Snakemake to compute the entire DAG and ensure all the jobs are shown. You can also use `-f <target>` to show fewer jobs.
 
-    An important thing to remember is that the `--dag` flag implicitly activates the `--dry-run/--dryrun/-n` option, which means that no jobs are executed during the plot creation.
+    An important thing to remember is that the `--dag` flag implicitly activates the `--dry-run/--dryrun/-n` parameter, which means that no jobs are executed during the plot creation.
 
 Snakemake can also create other graphs. In total, there are 3 types:
 
-* A DAG, created with the `--dag` option: dependency graph of all the jobs (rules appear once per wildcard value; wildcard value are displayed)
-* A rulegraph, created with the `--rulegraph` option: dependency graph of all the rules (rules appear only once)
-* A filegraph, created with the `--filegraph` option: dependency graph of all the rules with inputs and outputs (rule appears once, wildcards are shown but not replaced)
+* A DAG, created with the `--dag` parameter: dependency graph of all the jobs (rules appear once per wildcard value; wildcard value are displayed)
+* A rulegraph, created with the `--rulegraph` parameter: dependency graph of all the rules (rules appear only once)
+* A filegraph, created with the `--filegraph` parameter: dependency graph of all the rules with inputs and outputs (rule appears once, wildcards are shown but not replaced)
 
 Here are the graphs of the workflow:
 

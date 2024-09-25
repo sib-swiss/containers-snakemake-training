@@ -87,11 +87,11 @@ During the workflow execution, Snakemake automatically created the **missing fol
 
     Snakemake re-runs can be forced:
 
-    * For a specific rule using the `-R` option: `snakemake --cores 1 -R <rule_name>`
-    * For a specific target using the `-f` option: `snakemake --cores 1 -f <target>`
-    * For **all workflow outputs** using the `-F` option: `snakemake --cores 1 -F`
+    * For a specific rule using the `-R` parameter: `snakemake --cores 1 -R <rule_name>`
+    * For a specific target using the `-f` parameter: `snakemake --cores 1 -f <target>`
+    * For **all workflow outputs** using the `-F` parameter: `snakemake --cores 1 -F`
 
-    In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see [--rerun-triggers option](https://snakemake.readthedocs.io/en/v8.20.3/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
+    In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see [--rerun-triggers parameter](https://snakemake.readthedocs.io/en/v8.20.3/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 
 In the previous rule, the values of the two directives are **strings**. For the `shell` directive (we will see other types of values later in the course), long strings (which includes software commands) can be written on multiple lines for clarity, simply using a set of quotes for each line:
 
@@ -169,10 +169,10 @@ The core principle of Snakemake's execution is to compute a **Directed Acyclic G
 ??? bug "`MissingInputException`"
     The `MissingInputException` error is common in Snakemake. It means that Snakemake couldn't find a way to generate the targets during the DAG computation because an input file is missing. This is a case of **broken dependency** between rules. This error is often caused by typos in input or output paths (for example, the output of rule `first_step` not matching the input of rule `second_step`), so make sure to double-check them!
 
-**Exercise:** With this in mind, identify the target you need to use to trigger the execution of `rule second_step`. Add the `-F` option to the `snakemake` command and execute the workflow. What do you see?
+**Exercise:** With this in mind, identify the target you need to use to trigger the execution of `rule second_step`. Add the `-F` parameter to the `snakemake` command and execute the workflow. What do you see?
 
 ??? info "What does `-F` do?"
-    The `-F` option forces the re-creation of **all outputs** of the workflow. It is used here to avoid manually removing files, but it should be used carefully, especially with large workflows which contains a lot of outputs.
+    The `-F` parameter forces the re-creation of **all outputs** of the workflow. It is used here to avoid manually removing files, but it should be used carefully, especially with large workflows which contains a lot of outputs.
 
 ??? success "Answer"
     * To trigger the execution of the second rule, you need to use `results/second_step.txt` as target. The command is:

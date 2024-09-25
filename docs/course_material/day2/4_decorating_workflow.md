@@ -203,7 +203,7 @@ If you run the workflow from scratch with all the multihreading settings mention
 
 #### Non-file parameters
 
-As we have seen, Snakemake's execution is based around inputs and outputs of each step of the workflow. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated (rightfully so!) against using hard-coded filepaths. Yet, if you look back at the rules we have implemented, you will find 2 occurrences of this behaviour in the shell command:
+As we have seen, Snakemake's execution is based around inputs and outputs of each step of the workflow. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated (rightfully so!) against using hard-coded filepaths. Yet, if you look back at the rules you have implemented, you will find 2 occurrences of this behaviour in the shell command:
 
 * In the `rule read_mapping`, the index parameter `-x resources/genome_indices/Scerevisiae_index`
 * In the `rule reads_quantification_genes`, the annotation parameter `-a resources/Scerevisiae.gtf`
@@ -228,7 +228,7 @@ rule example:
         'head -n {params.lines} {input} > {output}'
 ```
 
-!!! note "Parameters arguments"
+??? info "Parameters arguments"
     In contrast to the `input` directive, the `params` directive can optionally take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`.
 
 **Exercise:** Replace the two hard-coded paths mentioned earlier by `params`.
@@ -260,14 +260,14 @@ rule example:
         -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'
     ```
 
-!!! note "Snakemake re-run behaviour"
+??? info "Snakemake re-run behaviour"
     If you try to re-run only the last rule with `snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`, Snakemake will actually try to re-run 3 rules in total.
 
     This is because the code changed in 2 rules (see `reason` field in Snakemake's log), which triggered an update of the inputs in the 3rd rule (`sam_to_bam`). To avoid this, first `touch` the files with `snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv` then re-run the last rule.
 
 #### Config files
 
-That being said, there is an even better way to handle parameters like the ones we just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a [Python dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) named `config`. The path to the config file can be specified either in the Snakefile with the line `configfile: <path/to/file.yaml>` at the top of the file, or it can be specified at runtime with the execution parameter `--configfile <path/to/file.yaml>`.
+That being said, there is an even better way to handle parameters like the ones you just modified: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files. The config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a [Python dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) named `config`. The path to the config file can be specified either in the Snakefile with the line `configfile: <path/to/file.yaml>` at the top of the file, or it can be specified at runtime with the execution parameter `--configfile <path/to/file.yaml>`.
 
 Config files are stored in the `config` subfolder and written in the [JSON](https://en.wikipedia.org/wiki/JSON) or [YAML](https://en.wikipedia.org/wiki/YAML) format. We will use the latter for this course as it is the most user-friendly and the recommended one. Briefly, in the YAML format, parameters are defined with the syntax `<name>: <value>`. Values can be strings, integers, floating points, booleans... For a complete overview of available value types, see [this list](https://learnxinyminutes.com/docs/yaml/). A parameter can have multiple values, which are then each listed on an indented single line starting with "**-**". These values will be stored in a Python list when Snakemake parses the config file. Finally, parameters can be nested on indented single lines, and they will be stored as a dictionary when Snakemake parses the config file.
 
@@ -295,7 +295,7 @@ config['resources']  # --> {'threads': 4, 'memory': '4G'}  # Lists of named para
 config['resources']['threads']  # --> 4
 ```
 
-!!! note "Accessing config values in `shell`"
+??? info "Accessing config values in `shell`"
     Values stored in the `config` dictionary cannot be accessed directly within the `shell` directive. If you need to use a parameter value in `shell`, define the parameter in `params` and assign its value from the `config` dictionary.
 
 **Exercise:** Create a config file in YAML format and fill it with adapted variables and values to replace the 2 hard-coded parameters in rules `read_mapping` and `reads_quantification_genes`. Then replace the hard-coded parameters by values from the config file and add its path on top of your Snakefile.
@@ -619,7 +619,7 @@ The next paragraphs will show how to use some of these properties.
         bam = temp('results/{sample}/{sample}_mapped_reads.bam'),
     ```
 
-!!! note "Consequences of using `temp()`"
+??? info "Consequences of using `temp()`"
     Removing temporary outputs is a great way to save a lot of storage space. If you look at the size of your current `results/` folder (`du -bchd0 results/`), you will notice that it drastically. Just removing these two files would allow to save ~1 GB. While it may not seem a lot, remember that you usually have much bigger files and many more samples! On the other hand, using temporary outputs might force you to re-run more jobs than necessary if an input changes, so carefully think about it before using it.
 
 **Exercise:** On the contrary, is there a file of your workflow that you would like to protect with `protected()`
@@ -640,7 +640,7 @@ The next paragraphs will show how to use some of these properties.
 
 [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a program designed to spot potential problems in high-througput sequencing datasets. It is a very popular tool, notably because it runs quickly and does not require a lot of configuration. It runs a set of analyses on one or more raw sequence files in FASTQ or BAM format and produces a report with quality plots that summarises the results. It will highlight any areas where a dataset looks unusual and might require a closer look. As such, it would be interesting to run FastQC on the original .fastq files and the trimmed .fastq files to check whether trimminga actually improved the read quality. FastQC can be run interactively or in batch mode, during which it saves results as an HTML file and a ZIP file. We will soon see that running FastQC in batch mode presents a little problem.
 
-!!! note "Data types and FastQC"
+??? info "Data types and FastQC"
     FastQC does not differentiate between sequencing techniques and as such can be used to look at libraries coming from a large number of experiments (Genomic Sequencing, ChIP-Seq, RNAseq, BS-Seq etc...).
 
 If you run `fastqc -h`, you will notice something a bit surprising (but not unusual in bioinformatics):
@@ -669,7 +669,7 @@ There are different solutions to deal with this problem:
 For the sake of time, we will not test all 4 solutions, but rather try to apply the 3<sup>rd</sup> **or** the 4<sup>th</sup> solution. We'll briefly summarise solutions 1 and 2 here:
 
 1. This could work, but it's better not to put the reports in the same directory than the input sequences. As a general principle, when writing Snakemake rules, we prefer to be in charge of the output names and to have all the files linked to a sample in the same directory
-1. This involves manually constructing the output directory path to use with the `-o` option, which works but isn't very convenient
+1. This involves manually constructing the output directory path to use with the `-o` parameter, which works but isn't very convenient
 
 The base of the FastQC command is the following: `fastqc --format fastq --threads 2 <input_fastq1> <input_fastq2>`
 
@@ -725,7 +725,7 @@ The base of the FastQC command is the following: `fastqc --format fastq --thread
                 '''
         ```
 
-    !!! note " `.snakemake_timestamp`"
+    ??? info " `.snakemake_timestamp`"
         When `directory()` is used, Snakemake creates an empty file called `.snakemake_timestamp` in the output directory. This is the marker it uses to know if it needs to re-run the rule producing the directory.
 
     Overall, this rule works well and allows for an easy rule definition. However, in this case, individual files are not explicitly named as outputs and this may cause problems to chain rules later. Also, remember that some applications won’t give you any control at all over the outputs, which is why you need a back-up plan, _i.e._ solution 4: the most powerful solution is to use shell commands to move and/or rename the files to the names you want. Also, the Snakemake developers advise to use `directory()` as a last resort and to rather use the [`touch()`](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/rules.html#flag-files) flag instead.
@@ -808,7 +808,7 @@ Several interesting things are happening in both versions of this rule:
 * Much like for the outputs, it is possible to refer to the inputs of a rule directly in another rule with the syntax `rules.<rule_name>.input.<input_name>`
 * FastQC doesn't create the output directory by itself (other programs might insist that the output directory **does not** already exist), so we have to create it manually  with `mkdir` in the shell command before running FastQC
 
-!!! note "Directory creation"
+??? info "Directory creation"
     Remember that in most cases it is not necessary to manually create directories because Snakemake will do it for you. Even when using a `directory(`) output, Snakemake will not create the directory itself but most applications will make the directory for you; FastQC is an exception.
 
 ??? tip
