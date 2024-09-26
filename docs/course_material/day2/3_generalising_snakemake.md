@@ -539,13 +539,11 @@ It would be interesting to know what is happening when featureCounts runs. This 
 
 We have now implemented and run the main steps of our workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Interestingly, Snakemake's has a built-in workflow visualisation feature to do this.
 
-
-
 **Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using the `--dag` parameter. Remember that Snakemake prints a DAG in text format, so you need to pipe its results (using `|`) into the `dot` command to transform it into a picture. Do you need to specify a target?
 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
-    * The `images/` subfolder is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when setting up the [workflow structure](#downloading-the-data-and-setting-up-the-folder-structure)
+    * The `images/` subfolder is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when you set up the [workflow structure](#downloading-the-data-and-setting-up-the-folder-structure)
     * If you already computed all the outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs.
 
 ??? tip "The `dot` command"
@@ -558,13 +556,13 @@ We have now implemented and run the main steps of our workflow. It is always a g
     ```
     snakemake -c 1 --dag -F | dot -Tpng > images/dag.png
     ```
-    You will get a `Target rules may not contain wildcards.` error. This makes sense, because if you don't give a target to Snakemake, it can't compute the wildcard values. To run the command using the same sample than before (`highCO2_sample1`), you can target one of the final outputs of the workflow:
+    You will get a `WorkflowError: Target rules may not contain wildcards.` error. This makes sense, because if you don't give a target to Snakemake, it can't compute the wildcard values. To run the command using the same sample than before (`highCO2_sample1`), you can target one of the final outputs of the workflow:
     ```
     snakemake -c 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
     ```
     We added the `-F` parameter to force Snakemake to compute the entire DAG and ensure all the jobs are shown. You can also use `-f <target>` to show fewer jobs.
 
-    An important thing to remember is that the `--dag` parameter implicitly activates the `--dry-run/--dryrun/-n` parameter, which means that no jobs are executed during the plot creation.
+    **An important thing to remember:** that the `--dag` parameter implicitly activates the `--dry-run/--dryrun/-n` parameter, which means that no jobs are executed during the figure creation.
 
 Snakemake can also create other graphs. In total, there are 3 types:
 
@@ -572,14 +570,13 @@ Snakemake can also create other graphs. In total, there are 3 types:
 * A rulegraph, created with the `--rulegraph` parameter: dependency graph of all the rules (rules appear only once)
 * A filegraph, created with the `--filegraph` parameter: dependency graph of all the rules with inputs and outputs (rule appears once, wildcards are shown but not replaced)
 
-Here are the graphs of the workflow:
+Here are the different graphs of the workflow:
 
 <figure>
-  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450" align="center"/>
-  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450" align="center"/>
-  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450" align="center"/>
-  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
+  <img src="../../../assets/images/backbone_all.png" align="center"/>
+  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow at the end of the session</figcaption>
 </figure>
+  <!-- <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption> -->
 
 And the commands to create them:
 
