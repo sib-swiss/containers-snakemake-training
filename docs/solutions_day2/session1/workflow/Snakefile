@@ -2,7 +2,7 @@ rule first_step:
     output:
         'results/first_step.txt'
     shell:
-        'echo "Hello world! > results/first_step.txt'
+        'echo "Hello world!" > results/first_step.txt'
 
 rule second_step:
     input:
