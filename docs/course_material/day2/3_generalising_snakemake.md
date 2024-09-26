@@ -75,30 +75,41 @@ In this part, we will download the data and start building the directory structu
 │   │── sample1.fastq
 │   └── sample2.fastq
 │── images
-│   └── rulegraph.svg
+│   │── dag.png
+│   │── filegraph.png
+│   └── rulegraph.png
 │── logs
 │   │── sample1.log
 │   └── sample2.log
 │── results
+│   │── DEG_list.tsv
 │   │── sample1
 │   │   └── sample1.bam
-│   │── sample2
-│   │   └── sample2.bam
-│   └── DEG_list.tsv
+│   └── sample2
+│       └── sample2.bam
 │── resources
 │   │── Scerevisiae.fasta
-│   └── Scerevisiae.gtf
+│   │── Scerevisiae.gtf
+│   └── genome_indices
+|       │── Scerevisiae_index.1.ht2
+|       │── Scerevisiae_index.2.ht2
+|       │── Scerevisiae_index.3.ht2
+|       │── Scerevisiae_index.4.ht2
+|       │── Scerevisiae_index.5.ht2
+|       │── Scerevisiae_index.6.ht2
+|       │── Scerevisiae_index.7.ht2
+|       └── Scerevisiae_index.8.ht2
 └── workflow
+    │── Snakefile
     │── envs
     │   │── tool1.yaml
     │   └── tool2.yaml
     │── rules
     │   │── module1.smk
     │   └── module2.smk
-    │── scripts
-    │   │── script1.py
-    │   └── script2.R
-    └── Snakefile
+    └── scripts
+        │── script1.py
+        └── script2.R
 ```
 
 For now, the main thing to remember is that the **code** goes into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**, except for the **`config` subfolder**, which will be **explained later**. All **output files** generated in the workflow should be stored under **`results/`**.
