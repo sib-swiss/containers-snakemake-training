@@ -168,8 +168,9 @@ This function will loop over the list of samples in the config file, replace '{s
 
 ??? success "Answer"
     There are two things to do:
-    * Insert the input function in `workflow/rules/analysis.smk`, before the rule, otherwise you will get a `name 'get_gene_counts' is not defined` error (the function needs to be defined **before** Snakemake looks for it when it parses the rule input).
-    * Use the function name as value for the input directive
+
+    1. Insert the input function in `workflow/rules/analysis.smk`, before the rule, otherwise you will get a `name 'get_gene_counts' is not defined` error (the function needs to be defined **before** Snakemake looks for it when it parses the rule input)
+    1. Use the function name as value for the input directive
 
     Your rule and function should resemble this:
     ```yaml
@@ -238,7 +239,7 @@ Now, all that is left is to run the rule to create the table.
             'results/total_count_table.tsv'
     ```
 
-    Finally, run the workflow with `snakemake --cores 4 -r -p --use-conda`
+    Finally, run the workflow with `snakemake -c 4 -p --use-conda`
 
 !!! note "--use-conda"
     Do not forget `--use-conda` otherwise Snakemake will not use the environments!!!
@@ -403,7 +404,7 @@ Now, all that is left is to run the rule to create the DEG list.
             'results/deg_list.tsv'
     ```
 
-    Finally, run the workflow with `snakemake --cores 4 -r -p --use-singularity`. You should see new Snakemake information messages:
+    Finally, run the workflow with `snakemake -c 4 -p --use-singularity`. You should see new Snakemake information messages:
     ```
     Rscript --vanilla /path/to/snakemake_rnaseq/.snakemake/scripts/tmpge97d_lz.DESeq2.R
     Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
@@ -418,7 +419,7 @@ Now, all that is left is to run the rule to create the DEG list.
     Do not forget `--use-singularity` otherwise Snakemake will not pull the image!!!
 
 ??? tip
-    If you want to see how a Snakemake-generated Dockerfile looks like, use: `snakemake --cores 1 --containerize > Dockerfile`
+    If you want to see how a Snakemake-generated Dockerfile looks like, use: `snakemake -c 1 --containerize > Dockerfile`.
 
 **Exercise:** How many DEG were detected?
 
@@ -428,14 +429,14 @@ Now, all that is left is to run the rule to create the DEG list.
 **Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
 
 ??? success "Answer"
-    You would need to execute `snakemake --cores 4 -r -p --use-conda --use-singularity -F`.
+    You would need to execute `snakemake -c 4 -p --use-conda --use-singularity -F`.
     * `-F` is to force the execution of the entire workflow
     * Don't forget `--use-conda --use-singularity`! Otherwise, you will lack some software and packages and the workflow will crash!
 
 **Exercise:** Visualise the DAG of the entire workflow.
 
 ??? success "Answer"
-    You should now be used to this. `snakemake --cores 1 -r -p -F --dag | dot -T png > images/total_dag.png`
+    You should now be used to this. `snakemake -c 1 -p -F --dag | dot -T png > images/total_dag.png`
 
 This is the DAG you should see:
 

@@ -53,7 +53,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 **Exercise:** Implement multi-threading in the rule of your choice (most of time, we start by multi-threading the longest jobs, here the mapping step, but with our small example dataset, it doesn't matter too much).
 
-??? tip "Explicit is better than implicit and placeholders"
+??? tip "Explicit is better than implicit; placeholders"
     * Even if a software cannot multi-thread, it is useful to add `threads: 1` to keep a consistency between rules and clearly state that the software works with a single thread.
     * The `threads` directive can also be used as a placeholder in the `shell` directive!
 
@@ -170,9 +170,9 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 **Exercise:** What Snakemake command should you use to run the workflow with 4 cores?
 
 ??? success "Answer"
-    You need to provide additional cores to Snakemake in the execution command with `--cores 4`:
+    You need to provide additional cores to Snakemake in the execution command with `-c 4`:
     ```
-    snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    snakemake -c 4 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
     The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you leave this number at the default value (1), Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap the rule threads at `--cores` to avoid requesting too many cores. Another benefit of increasing the value of `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running 2 jobs using 2 threads each).
 
@@ -190,9 +190,9 @@ If you run the workflow from scratch with all the multihreading settings mention
 ??? success "Answer"
     The command to use is:
 
-    `snakemake --cores 4 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
+    `snakemake -c 4 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`
 
-    Do not forget to provide additional cores to Snakemake in the execution command with `--cores 4`. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing `--cores` allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
+    Do not forget to provide additional cores to Snakemake in the execution command with `-c 4`. Note that the number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`. Therefore, if you leave this number at 1, Snakemake will not be able to use multiple threads. Also note that increasing `--cores` allows Snakemake to run multiple jobs in parallel (for example, running 2 jobs using 2 threads each). The workflow now takes ~6 min to run, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multi-threading is when the datasets and computing power get bigger!
  -->
 
 
@@ -261,9 +261,9 @@ rule example:
     ```
 
 ??? info "Snakemake re-run behaviour"
-    If you try to re-run only the last rule with `snakemake --cores 4 -r -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`, Snakemake will actually try to re-run 3 rules in total.
+    If you try to re-run only the last rule with `snakemake -c 4 -p -f results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`, Snakemake will actually try to re-run 3 rules in total.
 
-    This is because the code changed in 2 rules (see `reason` field in Snakemake's log), which triggered an update of the inputs in the 3rd rule (`sam_to_bam`). To avoid this, first `touch` the files with `snakemake --cores 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv` then re-run the last rule.
+    This is because the code changed in 2 rules (see `reason` field in Snakemake's log), which triggered an update of the inputs in the 3rd rule (`sam_to_bam`). To avoid this, first `touch` the files with `snakemake -c 1 --touch -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv` then re-run the last rule.
 
 #### Config files
 
@@ -295,7 +295,7 @@ config['resources']  # --> {'threads': 4, 'memory': '4G'}  # Lists of named para
 config['resources']['threads']  # --> 4
 ```
 
-??? info "Accessing config values in `shell`"
+??? tip "Accessing config values in `shell`"
     Values stored in the `config` dictionary cannot be accessed directly within the `shell` directive. If you need to use a parameter value in `shell`, define the parameter in `params` and assign its value from the `config` dictionary.
 
 **Exercise:** Create a config file in YAML format and fill it with adapted variables and values to replace the 2 hard-coded parameters in rules `read_mapping` and `reads_quantification_genes`. Then replace the hard-coded parameters by values from the config file and add its path on top of your Snakefile.
@@ -426,7 +426,7 @@ rule all:
 
     <!-- Note that we used only one of the two outputs of `rule reads_quantification_genes`. We do this because it is enough to trigger the execution and if the rule didn't produce both outputs, Snakemake would crash and report it this error. -->
 
-    Now, let's try to do a dry-run with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing thanks to the `-F` flag, including:
+    Now, let's try to do a dry-run with this new rule: `snakemake -c 4 -F -p -n`. You should see all the rules appearing thanks to the `-F` parameter, including:
 
     ```sh
     localrule all:
@@ -483,7 +483,7 @@ Using a target rule like the one presented in the previous paragraph gives anoth
             expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)
     ```
 
-    If you launch the workflow in dry-run mode with this new rule: `snakemake --cores 4 -F -r -p -n`. You should see all the rules appearing 5 times (1 for each sample that hasn't been processed yet):
+    If you launch the workflow in dry-run mode with this new rule: `snakemake -c 4 -F -p -n`. You should see all the rules appearing 5 times (1 for each sample that hasn't been processed yet):
 
     ```sh
     localrule all:
@@ -547,7 +547,7 @@ But we can do even better! At the moment, samples are defined in a list at the t
 ??? info "An even more Snakemake-idiomatic solution"
     There is an even better and more Snakemake-idiomatic version of the `expand()` syntax:
 
-    `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`.
+    `expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])`
 
     While it may not seem easy to use and understand, this entirely removes the need to write the output paths!
 
@@ -556,16 +556,16 @@ But we can do even better! At the moment, samples are defined in a list at the t
 **Exercise:** Touch the files already present in your workflow to avoid re-creating them and then run your workflow on the 5 other samples.
 
 ??? success "Answer"
-    * Touch the existing files: `snakemake --cores 1 --touch`
-    * Run the workflow `snakemake --cores 4 -r -p`
+    * Touch the existing files: `snakemake -c 1 --touch`
+    * Run the workflow `snakemake -c 4 -p`
 
 Thanks to the parallelisation, the workflow execution should take less than 10 min in total to process all the samples!
 
 **Exercise:** Generate the workflow DAG and filegraph.
 
 ??? success "Answer"
-    * Generate the DAG: `snakemake --cores 1 -F -r -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
-    * Generate the filegraph: `snakemake --cores 1 -F -r -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
+    * Generate the DAG: `snakemake -c 1 -F -p --rulegraph | dot -Tpng > images/all_samples_rulegraph.png`
+    * Generate the filegraph: `snakemake -c 1 -F -p --filegraph | dot -Tpng > images/all_samples_filegraph.png`
 
 Your DAG should resemble this:
 

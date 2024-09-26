@@ -49,7 +49,10 @@ Rules are defined and written in a file called **Snakefile** (note the capital `
 
 It is now time to execute your first worklow! To do this, you need to tell Snakemake what is your **target**, *i.e.* what is the **specific output** that you want to generate. A target can be any output from any rule in the workflow.
 
-**Exercise:** Create a Snakefile and copy the previous rule in it. Then, execute the workflow with `snakemake --cores 1 <target>`. What value should you use for `<target>`? Once Snakemake execution is finished, can you locate the output file?
+**Exercise:** Create a Snakefile and copy the previous rule in it. Then, execute the workflow with `snakemake -c 1 <target>`. What value should you use for `<target>`? Once Snakemake execution is finished, can you locate the output file?
+
+??? info "What does `-c/--cores` do?"
+    The `-c/--cores N` parameter controls the maximum number of CPU cores used in parallel. If N is omitted or ‘all’, Snakemake will use all the available CPU cores. In case of cluster/cloud execution, this argument sets the maximum number of cores requested from the cluster or cloud scheduler.
 
 ??? warning "Code indentation in Snakemake"
     As Snakemake is built on top of Python, proper **code indentation is crucial**. Wrong indentation often results in cryptics errors. We recommend using **indents of 4 spaces**, but here are two rules that should be followed at all times:
@@ -60,7 +63,7 @@ It is now time to execute your first worklow! To do this, you need to tell Snake
 ??? success "Answer"
     * The target value is the file you want to generate, here `results/first_step.txt`. The command to execute the workflow is:
     ```
-    snakemake --cores 1 results/first_step.txt
+    snakemake -c 1 results/first_step.txt
     ```
     * The output is located in the `results` folder. You can check the folder content with `ls -alh results/`
     * You can check the output content with `cat results/first_step.txt`
@@ -87,9 +90,9 @@ During the workflow execution, Snakemake automatically created the **missing fol
 
     Snakemake re-runs can be forced:
 
-    * For a specific rule using the `-R` parameter: `snakemake --cores 1 -R <rule_name>`
-    * For a specific target using the `-f` parameter: `snakemake --cores 1 -f <target>`
-    * For **all workflow outputs** using the `-F` parameter: `snakemake --cores 1 -F`
+    * For a specific rule using the `-R/--forcerun` parameter: `snakemake -c 1 -R <rule_name>`
+    * For a specific target using the `-f/--force` parameter: `snakemake -c 1 -f <target>`
+    * For **all workflow outputs** using the `-F/--forceall` parameter: `snakemake -c 1 -F`
 
     In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see [--rerun-triggers parameter](https://snakemake.readthedocs.io/en/v8.20.5/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 
@@ -131,7 +134,7 @@ As you may have guessed from the previous rule, the `input` and `output` directi
 
 #### Rule order matters!
 
-**Exercise:** Add the rule `second_step` to your Snakefile, **after** the `first_step` rule. Then, run the workflow **without specifying an output** with `snakemake --cores 1`. What happens?
+**Exercise:** Add the rule `second_step` to your Snakefile, **after** the `first_step` rule. Then, run the workflow **without specifying an output** with `snakemake -c 1`. What happens?
 
 ??? tip "Your Snakefile should look like this"
     ```python linenums="1"
@@ -171,13 +174,13 @@ The core principle of Snakemake's execution is to compute a **Directed Acyclic G
 
 **Exercise:** With this in mind, identify the target you need to use to trigger the execution of `rule second_step`. Add the `-F` parameter to the `snakemake` command and execute the workflow. What do you see?
 
-??? info "What does `-F` do?"
-    The `-F` parameter forces the re-creation of **all outputs** of the workflow. It is used here to avoid manually removing files, but it should be used carefully, especially with large workflows which contains a lot of outputs.
+??? info "What do we use `-F/--forceall` here?"
+    The `-F/--forceall` parameter forces the re-creation of **all outputs** of the workflow. It is used here to avoid manually removing files, but it should be used carefully, especially with large workflows which contains a lot of outputs.
 
 ??? success "Answer"
     * To trigger the execution of the second rule, you need to use `results/second_step.txt` as target. The command is:
     ```
-    snakemake --cores 1 -F results/second_step.txt
+    snakemake -c 1 -F results/second_step.txt
     ```
     * You should now see Snakemake execute the two rules and produce both targets/outputs: to generate the output `results/second_step.txt`, Snakemake requires the input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, here the rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG
 

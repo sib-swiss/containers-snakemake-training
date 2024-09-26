@@ -8,9 +8,9 @@ There are many ways to design a new workflow, but these few pieces of advice wil
 
 * Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!
     * Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first
-    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)
+    * Determine which rules (if any) aggregate or split inputs and create input functions accordingly (the topic is tackled in [this](5_reproducibility_snakemake.md) series of exercises)
 * Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!
-    * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `--dryrun` parameter to test the workflow before running it. You can even do that without writing all the shell commands!
+    * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `-n/--dry-run/--dryrun` parameter to test the workflow before running it. You can even do that without writing all the shell commands!
 * List any parameters or settings that might need to be adjusted later
 * Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, wildcards... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
 
@@ -20,7 +20,7 @@ It is very likely you will see bugs and errors the first time you try to run a n
 
 ### Order of operations in Snakemake
 
-The topic was tackled when DAGs were mentioned, but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command `snakemake --cores 1 <target>`. There are 3 main phases:
+The topic was approached when we discussed [DAGs](2_introduction_snakemake.md#chaining-rules), but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command `snakemake -c 1 <target>`. There are 3 main phases:
 
 1. Prepare to run:
     1. Read all the rule definitions from the Snakefile
@@ -37,7 +37,7 @@ The topic was tackled when DAGs were mentioned, but to efficiently debug a workf
 
 ### Debugging advice
 
-Sometimes, Snakemake will give you a precise error report, but other times... less so. Try to identify which phase of execution failed (see [previous paragraph](6_debugging_snakemake.md#order-of-operations-in-snakemake) on order of operations) and double-check the most common error causes for that phase:
+Sometimes, Snakemake will give you a precise error report, but other times... less so. Try to identify which phase of execution failed (see previous paragraph on [order of operations](6_debugging_snakemake.md#order-of-operations-in-snakemake)) and double-check the most common error causes for that phase:
 
 1. Parsing phase failures (phase 1):
     * Syntax errors, among which (but not limited to):

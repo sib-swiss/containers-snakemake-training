@@ -29,9 +29,9 @@ In each rule, you should try (as much as possible) to:
 
 ## Testing the workflow's logic
 
-* If you have a doubt, do not hesitate to test your workflow logic with a **dry-run** (the `-n` flag): `snakemake --cores 1 -n <target>`. Snakemake will then display all the jobs required to generate the target.
-* To obtain additional information on why a specific job is necessary, run Snakemake with the `-r` flag (which can -and usually is- combined with `-n`): `snakemake --cores 1 -n -r <target>`. For each job, Snakemake will print a **reason** field explaining why the job is required.
-* To visualise the exact command executed by each job (with the placeholders and wildcards replaced by their values), run snakemake with the `-p` flag: `snakemake --cores 1 -n -r -p <target>`.
+* If you have a doubt, do not hesitate to test your workflow logic with a **dry-run** (the `-n/--dry-run/--dryrun` parameter): `snakemake -c 1 -n <target>`. Snakemake will then display all the jobs required to generate the target as well as a **reason** field explaining why each job is required
+* To visualise the exact commands executed by each job (with the placeholders and wildcards replaced by their values), run snakemake with the `-p/--printshellcmds` parameter: `snakemake -c 1 -p <target>`
+* These two parameters are often used together to check an entire workflow: `snakemake -c 1 -n -p <target>`
 
 ## Data origin
 
@@ -126,12 +126,12 @@ touch workflow/Snakefile  # Create empty Snakefile
 ```
 
 ??? info "What does `-p` do?"
-    The `-p` flag of `mkdir` make parent directories as needed and does not return an error if the directory already exists.
+    The `-p` parameter of `mkdir` make parent directories as needed and does not return an error if the directory already exists.
 
 The **Snakefile** marks the **entrypoint** of the workflow. It will be automatically discovered when running Snakemake from the root of the structure, here `snakemake_rnaseq/`.
 
-??? info "Using a Snakefiles from a non-default location"
-    Snakemake can use a Snakefile from a non-default location thanks the `-s` flag: `snakemake --cores 1 -s <Snakefile_path> <target>`. However, it is **highly discouraged** as it **hampers reproducibility**.
+??? info "Using a Snakefile from a non-default location"
+    Snakemake can use a Snakefile from a non-default location thanks the `-s/--snakefile` parameter: `snakemake -c 1 -s <Snakefile_path> <target>`. However, it is **highly discouraged** as it **hampers reproducibility**.
 
 ??? warning "Relative paths in Snakemake"
     All the paths in a Snakefile are relative to the working directory in which the `snakemake` command is executed:
@@ -213,7 +213,7 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 ??? success "Answer"
     To process the sample `highCO2_sample1`, for example, you would use the command:
 
-    ```snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq```
+    ```snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq```
 
     You don't need to ask for the two outputs of the rule: asking only for one will still trigger the execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
 
@@ -279,11 +279,16 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 **Exercise:** What do you think about the value of the `-x` parameter?
 
 ??? success "Answer"
-    Something very interesting is happening here: to run, HISAT2 requires several genome index files. As such, they could (should?) be considered as inputs... and this is a problem: on one hand, the `-x` parameter only accepts strings containing the files path and common name. This means that if you were to manually add all the index files as inputs, HISAT2 would not recognize them and crash. On the other hand, if you were add the value of `-x` as input, Snakemake would look for a file called `resources/genome_indices/Scerevisiae_index`... and crash because such a file doesn't exist! This highlights the fact that **inputs must be files** and this is why we directly added the value of `-x` in the `shell` command. However, this is not very convenient: we will see later a better way to deal with this problem.
+    Something very interesting is happening here: to run, HISAT2 requires several genome index files. As such, they could (should?) be considered as inputs... and this is a problem:
+
+    * On one hand, the `-x` parameter only accepts strings containing the files path and common name. This means that if you were to manually add all the index files as inputs, HISAT2 would not recognize them... and crash!
+    * On the other hand, if you were add the value of `-x` as input, Snakemake would look for a file called `resources/genome_indices/Scerevisiae_index`... and crash because such a file doesn't exist!
+
+    This highlights the fact that **inputs must be files** and this is why we directly added the value of `-x` in the `shell` command. However, this is not very convenient: we will see later a better way to deal with this problem.
 
 Using the same sample than before (`highCO2_sample1`), the workflow can be run with:
 
-```snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam```
+```snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam```
 
 That being said, we recommend **not to run it now**, because this step is the longest of the workflow (with the current settings, it will take ~6 min to complete). If you want to run it now, you can, but you should launch it and start working on the next rules while it finishes.
 
@@ -348,7 +353,7 @@ rule sam_to_bam:
 
 Using the same sample than before (`highCO2_sample1`), the workflow can be run with
 ```
-snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
+snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
 ```
 However, you will soon run the entire workflow, so it might be worth waiting!
 
@@ -452,9 +457,9 @@ It would be interesting to know what is happening when featureCounts runs. This 
 **Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of the rule `reads_quantification_genes`. Does it contain useful information?
 
 ??? success "Answer"
-    Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules. Using the same sample than before (`highCO2_sample1`). You can add the `-F` flag to force an entire re-run, which should take ~10 min.:
+    Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules. Using the same sample than before (`highCO2_sample1`). You can add the `-F` parameter to force an entire re-run, which should take ~10 min.:
     ```
-    snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    snakemake -c 1 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
     You can check the logs with the command:
     ```
@@ -476,7 +481,7 @@ We have now implemented and run the main steps of our workflow. It is always a g
 
 
 
-**Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using the `--dag` flag. Remember that Snakemake prints a DAG in text format, so you need to pipe its results (using `|`) into the `dot` command to transform it into a picture. Do you need to specify a target?
+**Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using the `--dag` parameter. Remember that Snakemake prints a DAG in text format, so you need to pipe its results (using `|`) into the `dot` command to transform it into a picture. Do you need to specify a target?
 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
@@ -491,15 +496,15 @@ We have now implemented and run the main steps of our workflow. It is always a g
 ??? success "Answer"
     To run the command without target, you can use:
     ```
-    snakemake --cores 1 --dag -F | dot -Tpng > images/dag.png
+    snakemake -c 1 --dag -F | dot -Tpng > images/dag.png
     ```
     You will get a `Target rules may not contain wildcards.` error. This makes sense, because if you don't give a target to Snakemake, it can't compute the wildcard values. To run the command using the same sample than before (`highCO2_sample1`), you can target one of the final outputs of the workflow:
     ```
-    snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
+    snakemake -c 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
     ```
     We added the `-F` parameter to force Snakemake to compute the entire DAG and ensure all the jobs are shown. You can also use `-f <target>` to show fewer jobs.
 
-    An important thing to remember is that the `--dag` flag implicitly activates the `--dry-run/--dryrun/-n` parameter, which means that no jobs are executed during the plot creation.
+    An important thing to remember is that the `--dag` parameter implicitly activates the `--dry-run/--dryrun/-n` parameter, which means that no jobs are executed during the plot creation.
 
 Snakemake can also create other graphs. In total, there are 3 types:
 
@@ -520,9 +525,9 @@ And the commands to create them:
 
 * Rulegraph:
 ```
-snakemake --cores 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf > images/rulegraph.pdf
+snakemake -c 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf > images/rulegraph.pdf
 ```
 * Filegraph:
 ```
-snakemake --cores 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg > images/filegraph.jpg
+snakemake -c 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg > images/filegraph.jpg
 ```
