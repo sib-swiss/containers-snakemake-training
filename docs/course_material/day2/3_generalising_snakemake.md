@@ -35,7 +35,7 @@ In each rule, you should try (as much as possible) to:
 
 ## Data origin
 
-The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different concentrations of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high CO<sub>2</sub>**) and **down-sampled** them to **1 million read-pairs each** to reduce computation time.
+The data we will use during the exercises was produced [in this work](https://pubmed.ncbi.nlm.nih.gov/31654410/). Briefly, the team studied the transcriptional response of a strain of baker's yeast, [_Saccharomyces cerevisiae_](https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae), facing environments with different concentrations of CO<sub>2</sub>. To this end, they performed **150 bp paired-end** sequencing of mRNA-enriched samples. Detailed information on all the samples are available [here](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078), but just know that for the purpose of the course, we selected **6 samples** (**3 replicates per condition**, **low** and **high CO<sub>2</sub>**) and **down-sampled** them to **1 million read pairs each** to reduce computation time.
 
 ## Exercises
 
@@ -393,10 +393,6 @@ rule reads_quantification_genes:
     output:
         gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
         gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-    log:
-        'logs/{sample}/{sample}_genes_read_quantification.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
     shell:
         '''
         featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
@@ -423,7 +419,7 @@ rule reads_quantification_genes:
     * `-o`: specify path of file containing the count results (_i.e._ output file, in tsv format)
     * Paths of the sorted BAM file(s) (_i.e._ input file(s)) are not specified with an parameter, they are simply added at the end of the command
 
-**Exercise:** What does L19 do? Why did we add it?
+**Exercise:** What does L16 do? Why did we add it?
 
 ??? success "Answer"
     The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about the read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, the summary will be printed in `test.tsv.summary`. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.
@@ -448,36 +444,87 @@ It would be interesting to know what is happening when featureCounts runs. This 
         output:
             gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
             gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-        log:
-            'logs/{sample}/{sample}_genes_read_quantification.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
+        log:  # log directive
+            'logs/{sample}/{sample}_genes_read_quantification.log'  # Path of log file
+        benchmark:  # benchmark directive
+            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'  # Path of benchmark file
         shell:
             '''
-            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
             -B -C --largestOverlap --verbose -F GTF \
             -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &>> {log}
-            echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
-            echo "Results saved in <{output.gene_level}>" >> {log}
-            echo "Report saved in <{output.gene_summary}>" >> {log}
             '''
     ```
 
 ### Running the whole workflow
 
-**Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of the rule `reads_quantification_genes`. Does it contain useful information?
+**Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of the rule `reads_quantification_genes`. Does it contain anything? How many read pairs were assigned to a feature?
 
 ??? success "Answer"
     Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules. Using the same sample than before (`highCO2_sample1`). You can add the `-F` parameter to force an entire re-run, which should take ~10 min.:
     ```
     snakemake -c 1 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
-    You can check the logs with the command:
+    If you used the same path for the log file than the rule given above, you can check it with the command:
     ```
     cat logs/highCO2_sample1/highCO2_sample1_genes_read_quantification.log
     ```
+    In the log files, you can find a summary of the parameters used by `featureCounts`, its inputs and outputs... and the number of read pairs successfully assigned to a gene; with `highCO2_sample1`, 817894 read pairs (83.8% of the total) were assigned.
+    ```
+            ==========     _____ _    _ ____  _____  ______          _____
+            =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \
+              =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+                ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+                  ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+            ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+          v2.0.6
+
+    //========================== featureCounts setting ===========================\\
+    ||                                                                            ||
+    ||             Input files : 1 BAM file                                       ||
+    ||                                                                            ||
+    ||                           highCO2_sample1_mapped_reads_sorted.bam          ||
+    ||                                                                            ||
+    ||             Output file : highCO2_sample1_genes_read_quantification.tsv    ||
+    ||                 Summary : highCO2_sample1_genes_read_quantification.ts ... ||
+    ||              Paired-end : yes                                              ||
+    ||        Count read pairs : yes                                              ||
+    ||              Annotation : Scerevisiae.gtf (GTF)                            ||
+    ||      Dir for temp files : results/highCO2_sample1                          ||
+    ||                                                                            ||
+    ||                 Threads : 1                                                ||
+    ||                   Level : meta-feature level                               ||
+    ||      Multimapping reads : not counted                                      ||
+    || Multi-overlapping reads : not counted                                      ||
+    ||   Min overlapping bases : 1                                                ||
+    ||                                                                            ||
+    \\============================================================================//
+
+    //================================= Running ==================================\\
+    ||                                                                            ||
+    || Load annotation file Scerevisiae.gtf ...                                   ||
+    ||    Features : 7507                                                         ||
+    ||    Meta-features : 7127                                                    ||
+    ||    Chromosomes/contigs : 17                                                ||
+    ||                                                                            ||
+    || Process BAM file highCO2_sample1_mapped_reads_sorted.bam...                ||
+    ||    Strand specific : reversely stranded                                    ||
+    ||    Paired-end reads are included.                                          ||
+    ||    Total alignments : 975705                                               ||
+    ||    Successfully assigned alignments : 817894 (83.8%)                       ||
+    ||    Running time : 0.02 minutes                                             ||
+    ||                                                                            ||
+    || Write the final count table.                                               ||
+    || Write the read assignment summary.                                         ||
+    ||                                                                            ||
+    || Summary of counting results can be found in file "results/highCO2_sample1  ||
+    || /highCO2_sample1_genes_read_quantification.tsv.summary"                    ||
+    ||                                                                            ||
+    \\============================================================================//
+
+    ```
+
 
 **Extra:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially the wildcard values, input and output names etc...?
 
@@ -486,7 +533,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
     ```
     cat .snakemake/log/<latest_log>
     ```
-    This general log says exactly what was run by Snakemake, after the placeholders, wildcards... were replaced by their actual values.
+    This general log says exactly what was run by Snakemake, after the placeholders, wildcards... were replaced by their actual values. It is identical to what appears on your screen when you run Snakemake.
 
 ### Visualising the DAG of the workflow
 
