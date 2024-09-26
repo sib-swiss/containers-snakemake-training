@@ -59,7 +59,7 @@ At the end of this series of exercises, your workflow DAG should look like this:
 
 ### Downloading the data and setting up the folder structure
 
-In this part, we will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html). We already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
+In this part, we will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). We already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
 
 ```
 │── .gitignore

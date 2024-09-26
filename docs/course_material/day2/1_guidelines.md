@@ -10,7 +10,7 @@ All the software needed in this workflow is either:
 * Already installed in a Docker container
 * Will be installed via a conda environment during today's exercises
 
-All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/) for Snakemake version `8.20.3`.
+All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/) for Snakemake version `8.20.5`.
 
 ## Website colour code explanation
 

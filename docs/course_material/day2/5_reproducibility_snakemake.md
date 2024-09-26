@@ -82,7 +82,7 @@ You have done that a few times already, so it should not be too difficult.
 
 #### Getting the Python script and running it
 
-**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
+**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
 
 ??? success "Answer"
     ```sh
@@ -307,7 +307,7 @@ You have done that a few times already, so it should not be too difficult.
 
 #### Getting the R script and running it
 
-**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
+**Exercise:** Download the script and place it the proper folder. Remember that per the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html), scripts should be stored in a subfolder `workflow/scripts`.
 
 ??? success "Answer"
     ```sh
@@ -443,4 +443,4 @@ This is the DAG you should see:
   <img src="../../../assets/images/total_dag.png" width="100%"/>
 </figure>
 
-Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.3/snakefiles/best_practices.html)!
+Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!
