@@ -207,8 +207,9 @@ rule reads_quantification_genes:
     shell:
         '''
         echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
-        -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+        featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+        -B -C --largestOverlap --verbose -F GTF \
+        -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &>> {log}
         echo "Renaming output files" >> {log}
         mv {output.gene_level}.summary {output.gene_summary}
         echo "Results saved in <{output.gene_level}>" >> {log}

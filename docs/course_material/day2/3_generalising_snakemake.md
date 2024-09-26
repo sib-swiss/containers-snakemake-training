@@ -399,7 +399,8 @@ rule reads_quantification_genes:
         'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
     shell:
         '''
-        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
+        featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+        -B -C --largestOverlap --verbose -F GTF \
         -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted}
         mv {output.gene_level}.summary {output.gene_summary}
         '''
@@ -411,8 +412,8 @@ rule reads_quantification_genes:
     * `-g`: specify if and how to gather feature counts. Here, reads are counted by features (exon) (`-t`) and the exon counts are gathered by 'meta-features’ (genes) (`-g`)
     * `-s`: perform strand-specific read counting
         * Strandedness is determined by looking at the mRNA library preparation kit. It can also be determined _a posteriori_ with scripts such as [infer_experiment.py](https://rseqc.sourceforge.net/#infer-experiment-py) from the [RSeQC package](http://doi.org/10.1093/bioinformatics/bts356)
-    * `-p`: count fragments instead of reads
-        * If you don't use this parameter with paired-end reads, `featureCounts` won't be able to assign the read-pairs to features
+    * `-p`: specify that input data contain paired-end reads
+    * `--countReadPairs`: count read pairs instead of reads
     * `-B`: only count read pairs that have both ends aligned
     * `-C`: do not count read pairs that have their two ends mapping to different chromosomes or mapping on the same chromosome but on different strands
     * `--largestOverlap`: assign reads to the meta-feature/feature that has the largest number of overlapping bases
@@ -454,7 +455,8 @@ It would be interesting to know what is happening when featureCounts runs. This 
         shell:
             '''
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-            featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \
+            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+            -B -C --largestOverlap --verbose -F GTF \
             -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &>> {log}
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
