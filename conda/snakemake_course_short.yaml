@@ -3,10 +3,11 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - atropos==1.1.28
+  - atropos==1.1.32
   - fastqc==0.12.1
-  - graphviz==8.1.0
+  - graphviz==11.0.0
   - hisat2==2.2.1
-  - samtools==1.17
-  - snakemake==7.32.4
-  - subread==2.0.1
+  - python==3.12.3
+  - samtools==1.21
+  - snakemake==8.20.5
+  - subread==2.0.6
