@@ -15,7 +15,7 @@
 
 In this series of exercises, we will create the last two rules of the workflow. Each rule will execute a script, one in Python and one in R, and both rules will have dedicated environment that you will need to take into account in the snakefiles. These last two rules are quite different from the previous ones, so it would be a good idea to implement them in a new snakefile in `workflow/rules`, for example called `analysis.smk`.
 
-!!! note "Development and back-up"
+??? info "Development and back-up"
     During this session, we will modify our snakefiles quite heavily, so it may be a good idea to start by making a back-up: `cp -r worklow/ worklow_backup`. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up.
 
 ??? tip
@@ -25,9 +25,9 @@ In this series of exercises, we will create the last two rules of the workflow. 
 
 To perform a Differential Expression Analysis (DEA), it is easier to have a single file gathering all the read counts of the different samples.
 
-**Exercise:** Implement a rule to list and merge read count files (coming from `rule reads_quantification_genes`) into a single file using the Python script provided [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py).
+**Exercise:** Implement a rule to list and merge read count files (coming from rule `reads_quantification_genes`) into a single file using the Python script provided [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py).
 
-!!! note "Information on the script to compute the table"
+??? info "Information on the script to compute the table"
     * You can download the script with `wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py`
     * It goes in a special directory in your workflow
     * It is written in Python
@@ -86,21 +86,21 @@ You have done that a few times already, so it should not be too difficult.
 
 ??? success "Answer"
     ```sh
-    wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py  # Download the script
-    mkdir -p workflow/scripts  # Create the appropriate folder
-    mv count_table.py workflow/scripts  # Move the script in the newly created folder
+    wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py  # Download script
+    mkdir -p workflow/scripts  # Create appropriate folder
+    mv count_table.py workflow/scripts  # Move script in the newly created folder
     ```
 
 **Exercise:** Check how long the script is.
 
 ??? success "Answer"
-    If you run `wc -l workflow/scripts/count_table.py`, you will see that the script is 67 lines long. This is too much to use a `run` directive, so we will use the `script` directive instead. This means that we need to add the following to our `rule count_table`:
+    If you run `wc -l workflow/scripts/count_table.py`, you will see that the script is 67 lines long. This is too much to use a `run` directive, so we will use the `script` directive instead. This means that we need to add the following to our rule `count_table`:
     ```python
     script:
         '../scripts/count_table.py'
     ```
 
-!!! note "Script path"
+??? info "Script path"
     If you placed included files in subfolders (like `rules/analysis.smk`), you need to change relative paths for external script files, hence the `../` in the script path.
 
 ??? tip
@@ -109,7 +109,7 @@ You have done that a few times already, so it should not be too difficult.
     * You could implement most of the functionalities in a module and use this module in a simple script called by Snakemake
     * You could test for the existence of a `snakemake` object and handle parameter values differently (_e.g._ command-line arguments) if the object does not exist
     
-    Inside the script, you have access to an object `snakemake` that provides access to the same objects that are available in the `run` and `shell` directives (input, output, params, wildcards, log, threads, resources, config), _e.g._ you can use `snakemake.input[0]` to access the first input file of a rule, or `snakemake.input.input_name` to access a specific named input.
+    Inside the script, you have access to an object `snakemake` that provides access to the same objects that are available in the `run` and `shell` directives (`input`, `output`, `params`, `wildcards`, `log`, `threads`, `resources`, config), _e.g._ you can use `snakemake.input[0]` to access the first input file of a rule, or `snakemake.input.input_name` to access a specific named input.
 
 **Exercise:** Check the script content to see whether it requires specific packages.
 
@@ -128,20 +128,20 @@ You have done that a few times already, so it should not be too difficult.
         - pandas == 1.4.3
     ```
 
-    This means that you need to add the following to your `rule count_table`:
+    This means that you need to add the following to your rule `count_table`:
     ```python
     conda:
         '../envs/py.yaml'
     ```
 
-!!! note "Environment file path"
+??? info "Environment file path"
     If you placed included files in subfolders (like `rules/analysis.smk`), you need to change relative paths for conda environments files as well, hence the `../` in the environment file path.
 
 Using conda environments improves reproducibility for many reasons, including version control and the fact that users do not need to manually manage software dependencies. **Note: the first execution of the workflow after adding Conda environments will take some time, because Conda will have to download and install all the software**.
 
 #### Identifying and listing the input files
 
-The before-last step is the most complex one: identifying all the inputs of the rule and gathering them in a list. Here, there are only 6 samples, so in theory, we could list them directly... However, by now you should that is not a good solution. Fortunately, there is a much more elegant and convenient way to do this: an input function, which provides the added benefit of scaling up very well if the number of samples increase.
+The before-last step is the most complex one: identifying all the inputs of the rule and gathering them in a list. Here, there are only six samples, so in theory, we could list them directly... However, by now you should that is not a good solution. Fortunately, there is a much more elegant and convenient way to do this: an input function, which provides the added benefit of scaling up very well if the number of samples increase.
 
 We already wrote the input function for you:
 
@@ -156,9 +156,9 @@ def get_gene_counts(wildcards):
             for sample in config['samples']]
 ```
 
-This function will loop over the list of samples in the config file, replace '{sample}' with the current sample name of the iteration to create a string which is the output path from the `rule reads_quantification_genes` of said sample. Then, it will aggregate all the paths in a list and return this list.
+This function will loop over the list of samples in the config file, replace '{sample}' with the current sample name of the iteration to create a string which is the output path from the rule `reads_quantification_genes` of said sample. Then, it will aggregate all the paths in a list and return this list.
 
-!!! note "Details on input functions"
+??? info "Details on input functions"
     * Input functions take the `wildcards` global object as **single argument**
     * You can access wildcard values inside an input function with the syntax `{wildcards.wildcards_name}`
     * Input and output functions can return a list of files, which will then be automatically handled like multiple inputs or outputs by Snakemake. These functions can also return a dictionary; in this case, the function should be called with the syntax `input: unpack(<function_name>)`. The dictionary's keys will be interpreted as input/output names and the dictionary's values will be interpreted as input/output values
@@ -205,7 +205,7 @@ This function will loop over the list of samples in the config file, replace '{s
             '../scripts/count_table.py'
     ```
 
-!!! note "Input functions usage"
+??? info "Input functions and parentheses"
     You don't need to use parentheses or specify any argument when you call an input function in the `input` directive.
 
 #### Adapting the Snakefile and running the rule
@@ -215,7 +215,7 @@ Now, all that is left is to run the rule to create the table.
 **Exercise:** Which command should you use to create the output? Is there anything else to do beforehand?
 
 ??? success "Answer"
-    It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the `rule all`! Your Snakefile should now resemble this:
+    It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the rule `all`! Your Snakefile should now resemble this:
 
     ```python
     '''
@@ -223,17 +223,17 @@ Now, all that is left is to run the rule to create the table.
     map reads, and perform Differential Expression Analyses.
     '''
 
-    # Path of the config file
+    # Config file path
     configfile: 'config/config.yaml'
 
-    # Rules to execute the workflow
+    # Rules to execute workflow
     include: 'rules/read_mapping.smk'
     include: 'rules/analyses.smk'
 
-    # Master rule that launches the workflow
+    # Master rule used to launch workflow
     rule all:
         '''
-        Dummy rule to automatically generate the required outputs.
+        Dummy rule to automatically generate required outputs.
         '''
         input:
             'results/total_count_table.tsv'
@@ -241,7 +241,7 @@ Now, all that is left is to run the rule to create the table.
 
     Finally, run the workflow with `snakemake -c 4 -p --use-conda`
 
-!!! note "--use-conda"
+??? info "--use-conda"
     Do not forget `--use-conda` otherwise Snakemake will not use the environments!!!
 
 ### Creating a rule to detect Differentially Expressed Genes
@@ -250,7 +250,7 @@ It is now time to write the final rule of the workflow. This rule will perform t
 
 **Exercise:** Implement a rule to perform DEA using the R script provided [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/DESeq2.R).
 
-!!! note "Information on the script to compute the table"
+??? info "Information on the script to compute the table"
     * You can download the script with `wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/DESeq2.R`
     * It goes in a special directory in your workflow
     * It is written in R
@@ -266,7 +266,7 @@ It is now time to write the final rule of the workflow. This rule will perform t
         * Memory should be set at 1 GB
         * Threads should be set at 2
     1. Think about the directive you want to use to run the script
-        * Remember than there is only one way to run an R script
+        * Remember that there is only one way to run an R script
     1. Think about the location/path of the script
     1. This script is using a lot of external packages. Fortunately, all these packages are available in a _certain Docker image you worked with yesterday_
 
@@ -319,13 +319,13 @@ You have done that a few times already, so it should not be too difficult.
 **Exercise:** Find a way to run the script.
 
 ??? success "Answer"
-    There is only one way to run an R script: use the `script` directive. This means that we need to add the following to our `rule differential_expression`:
+    There is only one way to run an R script: use the `script` directive. This means that we need to add the following to our rule `differential_expression`:
     ```python
     script:
         '../scripts/DESeq2.R'
     ```
 
-!!! note "Script path"
+??? info "Script path"
     If you placed included files in subfolders (like `rules/analysis.smk`), you need to change relative paths for external script files, hence the `../` in the script path.
 
 ??? tip
@@ -337,13 +337,13 @@ You have done that a few times already, so it should not be too difficult.
     Remember what you did during Day 1, session 3 "Working with Dockerfiles"!
 
 ??? success "Answer"
-    During Day 1, you built your own docker image, called deseq2. This image actually contains everything we need to run DEA, so let's use it again, but with Snakemake this time! This means that you need to add the following to your `rule differential_expression`:
+    During Day 1, you built your own docker image, called deseq2. This image actually contains everything we need to run DEA, so let's use it again, but with Snakemake this time! This means that you need to add the following to your rule `differential_expression`:
     ```python
     container:
         'docker://geertvangeest/deseq2:v1'
     ```
 
-!!! note "Your own Docker image"
+??? info "Your own Docker image"
     First try with your own image. If it doesn't work, then you can use Geert's image: `geertvangeest/deseq2:v1`.
 
 After all these modifcations, this is what your final rule should look like:
@@ -380,7 +380,7 @@ Now, all that is left is to run the rule to create the DEG list.
 **Exercise:** Which command should you use to create the output? Is there anything else to do beforehand?
 
 ??? success "Answer"
-    It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the `rule all`! Your Snakefile should now resemble this:
+    It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the rule `all`! Your Snakefile should now resemble this:
 
     ```python
     '''
@@ -388,17 +388,17 @@ Now, all that is left is to run the rule to create the DEG list.
     map reads, and perform Differential Expression Analyses.
     '''
 
-    # Path of the config file
+    # Config file path
     configfile: 'config/config.yaml'
 
-    # Rules to execute the workflow
+    # Rules to execute workflow
     include: 'rules/read_mapping.smk'
     include: 'rules/analyses.smk'
 
-    # Master rule that launches the workflow
+    # Master rule used to launch workflow
     rule all:
         '''
-        Dummy rule to automatically generate the required outputs.
+        Dummy rule to automatically generate required outputs.
         '''
         input:
             'results/deg_list.tsv'
@@ -415,7 +415,7 @@ Now, all that is left is to run the rule to create the DEG list.
     INFO:    Cleaning up image... 
     ```
 
-!!! note "--use-singularity"
+??? info "--use-singularity"
     Do not forget `--use-singularity` otherwise Snakemake will not pull the image!!!
 
 ??? tip

@@ -32,7 +32,7 @@ rule fastq_trim:
 
 rule read_mapping:
     '''
-    This rule maps trimmed reads of a fastq on a reference assembly.
+    This rule maps trimmed reads of a fastq onto a reference assembly.
     '''
     input:
         trim1 = rules.fastq_trim.output.trim1,

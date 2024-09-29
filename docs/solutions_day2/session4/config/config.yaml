@@ -1,9 +1,9 @@
 # Configuration options of RNAseq-analysis workflow
 
-# Location of the genome indices
+# Location of genome indices
 index: 'resources/genome_indices/Scerevisiae_index'
 
-# Location of the annotation file
+# Location of annotation file
 annotations: 'resources/Scerevisiae.gtf'
 
 # Sample names

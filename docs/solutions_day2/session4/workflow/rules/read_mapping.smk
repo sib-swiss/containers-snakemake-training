@@ -33,10 +33,9 @@ rule fastq_trim:
         echo "Trimming report saved in <{log}>" >> {log}
         '''
 
-
 # rule fastq_qc_sol3:
 #     '''
-#     This rule performs a QC on paired-end fastq files before and after trimming.
+#     This rule performs a QC on paired-end .fastq files before and after trimming.
 #     '''
 #     input:
 #         reads1 = rules.fastq_trim.input.reads1,
@@ -69,7 +68,7 @@ rule fastq_trim:
 
 rule fastq_qc_sol4:
     '''
-    This rule performs a QC on paired-end fastq files before and after trimming.
+    This rule performs a QC on paired-end .fastq files before and after trimming.
     '''
     input:
         reads1 = rules.fastq_trim.input.reads1,
@@ -78,27 +77,27 @@ rule fastq_qc_sol4:
         trim2 = rules.fastq_trim.output.trim2
     output:
         # QC before trimming
-        html1_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_1.html',
-        zipfile1_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_1.zip',
-        html2_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_2.html',
-        zipfile2_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_2.zip',
+        html1_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_1.html',  # Forward-read report in HTML format before trimming
+        zipfile1_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_1.zip',  # Forward-read report in ZIP format before trimming
+        html2_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_2.html',  # Reverse-read report in HTML format before trimming
+        zipfile2_before = 'results/{sample}/fastqc_reports/{sample}_before_trim_2.zip',  # Reverse-read report in ZIP format before trimming
         # QC after trimming
-        html1_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_1.html',
-        zipfile1_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_1.zip',
-        html2_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_2.html',
-        zipfile2_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_2.zip'
+        html1_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_1.html',  # Forward-read report in HTML format after trimming
+        zipfile1_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_1.zip',  # Forward-read report in ZIP format after trimming
+        html2_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_2.html',  # Forward-read report in HTML format after trimming
+        zipfile2_after = 'results/{sample}/fastqc_reports/{sample}_after_trim_2.zip'  # Forward-read report in ZIP format after trimming
     params:
-        wd = 'results/{sample}/',
+        wd = 'results/{sample}/fastqc_reports/',  # Temporary directory to store files before renaming
         # QC before trimming
-        html1_before = 'results/{sample}/{sample}_1_fastqc.html',
-        zipfile1_before = 'results/{sample}/{sample}_1_fastqc.zip',
-        html2_before = 'results/{sample}/{sample}_2_fastqc.html',
-        zipfile2_before = 'results/{sample}/{sample}_2_fastqc.zip',
+        html1_before = 'results/{sample}/fastqc_reports/{sample}_1_fastqc.html',  # Default FastQC output name for forward-read report in HTML format before trimming
+        zipfile1_before = 'results/{sample}/fastqc_reports/{sample}_1_fastqc.zip',  # Default FastQC output name for forward-read report in ZIP format before trimming
+        html2_before = 'results/{sample}/fastqc_reports/{sample}_2_fastqc.html',  # Default FastQC output name for reverse-read report in HTML format before trimming
+        zipfile2_before = 'results/{sample}/fastqc_reports/{sample}_2_fastqc.zip',  # Default FastQC output name for reverse-read report in ZIP format before trimming
         # QC after trimming
-        html1_after = 'results/{sample}/{sample}_atropos_trimmed_1_fastqc.html',
-        zipfile1_after = 'results/{sample}/{sample}_atropos_trimmed_1_fastqc.zip',
-        html2_after = 'results/{sample}/{sample}_atropos_trimmed_2_fastqc.html',
-        zipfile2_after = 'results/{sample}/{sample}_atropos_trimmed_2_fastqc.zip'
+        html1_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_1_fastqc.html',# Default FastQC output name for forward-read report in HTML format after trimming
+        zipfile1_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_1_fastqc.zip',# Default FastQC output name for forward-read report in ZIP format after trimming
+        html2_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_2_fastqc.html',# Default FastQC output name for reverse-read report in HTML format after trimming
+        zipfile2_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_2_fastqc.zip'# Default FastQC output name for reverse-read report in ZIP format after trimming
     log:
         'logs/{sample}/{sample}_fastqc.log'
     benchmark:
@@ -108,6 +107,8 @@ rule fastq_qc_sol4:
     threads: 2
     shell:
         '''
+        echo "Creating output directory <{params.wd}>" > {log}
+        mkdir -p {params.wd} 2>> {log}  # FastQC doesn't create output directories so we have to do it manually
         echo "Performing QC of reads before trimming in <{input.reads1}> and <{input.reads2}>" >> {log}
         fastqc --format fastq --threads {threads} --outdir {params.wd} \
         --dir {params.wd} {input.reads1} {input.reads2} &>> {log}
@@ -130,7 +131,7 @@ rule fastq_qc_sol4:
 
 rule read_mapping:
     '''
-    This rule maps trimmed reads of a fastq on a reference assembly.
+    This rule maps trimmed reads of a fastq onto a reference assembly.
     '''
     input:
         trim1 = rules.fastq_trim.output.trim1,

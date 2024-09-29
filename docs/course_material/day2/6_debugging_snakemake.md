@@ -12,7 +12,7 @@ There are many ways to design a new workflow, but these few pieces of advice wil
 * Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!
     * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `-n/--dry-run/--dryrun` parameter to test the workflow before running it. You can even do that without writing all the shell commands!
 * List any parameters or settings that might need to be adjusted later
-* Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, wildcards... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
+* Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, `wildcards`... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
 
 ## Debugging a workflow
 
@@ -24,10 +24,10 @@ The topic was approached when we discussed [DAGs](2_introduction_snakemake.md#ch
 
 1. Prepare to run:
     1. Read all the rule definitions from the Snakefile
-1. Resolve the DAG (happens when Snakemake says ‘Building DAG of jobs’):
+1. Resolve the DAG (happens when Snakemake says 'Building DAG of jobs'):
     1. Check what output(s) are required
     1. Look for matching input(s) by looking at the outputs of all the rules
-    1. Fill in the wildcards to determine the exact input(s) of the matching rule(s)
+    1. Fill in the `wildcards` to determine the exact input(s) of the matching rule(s)
     1. Check whether this(these) input(s) is(are) available; if not, repeat Step 2 until everything is resolved
 1. Run:
     1. If needed, create the output(s) folder path
@@ -51,7 +51,7 @@ Sometimes, Snakemake will give you a precise error report, but other times... le
     * Other problems with rule definition
         * Invalid rule names/directives
         * Invalid wildcard names
-        * Mismatched wildcards
+        * Mismatched `wildcards`
 1. DAG building failures (phase 2, before Snakemake tries to run any job):
     * Failure to determine the target
     * Ambiguous rules making the same output(s)
