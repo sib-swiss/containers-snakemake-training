@@ -107,6 +107,8 @@ rule fastq_qc_sol4:
     threads: 2
     shell:
         '''
+        echo "Creating output directory <{params.wd}>" > {log}
+        mkdir -p {params.wd} 2>> {log}  # FastQC doesn't create output directories so we have to do it manually
         echo "Performing QC of reads before trimming in <{input.reads1}> and <{input.reads2}>" >> {log}
         fastqc --format fastq --threads {threads} --outdir {params.wd} \
         --dir {params.wd} {input.reads1} {input.reads2} &>> {log}
@@ -172,7 +174,7 @@ rule sam_to_bam:
     benchmark:
         'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
     resources:
-        mem_mb = 250
+        mem = '250MB'
     threads: 2
     shell:
         '''
@@ -202,7 +204,7 @@ rule reads_quantification_genes:
     benchmark:
         'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
     resources:
-        mem_mb = 500
+        mem = '500MB'
     threads: 2
     shell:
         '''
