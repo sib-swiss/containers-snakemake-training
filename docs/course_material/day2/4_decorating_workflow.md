@@ -55,9 +55,8 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 **Exercise:** Implement multithreading in a rule of your choice (it's usually best to start by multithreading the longest job, here `read_mapping`, but the example dataset is small, so it doesn't really matter).
 
-??? tip "Explicit is better than implicit; placeholders"
-    * Even if a software cannot multithread, it is useful to add `threads: 1` to keep the syntax consistent between rules and clearly state that the software works with a single thread
-    * `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive
+??? tip "Placeholder"
+    `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive.
 
 ??? success "Answer"
     We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile.

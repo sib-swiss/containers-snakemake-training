@@ -7,7 +7,7 @@ a single table and perform Differential Expression Analyses.
 # Input function used in rule count_table
 def get_gene_counts(wildcards):
     '''
-    This function lists all the gene count tables of samples in the config file
+    This function lists count tables from every sample in the config file
     '''
     return [f"results/{sample}/{sample}_genes_read_quantification.tsv"
             for sample in config['samples']]
@@ -15,7 +15,7 @@ def get_gene_counts(wildcards):
 
 rule count_table:
     '''
-    This rule merges all the gene count tables of an assembly into one table.
+    This rule merges gene count tables of an assembly into one table.
     '''
     input:
         get_gene_counts
@@ -25,11 +25,11 @@ rule count_table:
         'logs/total_count_table.log'
     benchmark:
         'benchmarks/total_count_table.txt'
-    conda:
-        '../envs/py.yaml'
     resources:
         mem_mb = 500
     threads: 1
+    conda:
+        '../envs/py.yaml'
     script:
         '../scripts/count_table.py'
 
@@ -48,10 +48,10 @@ rule differential_expression:
         'logs/differential_expression.log'
     benchmark:
         'benchmarks/differential_expression.txt'
-    container:
-        'docker://geertvangeest/deseq2:v1'
     resources:
         mem_gb = 1
     threads: 2
+    container:
+        'docker://geertvangeest/deseq2:v1'
     script:
         '../scripts/DESeq2.R'
