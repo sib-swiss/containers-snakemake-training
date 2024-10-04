@@ -53,14 +53,13 @@ In this series of exercises, you will create the workflow 'backbone', _i.e._ rul
 
 At the end of this series of exercises, your workflow should look like this:
 <figure markdown align="center">
-  ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png)
+  ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
   <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
 </figure>
 
 ### Downloading data and setting up folder structure
 
 In this part, you will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). you already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
-
 ```
 │── .gitignore
 │── README.md
@@ -114,7 +113,7 @@ In this part, you will download the data and start building the directory struct
 
 For now, the main thing to remember is that **code** goes into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**, except for the **`config` subfolder**, which will be **explained later**. All **output files** generated in the workflow should be stored under **`results/`**.
 
-Now, let's download the data, uncompress them and build the first part of the directory structure.
+Let's download the data, uncompress them and build the first part of the directory structure.
 
 ```sh linenums="1"
 ssh -i ~/.ssh/key_username.pem username@18.195.170.182  # Connect to server; don't forget to change key_username and username
@@ -124,12 +123,12 @@ rm snakemake_rnaseq.tar.gz  # Delete archive
 cd snakemake_rnaseq/  # Start developing in new folder
 ```
 
-In ` snakemake_rnaseq/`, you should now see two subfolders:
+In ` snakemake_rnaseq/`, you should see two subfolders:
 
 * `data/`, which contains data to analyse
 * `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow via git
 
-Let's create the other missing subfolders and the Snakefile:
+We also need to create the other missing subfolders and the Snakefile:
 
 ```sh linenums="1"
 mkdir -p config/ images/ workflow/envs workflow/rules workflow/scripts  # Create subfolder structure
@@ -139,10 +138,15 @@ touch workflow/Snakefile  # Create empty Snakefile
 ??? info "What does `-p` do?"
     The `-p` parameter of `mkdir` make parent directories as needed and does not return an error if the directory already exists.
 
-**Snakefile** marks the workflow **entrypoint**. It will be automatically discovered when running Snakemake from the root folder, here `snakemake_rnaseq/`.
+**Snakefile** marks the workflow **entry point**. It will be automatically discovered when running Snakemake from the root folder, here `snakemake_rnaseq/`.
 
 ??? info "Using a Snakefile from a non-default location"
-    Snakemake can use a Snakefile from a non-default location thanks to the `-s/--snakefile` parameter: `snakemake -c 1 -s <Snakefile_path> <target>`. However, it is **highly discouraged** as it **hampers reproducibility**.
+    Snakemake can use a Snakefile from a non-default location thanks to the `-s/--snakefile` parameter:
+    ```sh
+    snakemake -c 1 -s <Snakefile_path> <target>
+    ```
+
+    However, it is **highly discouraged** as it **hampers reproducibility**.
 
 ??? warning "Relative paths in Snakemake"
     All paths in a Snakefile are relative to the working directory in which the `snakemake` command is executed:
@@ -150,14 +154,14 @@ touch workflow/Snakefile  # Create empty Snakefile
     * If you execute Snakemake in `snakemake_rnaseq/`, the relative path to the input files in the rule is `data/<sample>.fastq`
     * If you execute Snakemake in `snakemake_rnaseq/workflow/`, the relative path to the input files in the rule is `../data/<sample>.fastq`
 
-If you followed the [advice](#advice-and-reminders) at the top of this page, Snakemake should create all the other missing folders by itself, so it is now time to create the rules mentioned [earlier](#exercises). If needed, you can check [here](6_debugging_snakemake.md#designing-a-workflow) for a few pieces of advice on workflow design.
+If you followed the [advice](#advice-and-reminders) at the top of this page, Snakemake should create all the other missing folders by itself, so it is time to create the rules mentioned [earlier](#exercises). If needed, you can check [here](6_debugging_snakemake.md#designing-a-workflow) for a few pieces of advice on workflow design.
 
 ??? info "'bottom-up' or 'top-down' development?"
     Even if it is often easier to start from final outputs and work backwards to first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand.
 
 #### Important: do not process all the samples!
 
-**Do not try to process all the samples yet, even if we asked you to use wildards. For now, choose only one sample (which means two .fastq files because reads are paired-end). You will see an efficient way to process a list of files in the next series of exercises.**
+**Do not try to process all the samples yet, even if we asked you to use wildcards. For now, choose only one sample (which means two .fastq files because reads are paired-end). You will see an efficient way to process a list of files in the next series of exercises.**
 
 ### Creating a rule to trim reads
 
@@ -167,7 +171,7 @@ Usually, when dealing with sequencing data, the first step is to improve read qu
     In theory, trimming should also remove sequencing adapters, but you will not do it here to keep computation time low and avoid parsing other files to extract adapter sequences.
 
 You will use [atropos](https://peerj.com/articles/3720/) to trim reads. The first part of the trimming command is:
-```
+```sh
 atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}"
 ```
 
@@ -189,8 +193,7 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
     * Paths of trimmed files (_i.e._ output files, also in FASTQ format) are specified with the parameters `-o` (first read) and `-p` (second read)
 
 ??? success "Answer"
-    This is one way of writing this rule, but definitely not the only way (and this is true for all the rules presented in these exercises).
-
+    This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
     ```python linenums="1"
     rule fastq_trim:
         """
@@ -223,8 +226,9 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 
 ??? success "Answer"
     To process the sample `highCO2_sample1`, for example, you would use:
-
-    ```snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq```
+    ```sh
+    snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
+    ```
 
     You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
 
@@ -234,8 +238,8 @@ Once the reads are trimmed, the next step is to map those reads onto the species
 
 ??? info "HISAT2 genome index"
     To align reads to a genome, HISAT2 relies on a graph-based index. To save some time, we built the genome index for you, using:
-    ```
-    hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index
+    ```sh
+    hisat2-build -p 24 -f resources/Scerevisiae.fasta resources/genome_indices/Scerevisiae_index
     ```
     The parameters are:
 
@@ -246,7 +250,7 @@ Once the reads are trimmed, the next step is to map those reads onto the species
     Genome indices can be found in `resources/genome_indices/`.
 
 The first part of the mapping command is:
-```
+```sh
 hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 ```
 
@@ -298,14 +302,15 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
     This highlights the fact that **inputs must be files** and this is why we directly added the value of `-x` in the command. However, this is not very convenient: you will see later a better way to deal with this problem.
 
 Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
+```sh
+snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam
+```
 
-```snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam```
+That being said, we recommend **not to run it for the moment**, because this step is the longest of the workflow (with current settings, it will take ~6 min to complete). Still, if you want to run it now, you can, but you should launch it and start working on the next rules while it finishes.
 
-That being said, we recommend **not to run it now**, because this step is the longest of the workflow (with current settings, it will take ~6 min to complete). If you want to run it now, you can, but you should launch it and start working on the next rules while it finishes.
+### Creating a rule to convert and sort .sam files to BAM format
 
-### Creating a rule to convert and sort SAM files to BAM
-
-HISAT2 only outputs mapped reads in [SAM format](https://en.wikipedia.org/wiki/SAM_(file_format)). However, most downstream analysis tools use [BAM format](https://en.wikipedia.org/wiki/Binary_Alignment_Map), which is the compressed binary version of SAM format and, as such, is much smaller, easier to manipulate and transfer and allows a faster data retrieval. Additionally, many analyses require BAM files to be sorted by genomic coordinates and indexed because sorted BAM files can be processed much more easily and quickly than unsorted ones. Operations on SAM and BAM files are usually performed with [Samtools](https://doi.org/10.1093/gigascience/giab008).
+HISAT2 only outputs mapped reads in [SAM format](https://en.wikipedia.org/wiki/SAM_(file_format)). However, most downstream analysis tools use [BAM format](https://en.wikipedia.org/wiki/Binary_Alignment_Map), which is the compressed binary version of SAM format and, as such, is much smaller, easier to manipulate and transfer and allows a faster data retrieval. Additionally, many analyses require .bam files to be sorted by genomic coordinates and indexed because sorted .bam files can be processed much more easily and quickly than unsorted ones. Operations on .sam and .bam files are usually performed with [Samtools](https://doi.org/10.1093/gigascience/giab008).
 
 ??? info "What are alignment formats?"
     More information on alignment formats can be found on [samtools github repository](https://github.com/samtools/hts-specs).
@@ -348,12 +353,12 @@ rule sam_to_bam:
     Let's start with a quick breakdown of the `shell` directive:
 
     * L13: `samtools view` converts a file in SAM format to BAM format
-    * L14: `samtools sort` sorts a BAM file by genomic coordinates
-    * L15: `samtools index` indexes a sorted BAM file. The index must have the exact same basename as its associated BAM file; the only difference is that it finishes with the extension `.bam.bai` instead of `.bam`
+    * L14: `samtools sort` sorts a .bam file by genomic coordinates
+    * L15: `samtools index` indexes a sorted .bam file. The index must have the exact same basename as its associated .bam file; the only difference is that it finishes with the extension `.bam.bai` instead of `.bam`
 
     The interesting thing is that so far, all the rules had only one command in the `shell` directive. In this rule, there are three commands grouped together, each with their own inputs and outputs. This means two things:
 
-    1. We could have split this rule into 3 separate rules with dependencies. There is no official guideline on whether to split rules like this, but a good rule of thumb is: does it make sense to run these commands together? Is it not too computationally expensive (time, memory, cpu) to run these rules together?
+    1. We could have split this rule into 3 separate rules with dependencies. There is no official guideline on whether to split rules like this, but a good rule of thumb is: does it make sense to run these commands together? Is it not too computationally expensive (time, memory, CPU) to run these rules together?
     1. `{output.bam}` and `{output.bam_sorted}` are outputs of  `samtools view` and  `samtools sort`... But they are also inputs of  `samtools sort` and  `samtools index`! This means that files that are created by a command can instantly be re-used in subsequent commands **within a same rule**!
 
 **Exercise:** Do you see any drawbacks to using a rule like this?
@@ -363,7 +368,7 @@ rule sam_to_bam:
 
 
 Using the same sample as before (`highCO2_sample1`), the workflow can be run with
-```
+```sh
 snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
 ```
 However, you will soon run the entire workflow, so it might be worth waiting!
@@ -416,7 +421,7 @@ rule reads_quantification_genes:
     * `-F`: specify format of annotation file
     * `-a`: specify path of file containing annotations (_i.e._ input files, in GTF format)
     * `-o`: specify path of file containing count results (_i.e._ output file, in tsv format)
-    * Paths of sorted BAM file(s) (_i.e._ input file(s)) are not specified with an parameter, they are simply added at the end of the command
+    * Paths of sorted .bam file(s) (_i.e._ input file(s)) are not specified with an parameter, they are simply added at the end of the command
 
 **Exercise:** What does L16 do? Why did we add it?
 
@@ -458,15 +463,15 @@ It would be interesting to know what is happening when featureCounts runs. This 
 
 ### Running the whole workflow
 
-**Exercise:** If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of rule `reads_quantification_genes`. Does it contain anything? How many read pairs were assigned to a feature?
+**Exercise:** If you have not done it after each step, run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of rule `reads_quantification_genes`. Does it contain anything? How many read pairs were assigned to a feature?
 
 ??? success "Answer"
     Because all rules are chained together, you only need to specify one final output to trigger the execution of all previous rules. Using the same sample as before (`highCO2_sample1`). You can add the `-F` parameter to force an entire re-run, which should take ~10 min.:
-    ```
+    ```sh
     snakemake -c 1 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
     If you used the same path for the log file as the rule given above, you can check it with:
-    ```
+    ```sh
     cat logs/highCO2_sample1/highCO2_sample1_genes_read_quantification.log
     ```
     In the log files, you can find a summary of the parameters used by `featureCounts`, its inputs and outputs... and the number of read pairs successfully assigned to a gene; with `highCO2_sample1`, 817894 read pairs (83.8% of total) were assigned.
@@ -521,15 +526,13 @@ It would be interesting to know what is happening when featureCounts runs. This 
     || /highCO2_sample1_genes_read_quantification.tsv.summary"                    ||
     ||                                                                            ||
     \\============================================================================//
-
     ```
 
-
-**Extra:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names etc...?
+**Extra:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
 
 ??? success "Answer"
     You can check the logs with:
-    ```
+    ```sh
     cat .snakemake/log/<latest_log>
     ```
     This general log says exactly what was run by Snakemake, after placeholders, `wildcards`... were replaced by their actual values. It is identical to what appears on your screen when you run Snakemake.
@@ -542,7 +545,7 @@ You have now implemented and run the main steps of the workflow. It is always a 
 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
-        * `images/` is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when you set up the [workflow structure](#downloading-the-data-and-setting-up-the-folder-structure)
+        * `images/` is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when you set up the [workflow structure](#downloading-data-and-setting-up-folder-structure)
     * If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs
         * You can also use `-f <target>` to show fewer jobs
 
@@ -552,17 +555,17 @@ You have now implemented and run the main steps of the workflow. It is always a 
 
 ??? success "Answer"
     To run the command without target, you can use:
-    ```
+    ```sh
     snakemake -c 1 --dag -F | dot -Tpng > images/dag.png
     ```
     We added the `-F` parameter to force Snakemake to compute the entire DAG and ensure all jobs are shown. However, you will get a `WorkflowError: Target rules may not contain wildcards.` error. This makes sense, because if you don't give a target to Snakemake, it can't compute the wildcard values. To run the command using the same sample as before (`highCO2_sample1`), you can target one of the final outputs of the workflow:
-    ```
+    ```sh
     snakemake -c 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng > images/dag.png
     ```
 
     You should get the following DAG:
     <figure markdown align="center">
-      ![backbone_rulegraph](../../assets/images/backbone_rulegraph.png)
+      ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
       <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
     </figure>
 
@@ -571,11 +574,11 @@ You have now implemented and run the main steps of the workflow. It is always a 
 Snakemake can also create two other graphs:
 
 * A rulegraph, created with the `--rulegraph` parameter: dependency graph of all the rules (rules appear only once)
-    ```
+    ```sh
     snakemake -c 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf > images/rulegraph.pdf
     ```
 * A filegraph, created with the `--filegraph` parameter: dependency graph of all the rules with inputs and outputs (rule appears once, `wildcards` are shown but not replaced)
-    ```
+    ```sh
     snakemake -c 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg > images/filegraph.jpg
     ```
 

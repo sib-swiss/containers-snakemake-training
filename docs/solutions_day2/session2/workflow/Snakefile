@@ -72,9 +72,9 @@ rule sam_to_bam:
         '''
         echo "Converting <{input.sam}> to BAM format" > {log}
         samtools view {input.sam} -b -o {output.bam} 2>> {log}
-        echo "Sorting BAM file" >> {log}
+        echo "Sorting .bam file" >> {log}
         samtools sort {output.bam} -O bam -o {output.bam_sorted} 2>> {log}
-        echo "Indexing the sorted BAM file" >> {log}
+        echo "Indexing sorted .bam file" >> {log}
         samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
         echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
         '''

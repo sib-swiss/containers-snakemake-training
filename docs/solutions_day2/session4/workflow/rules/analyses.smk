@@ -36,8 +36,7 @@ rule count_table:
 
 rule differential_expression:
     '''
-    This rule detects DEGs and plots associated visual control graphs (PCA,
-    heatmaps...).
+    This rule detects DEGs and plots control graphs (PCA, heatmaps...).
     '''
     input:
         table = rules.count_table.output.table

@@ -47,7 +47,7 @@ Rules are defined and written in a file called **Snakefile** (note the capital `
 
 ### Executing a workflow with a specific output
 
-It is now time to execute your first worklow! To do this, you need to tell Snakemake what is your **target**, *i.e.* what is the **specific output** that you want to generate. A target can be any output from any rule in the workflow.
+It is now time to execute your first workflow! To do this, you need to tell Snakemake what is your **target**, *i.e.* what is the **specific output** that you want to generate. A target can be any output from any rule in the workflow.
 
 **Exercise:** Create a Snakefile and copy the previous rule in it. Then, execute the workflow with `snakemake -c 1 <target>`. What value should you use for `<target>`? Once Snakemake execution is finished, can you locate the output file?
 
@@ -55,14 +55,14 @@ It is now time to execute your first worklow! To do this, you need to tell Snake
     The `-c/--cores N` parameter controls the maximum number of CPU cores used in parallel. If N is omitted or 'all', Snakemake will use all available CPU cores, which is useful but can also be dangerous. In case of cluster/cloud execution, this argument sets the maximum number of cores requested from the cluster or cloud scheduler.
 
 ??? warning "Code indentation in Snakemake"
-    As Snakemake is built on top of Python, proper **code indentation is crucial**. Wrong indentation often results in cryptics errors. We recommend using **indents of 4 spaces**, but here are two rules that should be followed at all times:
+    As Snakemake is built on top of Python, proper **code indentation is crucial**. Wrong indentation often results in cryptic errors. We recommend using **indents of 4 spaces**, but here are two rules that should be followed at all times:
 
     * Do not mix space and tab indents in a file
     * Always use the same indent length
 
 ??? success "Answer"
     * The target value is the file you want to generate, here `results/first_step.txt`. The command to execute the workflow is:
-    ```
+    ```sh
     snakemake -c 1 results/first_step.txt
     ```
     * The output is located in the `results` folder. You can check the folder content with `ls -alh results/`
@@ -95,7 +95,7 @@ During the workflow execution, Snakemake automatically created the **missing fol
     * For a specific target using the `-f/--force` parameter: `snakemake -c 1 -f <target>`
     * For **all workflow outputs** using the `-F/--forceall` parameter: `snakemake -c 1 -F`
 
-    In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see [--rerun-triggers parameter](https://snakemake.readthedocs.io/en/v8.20.5/executing/cli.html) in Snakemake's CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
+    In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see [--rerun-triggers parameter](https://snakemake.readthedocs.io/en/v8.20.5/executing/cli.html) in Snakemake CLI help and [this git issue](https://github.com/snakemake/snakemake/issues/1694) for more information).
 
 In the previous rule, the values of the two directives are **strings**. For the `shell` directive (other types of values will be seen later in the course), long strings (which includes software commands) can be written on multiple lines for clarity, simply using a set of quotes for each line:
 
@@ -109,7 +109,7 @@ rule first_step:
 ```
 
 Here, Snakemake will concatenate the two lines (_i.e._ paste the two lines together) and execute the resulting command:
-```
+```sh
 echo "I want to print a very very very very very very very very very very long string in my output" > results/first_step.txt
 ```
 
@@ -157,18 +157,18 @@ As you may have guessed from the previous rule, the `input` and `output` directi
 ??? success "Answer"
     Nothing! You get the same message as before, saying that Snakemake did not run anything:
 
-    ```
+    ```sh
     Building DAG of jobs...
     Nothing to be done (all requested files are present and up to date).
     ```
 
     When you do not specify a target, the one selected by **default** is the **output of the first rule in the Snakefile**, here `results/first_step.txt` of rule `first_step`. While this behaviour may seem weird, it will prove very useful later! In this case, `results/first_step.txt` already exists from your previous runs, so Snakemake doesn't recompute anything.
 
-Now, let's try to understand how rule dependencies work in Snakemake.
+Let's try to better understand how rule dependencies work in Snakemake.
 
 #### Chaining rules
 
-The core principle of Snakemake's execution is to compute a **Directed Acyclic Graph (DAG)** that summarises **dependencies between all inputs and outputs** required to generate the final desired outputs. Starting from jobs generating final outputs, Snakemake checks whether required inputs exist. If they do not, it looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from last outputs and go back to first inputs.
+The core principle of Snakemake execution is to compute a **Directed Acyclic Graph (DAG)** that summarises **dependencies between all inputs and outputs** required to generate the final desired outputs. Starting from jobs generating final outputs, Snakemake checks whether required inputs exist. If they do not, it looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a 'bottom-up' approach: it starts from last outputs and go back to first inputs.
 
 ??? bug "`MissingInputException`"
     `MissingInputException` is a common error in Snakemake. It means that Snakemake couldn't find a way to generate targets during DAG computation because an input file is missing. This is a case of **broken dependency** between rules. This error is often caused by typos in input or output paths (for example, output of rule `first_step` not matching input of rule `second_step`), so make sure to double-check them!
@@ -180,7 +180,7 @@ The core principle of Snakemake's execution is to compute a **Directed Acyclic G
 
 ??? success "Answer"
     * To trigger the execution of the second rule, you need to use `results/second_step.txt` as target. The command is:
-    ```
+    ```sh
     snakemake -c 1 -F results/second_step.txt
     ```
     * You should now see Snakemake execute two rules and produce both targets/outputs: to generate output `results/second_step.txt`, Snakemake requires input `results/first_step.txt`. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates `results/first_step.txt`, here rule `first_step`. The process is then repeated for `first_step`. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG
@@ -189,7 +189,7 @@ While it is possible to pass a space-separated list of targets in a Snakemake co
 
 #### Rule dependencies can be easier to write
 
-Creating rule dependencies using long filepaths can be cumbersome, especially when you are dealing with a large number of files/rules. But there is a dedicated Snakemake syntax that makes this process easier to set-up: it is possible (and recommended!) to refer to the output of a rule in another rule with the following syntax: `rules.<rule_name>.output`. It has several advantages, among which:
+Creating rule dependencies using long file paths can be cumbersome, especially when you are dealing with a large number of files/rules. But there is a dedicated Snakemake syntax that makes this process easier to set-up: it is possible (and recommended!) to refer to the output of a rule in another rule with the following syntax: `rules.<rule_name>.output`. It has several advantages, among which:
 
 * It limits the risk of error because you do not have to write filenames in several locations
 * A change in the output name will be automatically propagated to rules that depend on it, *i.e.* the name only has to be changed once

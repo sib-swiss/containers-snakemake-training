@@ -19,7 +19,7 @@ This series of exercises focuses on how to improve the workflow that you develop
 
 ??? tip "Snakefile from previous session"
     If you want to restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules, you can manually get it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
-    ```
+    ```sh
     wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
     ```
 
@@ -59,8 +59,8 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
     `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive.
 
 ??? success "Answer"
-    We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile.
-    ```
+    We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
+    ```python linenums="1"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -133,9 +133,9 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             '''
             echo "Converting <{input.sam}> to BAM format" > {log}
             samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  # Add multithreading to software
-            echo "Sorting BAM file" >> {log}
+            echo "Sorting .bam file" >> {log}
             samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  # Add multithreading to software
-            echo "Indexing the sorted BAM file" >> {log}
+            echo "Indexing sorted .bam file" >> {log}
             samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
             echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
             '''
@@ -173,12 +173,13 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 ??? success "Answer"
     You need to provide additional cores to Snakemake with the parameter `-c 4`. Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
-    ```
+    ```sh
     snakemake -c 4 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
+
     The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you use `-c 1`, Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap rule threads at `--cores` to avoid requesting too many. Another benefit of increasing `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running two jobs using two threads each).
 
-If you run the workflow from scratch with multihreading in all rules, it should now take ~6 min, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multithreading is when datasets and computing power get bigger!
+If you run the workflow from scratch with multithreading in all rules, it should take ~6 min, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multithreading is when datasets and computing power get bigger!
 
 ??? warning "Things to keep in mind when using parallel execution"
     * On-screen output from parallel jobs will be mixed, so save any output to log files instead
@@ -190,7 +191,7 @@ If you run the workflow from scratch with multihreading in all rules, it should 
 Another way to optimise resource usage in a workflow is to control the amount of memory and runtime of each job. This ensures your instance (computer, cluster...) won't run out of memory during computation (which could interrupt jobs or even crash the instance) and that your jobs will run in a reasonable amount of time (a job taking more time to run than usual might be a sign that something is going on).
 
 ??? info "Resource usage and schedulers"
-    Optimising resource usage is especially important when submitting jobs to a scheduler (for example on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start befvssore.
+    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start before.
 
 Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... _after the first run_ of your workflow. Do you remember the benchmark files you obtained in the previous series of exercises? Now is the time to take a look at them:
 
@@ -221,8 +222,8 @@ Here are some suggested values for the current workflow:
     `<unit>` is a unit in [B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB] and `n` is a **float**.
 
 ??? success "Answer"
-    We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile.
-    ```
+    We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile:
+    ```python linenums="1"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -301,9 +302,9 @@ Here are some suggested values for the current workflow:
             '''
             echo "Converting <{input.sam}> to BAM format" > {log}
             samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}
-            echo "Sorting BAM file" >> {log}
+            echo "Sorting .bam file" >> {log}
             samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}
-            echo "Indexing the sorted BAM file" >> {log}
+            echo "Indexing sorted .bam file" >> {log}
             samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
             echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
             '''
@@ -345,14 +346,14 @@ Finally, contrary to multithreading, note that you don't need to change the `sna
 
 #### Non-file parameters
 
-As you have seen, Snakemake's execution is based on input and output files. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated against using hard-coded filepaths. Yet, if you look back at previous rules, you will find two occurrences of this behaviour in `shell` directive:
+As you have seen, Snakemake execution is based on input and output files. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated against using hard-coded file paths. Yet, if you look back at previous rules, you will find two occurrences of this behaviour in `shell` directive:
 
 * In rule `read_mapping`, the index parameter:
-```
+```sh
 -x resources/genome_indices/Scerevisiae_index
 ```
 * In rule `reads_quantification_genes`, the annotation parameter:
-```
+```sh
 -a resources/Scerevisiae.gtf
 ```
 
@@ -360,15 +361,15 @@ This reduces readability and makes it very hard to change the values of these pa
 
 The `params` directive was (partly) designed to solve this problem: it contains parameters and variables used in the `shell` directive. It allows to specify additional non-file parameters instead of hard-coding them into shell commands or using them as inputs/outputs. Here are the main properties of parameters from the `params` directive:
 
-* Their values can be of any type (integer, string, list etc...)
-* Their values can depend on wildcard values and use input functions (explained [here](5_reproducibility_snakemake.md#identifying-and-listing-the-input-files)). This means that parameters can be changed conditionally, for example depending on the value of a wildcard
+* Their values can be of any type (integer, string, list...)
+* Their values can depend on wildcard values and use input functions (explained [here](5_reproducibility_snakemake.md#gathering-the-input-files)). This means that parameters can be changed conditionally, for example depending on the value of a wildcard
     * In contrast to the `input` directive, the `params` directive can take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`
 * Similarly to `{input}` and `{output}` placeholders, they can be accessed from within the `shell` directive with the `{params}` placeholder
 * Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should **always be named**)
 
 Here is an example of `params` utilisation:
 
-```python
+```python linenums="1"
 rule example:
     input:
         'data/example.tsv'
@@ -386,7 +387,7 @@ rule example:
     You need to add a `params` directive to the rule, name the parameter and replace the path by the placeholder in the `shell` directive. We did this for both rules so that you can check everything. Feel free to copy this in your Snakefile. For clarity, only lines that changed are shown below:
 
     * `read_mapping`:
-    ```python
+    ```python linenums="1"
     params:
         index = 'resources/genome_indices/Scerevisiae_index'
     shell:
@@ -396,7 +397,7 @@ rule example:
     ```
 
     * `reads_quantification_genes`:
-    ```python
+    ```python linenums="1"
     params:
         annotations = 'resources/Scerevisiae.gtf'
     shell:
@@ -409,7 +410,7 @@ But doing this only displaced the problem: now, hard-coded paths are in `params`
 
 #### Config files
 
-Config files are stored in the `config` subfolder and written in [JSON](https://en.wikipedia.org/wiki/JSON) or [YAML](https://en.wikipedia.org/wiki/YAML) format. You will use the latter for this course as it is more user-friendly. In YAML files:
+Config files are stored in the `config` subfolder and written in [JSON](https://en.wikipedia.org/wiki/JSON) or [YAML](https://en.wikipedia.org/wiki/YAML) format. You will use the latter for this course as it is more user-friendly. In .yaml files:
 
 * Parameters are defined with the syntax `<name>: <value>`
 * Values can be strings, integers, floating points, booleans...
@@ -423,7 +424,7 @@ Config files will be parsed by Snakemake when executing the workflow, and parame
 
 The example below shows a parameter with a single value (`lines_number`), a parameter with multiple values (`samples`), and nested parameters (`resources`):
 
-```yaml
+```yaml linenums="1"
 lines_number: 5  # Parameter with single value (string, int, float, bool ...)
 samples:  # Parameter with multiple values
     - sample1
@@ -435,7 +436,7 @@ resources:  # Nested parameters
 
 Then, each parameter can be accessed in Snakemake with:
 
-```python
+```python linenums="1"
 config['lines_number']  # --> 5
 config['samples']  # --> ['sample1', 'sample2']  # A list of parameters becomes a list
 config['resources']  # --> {'threads': 4, 'memory': '4G'}  # A list of named parameters becomes a dictionary
@@ -455,7 +456,7 @@ config['resources']['threads']  # --> 4
     ```
 
     Then, fill it with the desired values:
-    ```yaml
+    ```yaml linenums="1"
     # Configuration options of RNAseq-analysis workflow
     # Location of genome indices
     index: 'resources/genome_indices/Scerevisiae_index'
@@ -466,13 +467,13 @@ config['resources']['threads']  # --> 4
     Then, replace the `params` values in the Snakefile. We did this for both rules so that you can check everything. Feel free to copy this in your Snakefile. For simplicity, only lines that changed are shown below:
 
     * `read_mapping`:
-    ```python
+    ```python linenums="1"
     params:
         index = config['index']
     ```
 
     * `reads_quantification_genes`:
-    ```python
+    ```python linenums="1"
     params:
         annotations = config['annotations']
     ```
@@ -480,7 +481,7 @@ config['resources']['threads']  # --> 4
     Finally, add the file path on top of the Snakefile:
     `configfile: 'config/config.yaml'`
 
-Now, if you need to change these values, you can easily do it in the config file instead of modifying the code!
+From now on, if you need to change these values, you can easily do it in the config file instead of modifying the code!
 
 ### Modularising a workflow
 
@@ -501,13 +502,13 @@ In this course, you will only use the second level of modularisation. Briefly, t
 
 ??? success "Answer"
     First, move and rename the main Snakefile:
-    ```sh
+    ```sh linenums="1"
     mv workflow/Snakefile workflow/rules/read_mapping.smk  # Move and rename main Snakefile to modular snakefile
     touch workflow/Snakefile  # Recreate main Snakefile
     ```
 
     Then, add `include` and `configfile` statements to the new Snakefile. It should resemble this:
-    ```python
+    ```python linenums="1"
     '''
     Main Snakefile of RNAseq analysis workflow. This workflow can clean and
     map reads, and perform Differential Expression Analyses.
@@ -524,15 +525,15 @@ In this course, you will only use the second level of modularisation. Briefly, t
 
 ??? info "Relative paths"
     * Include statements are relative to the directory of the Snakefile in which they occur. For example, if the Snakefile is in `workflow`, then Snakemake will search for included snakefiles in `workflow/path/to/other/snakefile`, regardless of the working directory
-    * You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. **However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called** (this will be discussed in the [last series of exercises](5_reproducibility_snakemake.md#getting-the-python-script-and-running-it))
+    * You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. **However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called** (this will be discussed in the [last series of exercises](5_reproducibility_snakemake.md#deciding-how-to-run-the-script))
 
 In practice, you can imagine that the line `include: <path/to/snakefile.smk>` is replaced by the entire content of `snakefile.smk` in Snakefile. This means that syntaxes like `rules.<rule_name>.output.<output_name>` can still be used in modular snakefiles, even if the rule `<rule_name>` was defined in another snakefile, **as long as the snakefile in which `<rule_name>` is defined is included before the snakefile that uses `rules.<rule_name>.output`**. This also works for input functions and checkpoints.
 
 ### Using a target rule instead of a target file
 
-Modularisation also offers a great opportunity to facilitate workflows execution. By default, if no target is given in the command line, Snakemake executes the first rule in the Snakefile. Up to now, you have always executed the workflow with a target file to avoid this behaviour. But we can actually use this property to make execution easier by writing a pseudo-rule (also called target-rule and usually named rule `all`) which contains all the desired outputs files as inputs in the Snakefile. This rule will look like this:
+Modularisation also offers a great opportunity to facilitate workflows execution. By default, if no target is given in the command line, Snakemake executes the first rule in the Snakefile. So far, you have always executed the workflow with a target file to avoid this behaviour. But we can actually use this property to make execution easier by writing a pseudo-rule (also called target-rule and usually named rule `all`) which contains all the desired outputs files as inputs in the Snakefile. This rule will look like this:
 
-```python
+```python linenums="1"
 rule all:
     input:
         'path/to/ouput1',
@@ -548,7 +549,7 @@ rule all:
 
 ??? success "Answer"
     `reads_quantification_genes` is currently creating the last workflow outputs (with the same example as before, `results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv`). We need to use these files as inputs of rule `all`:
-    ```python
+    ```python linenums="1"
     # Master rule used to launch workflow
     rule all:
         '''
@@ -559,7 +560,7 @@ rule all:
     ```
 
     You can launch a dry-run with:
-    ```
+    ```sh
     snakemake -c 4 -F -p -n
     ```
 
@@ -587,9 +588,9 @@ After several (dry-)runs, you may have noticed that the rule order is not always
 
 ### Aggregating outputs to process lists of files
 
-Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the previous rule `all`, inputs are still hard-coded. By now, you know that this is not an optimal solution, especially if there are many samples to process. The [`expand()` function](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#the-expand-function) will solve both problems.
+Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the previous rule `all`, inputs are still hard-coded... and you know that this is not an optimal solution, especially if there are many samples to process. The [`expand()` function](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#the-expand-function) will solve both problems.
 
-`expand()` is used to generate a list of output files by automatically expanding a wildcard expression to several values. In other words, it will replace a wildcard in an expression by all the values of a list, successively. For example, `expand('{sample}.tsv', sample=['A', 'B', 'C'])` will create the list of files `['A.tsv', 'B.tsv', 'C.tsv']`.
+`expand()` is used to generate a list of output files by automatically expanding a wildcard expression to several values. In other words, it will replace a wildcard in an expression by all the values of a list, successively. For instance, `expand('{sample}.tsv', sample=['A', 'B', 'C'])` will create the list of files `['A.tsv', 'B.tsv', 'C.tsv']`.
 
 **Exercise:** Use an expand syntax to transform rule `all` to generate a list of final outputs **with all the samples**. Then, test your workflow with a dry-run and the `-F` parameter.
 
@@ -599,17 +600,17 @@ Using a target rule like the one presented in the previous paragraph gives anoth
 
 ??? success "Answer"
     First, we need to add a sample list in the Snakefile, **before rule `all`**. This list contains all the values that the wildcard will be replaced with:
-    ```
+    ```python
     SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']
     ```
 
     Then, we need to transform the rule `all` inputs to use the `expand` function:
-    ```
+    ```python
     expand('results/{sample}/{sample}_genes_read_quantification.tsv', sample=SAMPLES)
     ```
 
     The Snakefile should like this:
-    ```python
+    ```python linenums="1"
     # Sample list
     SAMPLES = ['highCO2_sample1', 'highCO2_sample2', 'highCO2_sample3', 'lowCO2_sample1', 'lowCO2_sample2', 'lowCO2_sample3']
 
@@ -623,7 +624,7 @@ Using a target rule like the one presented in the previous paragraph gives anoth
     ```
 
     You can launch a dry-run with the same command as before:
-    ```
+    ```sh
     snakemake -c 4 -F -p -n
     ```
 
@@ -652,7 +653,7 @@ But there is an even better solution! At the moment, samples are defined as a li
 
 ??? success "Answer"
     First, we need to add the sample names to the config file:
-    ```yaml
+    ```yaml linenums="1"
     # Configuration options of RNAseq-analysis workflow
 
     # Location of genome indices
@@ -672,7 +673,7 @@ But there is an even better solution! At the moment, samples are defined as a li
     ```
 
     Then, we need to remove `SAMPLES` from the Snakefile and use the config file in `expand()` instead:
-    ```python
+    ```python linenums="1"
     # Master rule used to launch workflow
     rule all:
         '''
@@ -685,7 +686,7 @@ But there is an even better solution! At the moment, samples are defined as a li
 
 ??? info "An even more Snakemake-idiomatic solution"
     There is an even better and more Snakemake-idiomatic version of the `expand()` syntax in rule `all`:
-    ```
+    ```python
     expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])
     ```
     This entirely removes the need to write output paths, even though it might be less easy to understand at first sigh.
@@ -694,20 +695,20 @@ But there is an even better solution! At the moment, samples are defined as a li
 
 ??? success "Answer"
     You can run the workflow by removing `-F` and `-n` from the dry-run command, which makes a very simple command:
-    ```
+    ```sh
     snakemake -c 4 -p
     ```
 
     To generate the DAG, you can use:
-    ```
+    ```sh
     snakemake -c 1 -F -p --dag | dot -Tpng > images/all_samples_dag.png
     ```
     <p align="center">
       <img src="../../../assets/images/all_samples_dag.png"/>
     </p>
 
-    And to generate the filegraph, you can use (open the picture in a new tab to zoom in):
-    ```
+    If needed, open the picture in a new tab to zoom in. Then, you can generate the filegraph with:
+    ```sh
     snakemake -c 1 -F -p --filegraph | dot -Tpng > images/all_samples_filegraph.png
     ```
     <p align="center">
@@ -743,16 +744,16 @@ This part shows a few examples using `temp()` and `protected()` flags.
 **Exercise:** In your workflow, identify outputs that are intermediary and mark them as temporary with `temp()`.
 
 ??? success "Answer"
-    Unsorted .bam and .sam outputs seem like great candidates to be marked as temporary. One could argue that trimmed .fastq files could also be marked as temporary, but we will keep them for now. For clarity, only lines that changed are shown below:
+    Unsorted .bam and .sam outputs seem like great candidates to be marked as temporary. One could argue that trimmed .fastq files could also be marked as temporary, but we won't bother with them here. For clarity, only lines that changed are shown below:
 
     * rule `read_mapping`:
-    ```python
+    ```python linenums="1"
     output:
         sam = temp('results/{sample}/{sample}_mapped_reads.sam'),
     ```
 
     * rule `sam_to_bam`:
-    ```python
+    ```python linenums="1"
     output:
         bam = temp('results/{sample}/{sample}_mapped_reads.bam'),
     ```
@@ -766,7 +767,7 @@ This part shows a few examples using `temp()` and `protected()` flags.
 
 ??? success "Answer"
     Sorted .bam files from rule `sam_to_bam` seem like good candidates for protection:
-    ```python
+    ```python linenums="1"
     output:
         bam_sorted = protected('results/{sample}/{sample}_mapped_reads_sorted.bam'),
     ```
@@ -782,7 +783,7 @@ As such, it would be interesting to run FastQC on the original and trimmed .fast
     FastQC does not differentiate between sequencing techniques and as such can be used to look at libraries coming from a large number of experiments (Genomic Sequencing, ChIP-Seq, RNAseq, BS-Seq etc...).
 
 If you run `fastqc -h`, you will notice something a bit surprising, but not unusual in bioinformatics:
-```
+```sh
     -o --outdir     Create all output files in the specified output directory.
                     Please note that this directory must exist as the program
                     will not create it. If this option is not set then the
@@ -809,7 +810,7 @@ It would be too long to test all four solutions, so you will work on the 3<sup>r
 1. This involves manually constructing the output directory path to use with the `-o` parameter, which works but isn't very convenient
 
 The first part of the FastQC command is:
-```
+```sh
 fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_path} <input_fastq1> <input_fastq2>
 ```
 
@@ -827,8 +828,7 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     ??? success "Answer"
         This makes the rule definition quite 'simple' compared to solution 4:
-
-        ```python
+        ```python linenums="1"
         rule fastq_qc_sol3:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
@@ -877,8 +877,7 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     ??? success "Answer"
         This makes the rule definition (much) more complicated than solution 3:
-
-        ```python
+        ```python linenums="1"
         rule fastq_qc_sol4:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
@@ -942,7 +941,7 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
                 '''
         ```
 
-    This solution is very long and much more complicated than the other one. However, it makes up for the complexity by allowing a total control on what is happening: with this method, we can choose where temporary files are saved as well as output names. It could have been shortened by using `-o .` to tell FastQC to create files in the current working directory instead of a specific one, but this would have created another problem: if we run multiple jobs in parallel, then Snakemake may try to produce files from different jobs at the same temporary destination. In this case, the different Snakemake instances would be trying to write to the same temporary files at the same time, overwriting each other and corrupting the output files.
+    This solution is very long and much more complicated than the other one. However, it makes up for its complexity by allowing a total control on what is happening: with this method, we can choose where temporary files are saved as well as output names. It could have been shortened by using `-o .` to tell FastQC to create files in the current working directory instead of a specific one, but this would have created another problem: if we run multiple jobs in parallel, then Snakemake may try to produce files from different jobs at the same temporary destination. In this case, the different Snakemake instances would be trying to write to the same temporary files at the same time, overwriting each other and corrupting the output files.
 
 Three interesting things are happening in both versions of this rule:
 
@@ -953,7 +952,7 @@ Three interesting things are happening in both versions of this rule:
 
 ??? tip "Controlling execution flow"
     If you want to make sure that a certain rule is executed before another, you can write the outputs of the first rule as inputs of the second one, even if the rule doesn't use them. For example, you could force the execution of FastQC before mapping reads with one more line in rule `read_mapping`:
-    ```
+    ```python linenums="1"
     rule read_mapping:
         '''
         This rule maps trimmed reads of a fastq onto a reference assembly.

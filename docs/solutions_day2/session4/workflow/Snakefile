@@ -1,5 +1,5 @@
 '''
-Main Snakefile of the RNAseq analysis workflow. This workflow can clean and
+Main Snakefile of RNAseq analysis workflow. This workflow can clean and
 map reads, and perform Differential Expression Analyses.
 '''
 

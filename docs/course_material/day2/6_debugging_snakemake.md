@@ -12,7 +12,7 @@ There are many ways to design a new workflow, but these few pieces of advice wil
 * Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!
     * Remember that Snakemake builds the DAG before running the shell commands, so you can use the `-n/--dry-run/--dryrun` parameter to test the workflow before running it. You can even do that without writing all the shell commands!
 * List any parameters or settings that might need to be adjusted later
-* Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, `wildcards`... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
+* Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, `wildcards`... to make your Snakefile as readable as possible. This is true for every script, piece of code, variable... and Snakemake is no exception! Have a look at [The Zen of Python](https://peps.python.org/pep-0020/) for more information
 
 ## Debugging a workflow
 
