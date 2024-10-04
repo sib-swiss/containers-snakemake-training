@@ -4,7 +4,7 @@ Merge gene counts from all samples of an assembly into a single table.
 
 
 import os
-import pandas as pd
+import pandas as pd  # Non-native package
 import sys
 
 
@@ -19,11 +19,11 @@ def import_clean(table):
     reads = pd.read_csv(table, sep='\t', comment='#')
     reads.rename(columns={reads.columns[-1]: 'Reads_quant'}, inplace=True)
     print('Sorting <gene> table by Chromosome then Start position')
-    # New columns are simpler and will be used to properly reorder the table
+    # New columns are simpler and will be used to properly reorder table
     print('\tCreating temporary columns')
-    # We get the unique Chr ID with set
+    # Get unique Chr ID using a set
     reads['Chr_new'] = reads['Chr'].apply(lambda x: ''.join(set(x.split(';'))))
-    # We select the start of the first exon
+    # Select start of the first exon
     reads['Start_new'] = reads['Start'].apply(lambda x: int(x.split(';')[0]))
     print('\tSorting table')
     reads.sort_values(['Chr_new', 'Start_new'], ascending=[True, True],
@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     with open(snakemake.log[0], 'w') as logfile:
     
-        # Redirect everything from the script to Snakemake log
+        # Redirect everything from script to Snakemake log
         sys.stderr = sys.stdout = logfile
 
         print('Getting data from snakemake')
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         output_dir = os.path.dirname(count_table)
         os.makedirs(output_dir, exist_ok=True)
 
-        print(f'Initializing global table with <{list_of_files[0]}>')
+        print(f'Initialising global table with <{list_of_files[0]}>')
         total_table = import_clean(list_of_files[0])
 
         for file in list_of_files[1:]:
