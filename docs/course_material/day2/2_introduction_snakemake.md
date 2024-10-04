@@ -86,7 +86,7 @@ During the workflow execution, Snakemake automatically created the **missing fol
 
     * A target file explicitly requested in the `snakemake` command is missing or an intermediate file is missing and is required to produce a target file
     * It detects input files that have been modified more recently than output files, based on their modification dates. In this case, Snakemake will re-generate existing outputs
-    * Code (including `params` directive, see [here](4_decorating_workflow.md#non-file-parameters) for more information) has changed since last workflow execution
+    * Code (including `params` directive, see [here](4_optimising_snakemake.md#non-file-parameters) for more information) has changed since last workflow execution
     * Computing environment has changed since last workflow execution
 
     Snakemake re-runs can be forced:
