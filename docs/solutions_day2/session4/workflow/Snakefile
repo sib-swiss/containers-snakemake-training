@@ -16,4 +16,4 @@ rule all:
     Dummy rule to automatically generate required outputs.
     '''
     input:
-        'results/deg_list.tsv'
+        rules.differential_expression.output.deg
