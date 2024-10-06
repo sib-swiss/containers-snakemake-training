@@ -15,7 +15,7 @@
 
 ## Exercises
 
-This series of exercises focuses on how to improve the workflow that you developed in the previous session. As a result, you will add only one rule to your workflow. But it's a crucial one!
+This series of exercises focuses on how to improve the workflow that you developed in the previous session. As a result, you will add only one rule to your workflow. But, fear not, it's a crucial one!
 
 ??? tip "Snakefile from previous session"
     If you want to restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules, you can manually get it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
@@ -30,7 +30,7 @@ This series of exercises focuses on how to improve the workflow that you develop
 
 #### Multithreading
 
-When working with real, larger, datasets, some processes can take a long to run. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
+When working with real, larger, datasets, some processes can take a long time to run. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
 
 **Exercise:** What are the two things you need to add to a rule to enable multithreading?
 
@@ -55,7 +55,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 **Exercise:** Implement multithreading in a rule of your choice (it's usually best to start by multithreading the longest job, here `read_mapping`, but the example dataset is small, so it doesn't really matter).
 
-??? tip "Placeholder"
+??? tip "`threads` placeholder"
     `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive.
 
 ??? success "Answer"
@@ -191,15 +191,16 @@ If you run the workflow from scratch with multithreading in all rules, it should
 Another way to optimise resource usage in a workflow is to control the amount of memory and runtime of each job. This ensures your instance (computer, cluster...) won't run out of memory during computation (which could interrupt jobs or even crash the instance) and that your jobs will run in a reasonable amount of time (a job taking more time to run than usual might be a sign that something is going on).
 
 ??? info "Resource usage and schedulers"
-    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start before.
+    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start first.
 
-Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... _after the first run_ of your workflow. Do you remember the benchmark files you obtained in the previous series of exercises? Now is the time to take a look at them:
+Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... **after the first run** of your workflow. Do you remember the benchmark files you obtained in the previous series of exercises? Now is the time to take a look at them:
 
 |  **s**  | **h: m: s** | **max_rss** | **max_vms** | **max_uss** | **max_pss** | **io_in** | **io_out** | **mean_load** | **cpu_time** |
 |:-------:|:---------:|:-----------:|:-----------:|:-----------:|:-----------:|:---------:|:----------:|:-------------:|:------------:|
 | 31.3048 |  0:00:31  |    763.04   |    904.29   |    757.89   |    758.37   |    1.81   |   230.18   |     37.09     |     11.78    |
 
-`s` and `h:m:s` give the job wall clock time, which is the actual time taken from the start of a software to its end. You can use these results to infer a safe value for the `runtime` keyword. Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword.
+* `s` and `h:m:s` give the job wall clock time (in seconds and hours-minutes-seconds, respectively), which is the actual time taken from the start of a software to its end. You can use these results to infer a safe value for the `runtime` keyword
+* Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
 
 ??? info "What are the other columns?"
     In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
@@ -346,7 +347,7 @@ Finally, contrary to multithreading, note that you don't need to change the `sna
 
 #### Non-file parameters
 
-As you have seen, Snakemake execution is based on input and output files. However, a lot of software rely on additional non-file parameters. In the previous presentation and series of exercises, we advocated against using hard-coded file paths. Yet, if you look back at previous rules, you will find two occurrences of this behaviour in `shell` directive:
+As you have seen, Snakemake execution revolves around input and output files. However, a lot of software also use **non-file parameters** to run. In the previous presentation and series of exercises, we advocated against using hard-coded file paths. Yet, if you look back at previous rules, you will find two occurrences of this behaviour in `shell` directives:
 
 * In rule `read_mapping`, the index parameter:
 ```sh
@@ -359,22 +360,22 @@ As you have seen, Snakemake execution is based on input and output files. Howeve
 
 This reduces readability and makes it very hard to change the values of these parameters, because this requires to change the `shell` directive code.
 
-The `params` directive was (partly) designed to solve this problem: it contains parameters and variables used in the `shell` directive. It allows to specify additional non-file parameters instead of hard-coding them into shell commands or using them as inputs/outputs. Here are the main properties of parameters from the `params` directive:
+The `params` directive was (partly) designed to solve this problem: it contains parameters and variables that can be accessed in the `shell` directive. It allows to specify additional non-file parameters instead of hard-coding them into shell commands or using them as inputs/outputs. Here are the main properties of parameters from the `params` directive:
 
 * Their values can be of any type (integer, string, list...)
 * Their values can depend on wildcard values and use input functions (explained [here](5_reproducibility_snakemake.md#gathering-the-input-files)). This means that parameters can be changed conditionally, for example depending on the value of a wildcard
     * In contrast to the `input` directive, the `params` directive can take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`
 * Similarly to `{input}` and `{output}` placeholders, they can be accessed from within the `shell` directive with the `{params}` placeholder
-* Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and can be named (in practice, unknown parameters are unexplicit and easily confusing, so parameters should **always be named**)
+* Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and they can also be named. While it isn't mandatory, un-named parameters are not explicit at all, so **you should always name your parameters**
 
 Here is an example of `params` utilisation:
 
 ```python linenums="1"
-rule example:
+rule get_header:
     input:
-        'data/example.tsv'
+        'data/example.txt'
     output:
-        'results/example.txt'
+        'results/header.txt'
     params:
         lines = 5
     shell:
@@ -406,14 +407,14 @@ rule example:
         -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'  # Parameter was replaced here
     ```
 
-But doing this only displaced the problem: now, hard-coded paths are in `params` instead of `shell`. This is better, but not by much! Luckily, there is an even better way to handle parameters: instead of hard-coding parameter values in the Snakefile, Snakemake allows to define parameters and their values in config files.
+But doing this only shifted the problem: now, hard-coded paths are in `params` instead of `shell`. This is better, but not by much! Luckily, there is an even better way to handle parameters: instead of hard-coding parameter values in the Snakefile, Snakemake can use parameters (and their values) defined in config files.
 
 #### Config files
 
 Config files are stored in the `config` subfolder and written in [JSON](https://en.wikipedia.org/wiki/JSON) or [YAML](https://en.wikipedia.org/wiki/YAML) format. You will use the latter for this course as it is more user-friendly. In .yaml files:
 
 * Parameters are defined with the syntax `<name>: <value>`
-* Values can be strings, integers, floating points, booleans...
+* Values can be strings, integers, booleans...
     * For a complete overview of available value types, see [this list](https://learnxinyminutes.com/docs/yaml/)
 * A parameter can have multiple values, each value being on an indented line starting with "**-**"
     * These values will be stored in a Python list when Snakemake parses the config file
@@ -444,10 +445,9 @@ config['resources']['threads']  # --> 4
 ```
 
 ??? warning "Accessing config values in `shell`"
-    Values stored in the `config` dictionary cannot be accessed directly within `shell` directives. If you need to use a parameter value in `shell`, define the parameter in `params` and assign its value from the dictionary.
+    You cannot use values from the `config` dictionary directly in a `shell` directive. If you need to access parameter value in `shell`, first define it in `params` and assign its value from the dictionary, then use `params.<name>` in `shell`.
 
-
-**Exercise:** Create a config file in YAML format and fill it with variables and values to replace one of the two hard-coded parameters mentioned before. Then replace the hard-coded parameter values by variables from the config file. Finally, add the config file path on top of your Snakefile.
+**Exercise:** Create a config file in YAML format and fill it with variables and values to replace one of the two hard-coded parameters mentioned before. Then replace the hard-coded parameter values by variables from the config file. Finally, add the config file import on top of your Snakefile.
 
 ??? success "Answer"
     First, create an empty config file:
@@ -491,7 +491,7 @@ If you develop a large workflow, you are bound to encounter some cluttering prob
 1. For larger parts belonging to the same workflow, it is recommended to split the main Snakefile into smaller snakefiles, each containing rules with a common topic. Smaller snakefiles are then integrated into the main Snakefile with the `include` statement. In this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#includes) for more explanations
 
     ??? info "Rules organisation"
-        How to organise rules is up to you, but a common approach would be to create "thematic" modules, *i.e.* regroup rules involved in the same general step of the workflow. Modularisation is a common practice in programming in general: it is often easier to group all variables, functions, classes... related to a common theme into a single script, package, software...
+        There is no official guideline on how to regroup rules, but a simple and logic approach is to create "thematic" snakefiles, _i.e._ place rules related to the same topic in the same file. Modularisation is a common practice in programming in general: it is often easier to group all variables, functions, classes... related to a common theme into a single script, package, software...
 
 1. The final level of modularisation enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#snakefiles-modules) for more explanations
 
@@ -525,9 +525,10 @@ In this course, you will only use the second level of modularisation. Briefly, t
 
 ??? info "Relative paths"
     * Include statements are relative to the directory of the Snakefile in which they occur. For example, if the Snakefile is in `workflow`, then Snakemake will search for included snakefiles in `workflow/path/to/other/snakefile`, regardless of the working directory
-    * You can place snakefiles in a sub-directory without changing input and output paths, as these paths are relative to the working directory. **However, you will need to edit paths to external scripts and conda environments, as these paths are relative to the snakefile from which they are called** (this will be discussed in the [last series of exercises](5_reproducibility_snakemake.md#deciding-how-to-run-the-script))
+    * You can place snakefiles in a sub-directory without changing input and output paths, because these paths are relative to the working directory
+    * **However, you will need to edit paths to external scripts and conda environments, because these paths are relative to the snakefile from which they are called** (this will be discussed in the [last series of exercises](5_reproducibility_snakemake.md#deciding-how-to-run-the-script))
 
-In practice, you can imagine that the line `include: <path/to/snakefile.smk>` is replaced by the entire content of `snakefile.smk` in Snakefile. This means that syntaxes like `rules.<rule_name>.output.<output_name>` can still be used in modular snakefiles, even if the rule `<rule_name>` was defined in another snakefile, **as long as the snakefile in which `<rule_name>` is defined is included before the snakefile that uses `rules.<rule_name>.output`**. This also works for input functions and checkpoints.
+If you have trouble visualising what an `include` statement does, you can imagine that the entire content of the included file gets copied into the Snakefile. As a consequence, syntaxes like `rules.<rule_name>.output.<output_name>` can still be used in modular snakefiles, even if the rule `<rule_name>` is defined in another snakefile. However, you have to make sure that **the snakefile in which `<rule_name>` is defined is included before the snakefile that uses `rules.<rule_name>.output`**. This is also true for input functions and checkpoints.
 
 ### Using a target rule instead of a target file
 
@@ -718,7 +719,7 @@ But there is an even better solution! At the moment, samples are defined as a li
 
 ### Extra: using non-conventional outputs
 
-_This part is an extra-exercise about non-conventional Snakemake outputs. It is quite long. Do it only if you finished all the other exercises._
+_This part is an extra-exercise about non-conventional Snakemake outputs. It is quite long, so do it only if you finished all the other exercises._
 
 Snakemake has several built-in utilities to assign properties to outputs that are deemed 'special'. These properties are listed in the table below:
 

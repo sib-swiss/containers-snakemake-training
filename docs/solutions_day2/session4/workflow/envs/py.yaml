@@ -1,5 +1,5 @@
 # Environment file to perform data processing with Python
-name : python
+name : py3.12
 channels :
     - conda-forge
     - bioconda

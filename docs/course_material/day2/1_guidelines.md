@@ -31,7 +31,7 @@ We tried to use a colour code throughout the website to make the different piece
 Each series of exercises is divided into multiple questions. Each question provides a background explanation, a description of the task at hand and additional details when required.
 
 !!! tip "Hints for challenging questions"
-    For the most challenging questions, hints will be provided. However, you should first try to solve the problem without tips!
+    For the most challenging questions, hints will be provided. However, you should first try to solve the problem without them!
 
 ## Answers
 

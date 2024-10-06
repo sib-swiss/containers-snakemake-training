@@ -29,8 +29,8 @@ In each rule, you should try (as much as possible) to:
 
 ## Testing your workflow's logic
 
-* If you have a doubt, do not hesitate to test your workflow logic with a **dry-run** (`-n/--dry-run/--dryrun` parameter): `snakemake -c 1 -n <target>`. Snakemake will then display all the jobs required to generate the target as well as a **reason** field explaining why each job is required
-* To visualise the exact commands executed by each job (with placeholders and `wildcards` replaced by their values), run snakemake with `-p/--printshellcmds`: `snakemake -c 1 -p <target>`
+* If you have a doubt, do not hesitate to test your workflow logic with a **dry-run** (`-n/--dry-run/--dryrun` parameter): `snakemake -c 1 -n <target>`. Snakemake will then show all the jobs needed to generate `<target>` as well as a **reason** field explaining why each job is required
+* To visualise the exact commands executed by each job (with placeholders and `wildcards` replaced by their values), run snakemake with the `-p/--printshellcmds` parameter: `snakemake -c 1 -p <target>`
 * These two parameters are often used together to check an entire workflow: `snakemake -c 1 -n -p <target>`
 
 ## Data origin
@@ -59,7 +59,7 @@ At the end of this series of exercises, your workflow should look like this:
 
 ### Downloading data and setting up folder structure
 
-In this part, you will download the data and start building the directory structure of our workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). you already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
+In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). You already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
 ```
 │── .gitignore
 │── README.md
@@ -111,7 +111,7 @@ In this part, you will download the data and start building the directory struct
         └── script2.R
 ```
 
-For now, the main thing to remember is that **code** goes into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**, except for the **`config` subfolder**, which will be **explained later**. All **output files** generated in the workflow should be stored under **`results/`**.
+For now, the main thing to remember is that **code** should go into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**. The only exception is the **`config` subfolder**, but it will be [explained later](4_optimising_snakemake.md#config-files). All **output files** generated in the workflow should be stored under **`results/`**.
 
 Let's download the data, uncompress them and build the first part of the directory structure.
 
@@ -126,7 +126,7 @@ cd snakemake_rnaseq/  # Start developing in new folder
 In ` snakemake_rnaseq/`, you should see two subfolders:
 
 * `data/`, which contains data to analyse
-* `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow via git
+* `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow
 
 We also need to create the other missing subfolders and the Snakefile:
 
@@ -428,13 +428,13 @@ rule reads_quantification_genes:
 ??? success "Answer"
     The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, summary will be printed in `test.tsv.summary`. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.
 
-It would be interesting to know what is happening when featureCounts runs. This is where the `log` and `benchmark` directives play a role!
+It would be interesting to know what is happening when featureCounts runs. This is where the `log` and `benchmark` directives come into play!
 
 **Exercise:** Copy this rule in your Snakefile. Then, add the `log` and `benchmark` directives to the rule. Don't forget to update the directive values to match the ones you used in your previous rules.
 
 ??? tip "Logs and benchmarks"
     * `log` and `benchmark` directives must contain the same `wildcards` as the `output` directive, here `sample`
-    * Logs need to be handled manually, so you need to redirect what is produced by featureCounts to the log file. You can redirect both `stdout` and `stderr` streams with `&>` at the end of the command
+    * Logs need to be handled manually, so you need to redirect what is produced by featureCounts to the log file. You can redirect both `stdout` and `stderr` streams with `&> {log}` at the end of the command
 
 ??? success "Answer"
     ```python linenums="1"
@@ -541,7 +541,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
 
 You have now implemented and run the main steps of the workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake's has a built-in workflow visualisation feature to do this: the `--dag` parameter, which shows a dependency graph of all the jobs (rules appear once per wildcard value and wildcard value are displayed).
 
-**Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using `--dag`. Remember that Snakemake prints a DAG in text format, so you need to pipe its results into the `dot` command to transform it into a picture with `| dot -Tpng > image.png`. Do you need to specify a target to the `snakemake` command?
+**Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using `--dag`. Remember that Snakemake prints a DAG in text format, so you need to pipe its results into the `dot` command to transform it into a picture with `| dot -Tpng > <image_path>.png`. Do you need to specify a target to the `snakemake` command?
 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder

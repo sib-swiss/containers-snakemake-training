@@ -22,7 +22,7 @@ In this series of exercises, you will create the last two rules of the workflow.
     ```
 
 ??? tip "Development and back-up"
-    During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
+    During this session as well, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
 
 ### Creating a rule to gather read counts
 
@@ -114,15 +114,15 @@ This function will loop over the list of samples in the config file and replace 
 ??? info "More on input functions"
     * Input functions take the `wildcards` global object as **single argument**
     * You can access wildcard values inside an input function with the syntax `{wildcards.wildcards_name}`
-    * Input functions can return a list of files, which will then be automatically handled like multiple inputs by Snakemake
-        * Input functions can also return a dictionary; in this case, the function should be called with the syntax:
+    * Input functions can return lists of files, which will be automatically handled like multiple inputs by Snakemake
+        * Input functions can also return a dictionary; in this case, the function should be called with the `unpack()` function:
         ```python
         input: unpack(<function_name>)
         ```
-        The dictionary keys will be interpreted as input names and the dictionary values will be interpreted as input values, providing a list of named inputs
+        The dictionary keys will be used as input names and the dictionary values will be used as input values, providing a list of named inputs
 
 ??? warning "Input functions and output directory"
-    Input functions are evaluated **before** the workflow is executed. As a consequence, they cannot be used to list the content of an output directory, since the directory does not exist before the workflow is executed! For this, you should use a [checkpoint](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
+    Input functions are evaluated **before** the workflow is executed, so they cannot be used to list the content of an output directory, since it does not exist before the workflow is executed. Instead, you can use a [checkpoint](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
 
 **Exercise:** Insert the function `get_gene_counts()` in `workflow/rules/analysis.smk` and adapt the input value of `count_table` accordingly. Do you need to insert the function in a specific location?
 
@@ -301,11 +301,13 @@ If you remember the presentation, there are two directives that you can use to r
     ```
 
 ??? info "Using the same Python script in and out of Snakemake"
-    In many cases, it would be nice to have a script that can be called by Snakemake but also work with standard Python, so that the code can be reused in other projects. There are several ways to do that:
+    To avoid code redundancy, it would be ideal to have a script that can be called by Snakemake but also work with standard Python (and be used outside Snakemake). The two main ways to do this are:
 
-    * Implement most of the functionalities in a module/package and use this module in a simple script called by Snakemake
-    * Test for the existence of a `snakemake` object inside the script and handle parameter values differently if the object does not exist (for example, rely on command-line arguments)
-        * When the script is launched by Snakemake, you have access to an object called `snakemake` that provides access to the same objects that are available in the `run` and `shell` directives (`input`, `output`, `params`, `wildcards`, `log`, `threads`, `resources`, config). For instance, you can use `snakemake.input[0]` to access the first input file of a rule, or `snakemake.input.input_name` to access a named input.
+    * Implement the script as a module/package and use this module in Snakemake, for example with a command-line interface in `shell`
+    * Test whether the `snakemake` object exists in the script:
+        * If so, the script can process the Snakemake values
+            * When the script is launched by Snakemake, there is an object called `snakemake` that provides access to the same objects that are available in the `run` and `shell` directives (`input`, `output`, `params`, `wildcards`, `log`, `threads`, `resources`, config). For instance, you can use `snakemake.input[0]` to access the first input file of a rule, or `snakemake.input.input_name` to access a named input
+        * If not, the script can use other parameters, for example those coming from command-line parsing
 
 ##### Providing a rule-specific conda environment
 
@@ -314,7 +316,7 @@ Given the presence of a non-default package in the script, we need to find a sol
 **(Optional) Exercise:** If you want, you can try to create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how an environment file look, you can check out slide 19 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
 
 ??? tip "Environment features"
-    * Environment `name` is `python`
+    * Environment `name` is `py3.12`
     * It uses two `channels`: `conda-forge` and `bioconda` (in that order)
     * It requires `python` with **at least** version `3.12`
     * It requires `pandas` with version `2.2.3` **exactly**
@@ -324,7 +326,7 @@ Given the presence of a non-default package in the script, we need to find a sol
     The config file, created in `workflow/envs/py.yaml` should look like this:
     ```yaml linenums="1"
     # Environment file to perform data processing with Python
-    name : python
+    name : py3.12
     channels :
         - conda-forge
         - bioconda

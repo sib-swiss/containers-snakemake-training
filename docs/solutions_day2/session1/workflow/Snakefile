@@ -1,13 +1,13 @@
-rule first_step:
+rule hello_world:
     output:
-        'results/first_step.txt'
+        'results/hello.txt'
     shell:
-        'echo "Hello world!" > results/first_step.txt'
+        'echo "Hello world!" > results/hello.txt'
 
-rule second_step:
+rule copy_file:
     input:
-        rules.first_step.output
+        rules.hello_world.output
     output:
-        'results/second_step.txt'
+        'results/copied_file.txt'
     shell:
-        'cp results/first_step.txt results/second_step.txt'
+        'cp results/hello.txt results/copied_file.txt'
