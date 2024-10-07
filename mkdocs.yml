@@ -24,6 +24,7 @@ theme:
     repo: fontawesome/brands/github
   features:
     - announce.dismiss
+    - content.code.copy
 
 extra:
   version:
