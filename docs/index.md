@@ -4,7 +4,6 @@
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
-- Damir Zhakparov
 
 ## Authors
 
