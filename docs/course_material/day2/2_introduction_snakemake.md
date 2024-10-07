@@ -203,7 +203,7 @@ Creating rule dependencies using long file paths can be cumbersome, especially w
 
 The following example implements this syntax for the two rules defined above:
 
-```python linenums="1"
+```python linenums="1" hl_lines="9"
 rule hello_world:
     output:
         'results/hello.txt'

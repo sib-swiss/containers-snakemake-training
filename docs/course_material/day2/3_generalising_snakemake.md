@@ -194,7 +194,7 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 
 ??? success "Answer"
     This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="2-7 12 13 16 17"
     rule fastq_trim:
         """
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -437,7 +437,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
     * Logs need to be handled manually, so you need to redirect what is produced by featureCounts to the log file. You can redirect both `stdout` and `stderr` streams with `&> {log}` at the end of the command
 
 ??? success "Answer"
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="11-14"
     rule reads_quantification_genes:
         """
         This rule quantifies the reads of a bam file mapping on genes and produces
@@ -474,8 +474,8 @@ It would be interesting to know what is happening when featureCounts runs. This 
     ```sh
     cat logs/highCO2_sample1/highCO2_sample1_genes_read_quantification.log
     ```
-    In the log files, you can find a summary of the parameters used by `featureCounts`, its inputs and outputs... and the number of read pairs successfully assigned to a gene; with `highCO2_sample1`, 817894 read pairs (83.8% of total) were assigned.
-    ```
+    In the log files, you can find a summary of the parameters used by `featureCounts`, its inputs and outputs... and the number of read pairs successfully assigned to a gene; with `highCO2_sample1`, 817894 read pairs (83.8% of total) were assigned:
+    ```linenums="1" hl_lines="41"
             ==========     _____ _    _ ____  _____  ______          _____
             =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \
               =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |

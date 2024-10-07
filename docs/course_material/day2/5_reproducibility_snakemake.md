@@ -130,7 +130,7 @@ This function will loop over the list of samples in the config file and replace 
     The first step is to add the input function to the file. However, it needs to appear **before the rule `count_table`**, otherwise we will see the error `name 'get_gene_counts' is not defined`. In other words, the function needs to be defined **before** Snakemake looks for it when it parses the input. Then, we need to set the function name as the rule input value.
 
     The modular snakefile `workflow/rules/analysis.smk` will resemble this:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="14"
     # Input function used in rule count_table
     def get_gene_counts(wildcards):
         '''
@@ -178,7 +178,7 @@ wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/m
 Or you can copy it from here:
 
 ??? tip "Click here to see a nice Python script!"
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="7" title="count_table.py"
     '''
     Merge gene counts from all samples of an assembly into a single table.
     '''
@@ -276,7 +276,7 @@ If you remember the presentation, there are two directives that you can use to r
         Here, there are several `import` statements at the top of the script, including `import pandas as pd  # Non-native package`. [`pandas`](https://pandas.pydata.org/docs/index.html) is a great package, but it is not part of the default packages natively shipped with Python. This means that the script needs a dedicated environment to run and confirm that we need the `script` directive.
 
     With this in mind, the rule will be:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="20 21"
     rule count_table:
         '''
         This rule merges gene count tables of an assembly into one table.
@@ -342,7 +342,7 @@ Given the presence of a non-default package in the script, we need to find a sol
 
 ??? success "Answer"
     We need to fill the last two missing elements with the directive name, `conda`, and its value, the script location:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="18 19"
         rule count_table:
             '''
             This rule merges gene count tables of an assembly into one table.
@@ -376,7 +376,7 @@ All that is left is running the rule to create the table.
 
 ??? success "Answer"
     We cannot launch the workflow directly: first, we need to update rule `all` input to use the output of rule `count_table`. After this, your Snakefile should be:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="19"
     '''
     Main Snakefile of RNAseq analysis workflow. This workflow can clean and
     map reads, and perform Differential Expression Analyses.
@@ -443,7 +443,7 @@ Once again, we do not need to use `wildcards` in this rule, because all the file
 
 ??? success "Answer"
     There is only one thing to update in the target rule input:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="19"
     '''
     Main Snakefile of RNAseq analysis workflow. This workflow can clean and
     map reads, and perform Differential Expression Analyses.
@@ -501,7 +501,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
     1. Which directive to use?
 
         There isn't much of a choice here... If you remember the presentation, there is only one way to run non-Python code in Snakemake: the `script` directive:
-        ```python linenums="1"
+        ```python linenums="1" hl_lines="19 20"
         rule differential_expression:
             '''
             This rule detects DEGs and plots control graphs (PCA, heatmaps...).
@@ -529,7 +529,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
         If you look at the top of the script, you will see several (11 to be exact!) `library()` calls. Each of them imports an external package. All of these could be gathered in a conda environment, however when numerous libraries are involved, it is sometimes easier to use a container. During Day 1 - Session 3 ([Working with Dockerfiles](../day1/dockerfiles.md)), you built your own Docker image, called `deseq2`. This image actually contains everything required by the script.
 
         In Snakemake, you can use `docker` and `apptainer`/`singularity` images with the `container` directive. Its value should be the location of the image: it can be either a local path or a remote URL (allowed URLs are everything supported by `apptainer`, including `shub://` and `docker://`; the latter is preferred):
-        ```python linenums="1"
+        ```python linenums="1" hl_lines="17 18"
         rule differential_expression:
             '''
             This rule detects DEGs and plots control graphs (PCA, heatmaps...).

@@ -60,7 +60,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 ??? success "Answer"
     We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="18 23 43 48 68 72 95 101"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -224,7 +224,7 @@ Here are some suggested values for the current workflow:
 
 ??? success "Answer"
     We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="18 19 45 46 72 73 101 102"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -388,7 +388,7 @@ rule get_header:
     You need to add a `params` directive to the rule, name the parameter and replace the path by the placeholder in the `shell` directive. We did this for both rules so that you can check everything. Feel free to copy this in your Snakefile. For clarity, only lines that changed are shown below:
 
     * `read_mapping`:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="5"
     params:
         index = 'resources/genome_indices/Scerevisiae_index'
     shell:
@@ -398,7 +398,7 @@ rule get_header:
     ```
 
     * `reads_quantification_genes`:
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="6"
     params:
         annotations = 'resources/Scerevisiae.gtf'
     shell:
@@ -829,7 +829,7 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     ??? success "Answer"
         This makes the rule definition quite 'simple' compared to solution 4:
-        ```python linenums="1"
+        ```python linenums="1" hl_lines="23 29"
         rule fastq_qc_sol3:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
@@ -878,7 +878,7 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     ??? success "Answer"
         This makes the rule definition (much) more complicated than solution 3:
-        ```python linenums="1"
+        ```python linenums="1" hl_lines="43 47 55"
         rule fastq_qc_sol4:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
