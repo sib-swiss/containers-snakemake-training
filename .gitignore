@@ -3,3 +3,10 @@ site
 workdir/
 ~$*
 env/
+benchmarks/
+data/
+images/
+logs/
+resources/
+results/
+.snakemake/
