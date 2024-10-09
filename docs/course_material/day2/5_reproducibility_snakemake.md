@@ -151,8 +151,6 @@ This function will loop over the list of samples in the config file and replace 
             'logs/total_count_table.log'
         benchmark:
             'benchmarks/total_count_table.txt'
-        conda:
-            '../envs/py.yaml'
         resources:
             mem_mb = 500
         threads: 1
@@ -276,7 +274,7 @@ If you remember the presentation, there are two directives that you can use to r
         Here, there are several `import` statements at the top of the script, including `import pandas as pd  # Non-native package`. [`pandas`](https://pandas.pydata.org/docs/index.html) is a great package, but it is not part of the default packages natively shipped with Python. This means that the script needs a dedicated environment to run and confirm that we need the `script` directive.
 
     With this in mind, the rule will be:
-    ```python linenums="1" hl_lines="20 21"
+    ```python linenums="1" hl_lines="18 19"
     rule count_table:
         '''
         This rule merges gene count tables of an assembly into one table.
@@ -289,8 +287,6 @@ If you remember the presentation, there are two directives that you can use to r
             'logs/total_count_table.log'
         benchmark:
             'benchmarks/total_count_table.txt'
-        conda:
-            '../envs/py.yaml'
         resources:
             mem_mb = 500
         threads: 1
@@ -342,7 +338,7 @@ Given the presence of a non-default package in the script, we need to find a sol
 
 ??? success "Answer"
     We need to fill the last two missing elements with the directive name, `conda`, and its value, the script location:
-    ```python linenums="1" hl_lines="18 19"
+    ```python linenums="1" hl_lines="16 17"
         rule count_table:
             '''
             This rule merges gene count tables of an assembly into one table.
@@ -355,8 +351,6 @@ Given the presence of a non-default package in the script, we need to find a sol
                 'logs/total_count_table.log'
             benchmark:
                 'benchmarks/total_count_table.txt'
-            conda:
-                '../envs/py.yaml'
             resources:
                 mem_mb = 500
             threads: 1
@@ -400,9 +394,9 @@ All that is left is running the rule to create the table.
 
     Finally, run the workflow with:
     ```
-    snakemake -c 4 -p --sdm conda
+    snakemake -c 4 -p --sdm=conda
     ```
-    Do not forget to add `--sdm conda`, otherwise Snakemake will not use the environment you provided.
+    Do not forget to add `--sdm=conda`, otherwise Snakemake will not use the environment you provided.
 
 You should see the rule `count_table` executed with 6 files as input. You can also check the log of rule `count_table` to see if the script worked as intended.
 
@@ -526,9 +520,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
 
     1. Does it use external packages and need a specific environment?
 
-        If you look at the top of the script, you will see several (11 to be exact!) `library()` calls. Each of them imports an external package. All of these could be gathered in a conda environment, however when numerous libraries are involved, it is sometimes easier to use a container. During Day 1 - Session 3 ([Working with Dockerfiles](../day1/dockerfiles.md)), you built your own Docker image, called `deseq2`. This image actually contains everything required by the script.
-
-        In Snakemake, you can use `docker` and `apptainer`/`singularity` images with the `container` directive. Its value should be the location of the image: it can be either a local path or a remote URL (allowed URLs are everything supported by `apptainer`, including `shub://` and `docker://`; the latter is preferred):
+        If you look at the top of the script, you will see several (11 to be exact!) `library()` calls. Each of them imports an external package. All of these could be gathered in a conda environment, however when numerous libraries are involved, it is sometimes easier to use a container. During Day 1 - Session 3 ([Working with Dockerfiles](../day1/dockerfiles.md)), you built your own Docker image, called `deseq2`. This image actually contains everything required by the script:
         ```python linenums="1" hl_lines="17 18"
         rule differential_expression:
             '''
@@ -564,7 +556,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 ??? success "Answer"
     You can run the workflow with:
     ```
-    snakemake -c 4 -p --sdm apptainer
+    snakemake -c 4 -p --sdm=apptainer
     ```
     Do not forget to add `--sdm apptainer`, otherwise Snakemake will not pull the image and the script will be executed in the default environment (which will most likely lead to a crash).
 
@@ -588,7 +580,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 ??? success "Answer"
     You can re-run the whole workflow with:
     ```
-    snakemake -c 4 -p -F --sdm conda apptainer
+    snakemake -c 4 -p -F --sdm=conda --sdm=apptainer
     ```
 
     * `-F` forces the execution of the entire workflow

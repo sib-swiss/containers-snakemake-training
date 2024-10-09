@@ -1,13 +1,8 @@
-name: snake_course
+name: snakemake
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - atropos==1.1.32
-  - fastqc==0.12.1
   - graphviz==11.0.0
-  - hisat2==2.2.1
   - python==3.12.3
-  - samtools==1.21
   - snakemake==8.20.5
-  - subread==2.0.6

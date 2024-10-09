@@ -185,7 +185,21 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
     * `-a "A{{20}}" -A "A{{20}}"`: remove series of 20 As in adapter sequences (`-a` for first read of the pair, `-A` for the second one)
         * The usual command-line syntax is `-a "A{20}"`. Here, brackets were doubled to prevent Snakemake from interpreting `{20}` as a wildcard
 
-**Exercise:** Complete the atropos command given above with parameters to specify inputs (files to trim) and outputs (trimmed files). You can find information on how to use `atropos` and its parameters with `atropos trim -h`. Then, implement a rule containing your command to trim reads contained in a .fastq files.
+Now, a few questions might come to mind when you need to use specific software in a workflow:
+
+* Is the software already installed in the machine I am working on?
+* If not, how do I install it quickly and easily?
+* How can I make sure that everyone using my workflow has it installed? With the exact same version?!
+
+To solve this problem, Snakemake can use package managers (more on this [later](5_reproducibility_snakemake.md#providing-a-rule-specific-conda-environment)) or container managers, like `docker` and `apptainer`, to deploy rule-specific environments. The latter is done with the **`container` directive** and its value should be the location of the image: it can be either a local path or a remote URL. Allowed URLs are everything supported by `apptainer`, including `shub://` and `docker://`.
+
+**Exercise:**
+
+* Complete the atropos command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)
+    * You can find information on how to use `atropos` and its parameters with `atropos trim -h` or you can look at the tip below
+* Implement a rule containing your command to trim reads contained in a .fastq files
+    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2`
 
 ??? tip "atropos inputs and outputs"
     * .fastq files to trim are located in `data/`
@@ -194,7 +208,7 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 
 ??? success "Answer"
     This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
-    ```python linenums="1" hl_lines="2-7 12 13 16 17"
+    ```python linenums="1" hl_lines="2-7 12-15 18 19"
     rule fastq_trim:
         """
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -208,6 +222,8 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
         output:
             trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
             trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
+        container:
+            'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
         shell:
             '''
             atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
@@ -218,19 +234,20 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
 
     There are three interesting things happening here:
 
-    1. We added a comment between double quotes under the rule name. In Python, it is called a docstring. While it is not mandatory, it is good practice (and very recommended) to write docstrings to explain what a rule does, what are its inputs, outputs, parameters...
+    1. We added a comment between double quotes under the rule name (L2-7). In Python, it is called a docstring. While it is not mandatory, it is good practice (and very recommended) to write docstrings to explain what a rule does, what are its inputs, outputs, parameters...
     1. We used the `{sample}` wildcards twice in output paths (L12-13). This is because we prefer to have all files from a single sample in the same directory
-    1. We used a backslash `\` at the end of L16-17 to split a very long command in smaller lines. This is purely 'cosmetic' but it avoids very long lines that are painful to read, understand and debug...
+    1. We used a backslash `\` at the end of L18-19 to split a very long command in smaller lines. This is purely 'cosmetic' but it avoids very long lines that are painful to read, understand and debug...
 
 **Exercise:** If you had to run the workflow by specifying only one output, what command would you use?
 
 ??? success "Answer"
     To process the sample `highCO2_sample1`, for example, you would use:
     ```sh
-    snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
+    snakemake -c 1 -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
     ```
 
-    You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
+    * You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
+    * Do not forget to add `--sdm=apptainer`, otherwise Snakemake will not pull the image and the command will be executed in the default environment (which will most likely lead to a crash). Don't worry if the first execution is somewhat slow: Snakemake has to download the image. The next ones will be much faster as the images are cached
 
 ### Creating a rule to map trimmed reads onto a reference genome
 
@@ -263,7 +280,14 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
     * `--new-summary`: print alignment summary in a new style
     * `--no-unal`: suppress SAM records for reads that failed to align
 
-**Exercise:** Complete the HISAT2 command given above with parameters to specify inputs and outputs. Briefly, you will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?). You can find more information on how to use HISAT2 and its parameters with `hisat2 -h`. Then, implement a rule containing your command to map trimmed reads contained in .fastq files.
+**Exercise:**
+
+* Complete the HISAT2 command given above with parameters to specify inputs and outputs
+    * You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)
+        * You can find more information on how to use HISAT2 and its parameters with `hisat2 -h` or you can look at the tip below
+* Implement a rule containing your command to map trimmed reads contained in .fastq files
+    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6`
 
 ??? tip "HISAT2 inputs and outputs"
     * Paths of trimmed files (_i.e._ input files) are specified with the parameters `-1` (first read) and `-2` (second read)
@@ -283,6 +307,8 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
         output:
             sam = 'results/{sample}/{sample}_mapped_reads.sam',
             report = 'results/{sample}/{sample}_mapping_report.txt'
+        container:
+            'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
         shell:
             '''
             hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
@@ -303,7 +329,7 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 
 Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
 ```sh
-snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam
+snakemake -c 1 --sdm=apptainer -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam
 ```
 
 That being said, we recommend **not to run it for the moment**, because this step is the longest of the workflow (with current settings, it will take ~6 min to complete). Still, if you want to run it now, you can, but you should launch it and start working on the next rules while it finishes.
@@ -328,6 +354,8 @@ rule sam_to_bam:
         bam = 'results/{sample}/{sample}_mapped_reads.bam',
         bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
         index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
+    container:
+        'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
     shell:
         '''
         samtools view {input.sam} -b -o {output.bam}
@@ -352,9 +380,9 @@ rule sam_to_bam:
 ??? success "Answer"
     Let's start with a quick breakdown of the `shell` directive:
 
-    * L13: `samtools view` converts a file in SAM format to BAM format
-    * L14: `samtools sort` sorts a .bam file by genomic coordinates
-    * L15: `samtools index` indexes a sorted .bam file. The index must have the exact same basename as its associated .bam file; the only difference is that it finishes with the extension `.bam.bai` instead of `.bam`
+    * L15: `samtools view` converts a file in SAM format to BAM format
+    * L16: `samtools sort` sorts a .bam file by genomic coordinates
+    * L17: `samtools index` indexes a sorted .bam file. The index must have the exact same basename as its associated .bam file; the only difference is that it finishes with the extension `.bam.bai` instead of `.bam`
 
     The interesting thing is that so far, all the rules had only one command in the `shell` directive. In this rule, there are three commands grouped together, each with their own inputs and outputs. This means two things:
 
@@ -369,7 +397,7 @@ rule sam_to_bam:
 
 Using the same sample as before (`highCO2_sample1`), the workflow can be run with
 ```sh
-snakemake -c 1 -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
+snakemake -c 1 -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
 ```
 However, you will soon run the entire workflow, so it might be worth waiting!
 
@@ -386,7 +414,7 @@ Most of analyses happening downstream the alignment step, including Differential
 
 We already wrote a rule to count reads mapping on each gene of the _S. cerevisiae_ genome using [featureCounts](https://academic.oup.com/bioinformatics/article/30/7/923/232889):
 
-```python linenums="1"
+```python linenums="1" hl_lines="18"
 rule reads_quantification_genes:
     """
     This rule quantifies the reads of a bam file mapping on genes and produces
@@ -397,6 +425,8 @@ rule reads_quantification_genes:
     output:
         gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
         gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
+    container:
+        'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
     shell:
         '''
         featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
@@ -423,14 +453,14 @@ rule reads_quantification_genes:
     * `-o`: specify path of file containing count results (_i.e._ output file, in tsv format)
     * Paths of sorted .bam file(s) (_i.e._ input file(s)) are not specified with an parameter, they are simply added at the end of the command
 
-**Exercise:** What does L16 do? Why did we add it?
+**Exercise:** Copy this rule in your Snakefile. What does L18 do? Why did we add it?
 
 ??? success "Answer"
     The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, summary will be printed in `test.tsv.summary`. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.
 
 It would be interesting to know what is happening when featureCounts runs. This is where the `log` and `benchmark` directives come into play!
 
-**Exercise:** Copy this rule in your Snakefile. Then, add the `log` and `benchmark` directives to the rule. Don't forget to update the directive values to match the ones you used in your previous rules.
+**(Optional) Exercise:** If you have time, add the `log` and `benchmark` directives to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 29-35 of the presentation (available [here](#material)) for information on those directives.
 
 ??? tip "Logs and benchmarks"
     * `log` and `benchmark` directives must contain the same `wildcards` as the `output` directive, here `sample`
@@ -452,6 +482,8 @@ It would be interesting to know what is happening when featureCounts runs. This 
             'logs/{sample}/{sample}_genes_read_quantification.log'  # Path of log file
         benchmark:  # benchmark directive
             'benchmarks/{sample}/{sample}_genes_read_quantification.txt'  # Path of benchmark file
+        container:
+            'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
         shell:
             '''
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
@@ -468,7 +500,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
 ??? success "Answer"
     Because all rules are chained together, you only need to specify one final output to trigger the execution of all previous rules. Using the same sample as before (`highCO2_sample1`). You can add the `-F` parameter to force an entire re-run, which should take ~10 min.:
     ```sh
-    snakemake -c 1 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    snakemake -c 1 -F --sdm=apptainer -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
     ```
     If you used the same path for the log file as the rule given above, you can check it with:
     ```sh

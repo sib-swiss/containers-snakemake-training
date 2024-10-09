@@ -23,6 +23,8 @@ rule fastq_trim:
     resources:
         mem_mb = 500
     threads: 2
+    container:
+        'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
     shell:
         '''
         echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
@@ -52,6 +54,8 @@ rule fastq_trim:
 #     resources:
 #         mem_gb = 1
 #     threads: 2
+#     container:
+#         'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
 #     shell:
 #         '''
 #         echo "Creating output directory <{output.before_trim}>" > {log}
@@ -105,6 +109,8 @@ rule fastq_qc_sol4:
     resources:
         mem_gb = 1
     threads: 2
+    container:
+        'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
     shell:
         '''
         echo "Creating output directory <{params.wd}>" > {log}
@@ -148,6 +154,8 @@ rule read_mapping:
     resources:
         mem_gb = 2
     threads: 4
+    container:
+        'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
     shell:
         '''
         echo "Mapping the reads" > {log}
@@ -175,6 +183,8 @@ rule sam_to_bam:
     resources:
         mem = '250MB'
     threads: 2
+    container:
+        'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
     shell:
         '''
         echo "Converting <{input.sam}> to BAM format" > {log}
@@ -205,6 +215,8 @@ rule reads_quantification_genes:
     resources:
         mem = '500MB'
     threads: 2
+    container:
+        'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
     shell:
         '''
         echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}

@@ -20,6 +20,8 @@ rule fastq_trim:
         'logs/{sample}/{sample}_atropos_trimming.log'
     benchmark:
         'benchmarks/{sample}/{sample}_atropos_trimming.txt'
+    container:
+        'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
     shell:
         '''
         echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
@@ -44,6 +46,8 @@ rule read_mapping:
         'logs/{sample}/{sample}_mapping.log'
     benchmark:
         'benchmarks/{sample}/{sample}_mapping.txt'
+    container:
+        'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
     shell:
         '''
         echo "Mapping the reads" > {log}
@@ -68,6 +72,8 @@ rule sam_to_bam:
         'logs/{sample}/{sample}_mapping_sam_to_bam.log'
     benchmark:
         'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
+    container:
+        'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
     shell:
         '''
         echo "Converting <{input.sam}> to BAM format" > {log}
@@ -93,6 +99,8 @@ rule reads_quantification_genes:
         'logs/{sample}/{sample}_genes_read_quantification.log'
     benchmark:
         'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
+    container:
+        'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
     shell:
         '''
         echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}

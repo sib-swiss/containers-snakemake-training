@@ -827,9 +827,11 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     **Exercise:** Implement a single rule to run FastQC on both the original and trimmed .fastq files (four files in total) using directories as ouputs with the `directory()` flag.
 
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0`
+
     ??? success "Answer"
         This makes the rule definition quite 'simple' compared to solution 4:
-        ```python linenums="1" hl_lines="23 29"
+        ```python linenums="1" hl_lines="25 31"
         rule fastq_qc_sol3:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
@@ -849,6 +851,8 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
             resources:
                 mem_gb = 1
             threads: 2
+            container:
+                'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
             shell:
                 '''
                 echo "Creating output directory <{output.before_trim}>" > {log}
@@ -876,9 +880,11 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
 
     **Exercise:** Implement a single rule to run FastQC on both the original and trimmed .fastq files (four files in total) and rename the files created by FastQC to the desired output names using the `mv <old_name> <new_name>` command.
 
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0`
+
     ??? success "Answer"
         This makes the rule definition (much) more complicated than solution 3:
-        ```python linenums="1" hl_lines="43 47 55"
+        ```python linenums="1" hl_lines="45 49 57"
         rule fastq_qc_sol4:
             '''
             This rule performs a QC on paired-end .fastq files before and after trimming.
@@ -918,6 +924,8 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
             resources:
                 mem_gb = 1
             threads: 2
+            container:
+                'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
             shell:
                 '''
                 echo "Creating output directory <{params.wd}>" > {log}
@@ -974,6 +982,8 @@ Three interesting things are happening in both versions of this rule:
         resources:
             mem_gb = 2
         threads: 4
+        container:
+            'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
         shell:
             '''
             echo "Mapping the reads" > {log}
