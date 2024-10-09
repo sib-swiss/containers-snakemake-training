@@ -5,7 +5,7 @@
 * Use an input function to work with an unknown number of files
 * Run scripts from other languages (Python and R)
 * Deploy a rule-specific conda environment
-* Deploy a rule-specific Docker/Singularity container
+* Deploy a rule-specific Docker/Apptainer container
 
 ## Material
 
@@ -309,7 +309,7 @@ If you remember the presentation, there are two directives that you can use to r
 
 Given the presence of a non-default package in the script, we need to find a solution to make it accessible inside the rule. The easiest way to do that is to create a rule-specific conda environment. In Snakemake, you can do this by providing an environment config file (in YAML format) to the rule with the `conda` directive.
 
-**(Optional) Exercise:** If you want, you can try to create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how an environment file look, you can check out slide 19 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
+**(Optional) Exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how an environment file look, you can check out slide 19 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
 
 ??? tip "Environment features"
     * Environment `name` is `py3.12`
@@ -575,7 +575,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     snakemake -c 1 --containerize > Dockerfile
     ```
 
-**Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
+**(Optional) Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
 
 ??? success "Answer"
     You can re-run the whole workflow with:

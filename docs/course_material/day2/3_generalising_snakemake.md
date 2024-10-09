@@ -4,8 +4,8 @@
 
 * Create rules with multiple inputs and outputs
 * Make the code shorter and more general by using placeholders and `wildcards`
-* Check a workflow's behaviour
 * Visualise a workflow DAG
+* (Check a workflow's behaviour)
 
 ## Material
 
@@ -560,7 +560,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
     \\============================================================================//
     ```
 
-**Extra:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
+**(Optional) Exercise:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
 
 ??? success "Answer"
     You can check the logs with:

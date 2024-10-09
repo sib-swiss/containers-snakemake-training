@@ -2,11 +2,11 @@
 
 **After having completed this chapter you will be able to:**
 
-* Optimise resource usage in a workflow
 * Use non-file parameters and config files in rules
 * Make a workflow process list of inputs rather than one at a time
 * Modularise a workflow
-* Aggregate outputs into a "master" rule
+* Aggregate final outputs in a target rule
+* (Optimise resource usage in a workflow)
 * (Create rules with non-conventional outputs)
 
 ## Material
@@ -26,323 +26,6 @@ This series of exercises focuses on how to improve the workflow that you develop
 ??? tip "Development and back-up"
     During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
 
-### Optimising resource usage in a workflow
-
-#### Multithreading
-
-When working with real, larger, datasets, some processes can take a long time to run. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
-
-**Exercise:** What are the two things you need to add to a rule to enable multithreading?
-
-??? success "Answer"
-    You need to add:
-
-    1. The `threads` directive to tell Snakemake that it needs to allocate several threads to this rule
-    1. The software-specific parameters in the `shell` directive to tell a software that it can use several threads
-
-    If you add only the first element, the software will not be aware of the number of threads allocated to it and will use its default number of threads (usually one). If you add only the second element, Snakemake will allocate only one thread to the software, which means that it will run slowly or crash (the software expects multiple threads but gets one).
-
-Usually, you need to read documentation to identify which software can make use of multithreading and which parameters control multithreading. We did it for you to save some time:
-
-* `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` can parallelise with the `--threads <nb_thread>` parameter
-* `featureCounts` can parallelise with the `-T <nb_thread>` parameter
-* `samtools index` can't parallelise. Remember that multithreading only applies to software that were developed to this end, Snakemake itself cannot parallelise a software!
-
-Unfortunately, there is no easy way to find the optimal number of threads for a job. It depends on tasks, datasets, software, resources you have at your disposal... It often takes of few rounds of trial and error to see what works best. We already decided the number of threads to use for each software:
-
-* 4 threads for `hisat2`
-* 2 for all the other software
-
-**Exercise:** Implement multithreading in a rule of your choice (it's usually best to start by multithreading the longest job, here `read_mapping`, but the example dataset is small, so it doesn't really matter).
-
-??? tip "`threads` placeholder"
-    `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive.
-
-??? success "Answer"
-    We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="18 23 43 48 68 72 95 101"
-    rule fastq_trim:
-        '''
-        This rule trims paired-end reads to improve their quality. Specifically, it removes:
-        - Low quality bases
-        - A stretches longer than 20 bases
-        - N stretches
-        '''
-        input:
-            reads1 = 'data/{sample}_1.fastq',
-            reads2 = 'data/{sample}_2.fastq',
-        output:
-            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
-            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
-        log:
-            'logs/{sample}/{sample}_atropos_trimming.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-        threads: 2  # Add directive
-        shell:
-            '''
-            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
-            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
-            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \  # Add multithreading to software
-            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
-            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
-            echo "Trimming report saved in <{log}>" >> {log}
-            '''
-
-    rule read_mapping:
-        '''
-        This rule maps trimmed reads of a fastq onto a reference assembly.
-        '''
-        input:
-            trim1 = rules.fastq_trim.output.trim1,
-            trim2 = rules.fastq_trim.output.trim2
-        output:
-            sam = 'results/{sample}/{sample}_mapped_reads.sam',
-            report = 'results/{sample}/{sample}_mapping_report.txt'
-        log:
-            'logs/{sample}/{sample}_mapping.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping.txt'
-        threads: 4  # Add directive
-        shell:
-            '''
-            echo "Mapping the reads" > {log}
-            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \  # Add multithreading to software
-            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
-            echo "Mapped reads saved in <{output.sam}>" >> {log}
-            echo "Mapping report saved in <{output.report}>" >> {log}
-            '''
-
-    rule sam_to_bam:
-        '''
-        This rule converts a sam file to bam format, sorts it and indexes it.
-        '''
-        input:
-            sam = rules.read_mapping.output.sam
-        output:
-            bam = 'results/{sample}/{sample}_mapped_reads.bam',
-            bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
-            index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
-        log:
-            'logs/{sample}/{sample}_mapping_sam_to_bam.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-        threads: 2  # Add directive
-        shell:
-            '''
-            echo "Converting <{input.sam}> to BAM format" > {log}
-            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  # Add multithreading to software
-            echo "Sorting .bam file" >> {log}
-            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  # Add multithreading to software
-            echo "Indexing sorted .bam file" >> {log}
-            samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
-            echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
-            '''
-
-    rule reads_quantification_genes:
-        '''
-        This rule quantifies the reads of a bam file mapping on genes and produces
-        a count table for all genes of the assembly. The strandedness parameter
-        is determined by get_strandedness().
-        '''
-        input:
-            bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
-        output:
-            gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
-            gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-        log:
-            'logs/{sample}/{sample}_genes_read_quantification.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-        threads: 2  # Add directive
-        shell:
-            '''
-            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
-            -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}  # Add multithreading to software
-            echo "Renaming output files" >> {log}
-            mv {output.gene_level}.summary {output.gene_summary}
-            echo "Results saved in <{output.gene_level}>" >> {log}
-            echo "Report saved in <{output.gene_summary}>" >> {log}
-            '''
-    ```
-
-**Exercise:** Do you need to change anything in the `snakemake` command to run the workflow with 4 cores?
-
-??? success "Answer"
-    You need to provide additional cores to Snakemake with the parameter `-c 4`. Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
-    ```sh
-    snakemake -c 4 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
-    ```
-
-    The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you use `-c 1`, Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap rule threads at `--cores` to avoid requesting too many. Another benefit of increasing `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running two jobs using two threads each).
-
-If you run the workflow from scratch with multithreading in all rules, it should take ~6 min, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multithreading is when datasets and computing power get bigger!
-
-??? warning "Things to keep in mind when using parallel execution"
-    * On-screen output from parallel jobs will be mixed, so save any output to log files instead
-    * Parallel jobs use more RAM. If you run out then either your OS will swap data to disk (which slows data access), or a process will die (which can crash Snakemake)
-    * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop).
-
-#### Controlling memory usage and runtime
-
-Another way to optimise resource usage in a workflow is to control the amount of memory and runtime of each job. This ensures your instance (computer, cluster...) won't run out of memory during computation (which could interrupt jobs or even crash the instance) and that your jobs will run in a reasonable amount of time (a job taking more time to run than usual might be a sign that something is going on).
-
-??? info "Resource usage and schedulers"
-    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start first.
-
-Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... **after the first run** of your workflow. Do you remember the benchmark files you obtained in the previous series of exercises? Now is the time to take a look at them:
-
-|  **s**  | **h: m: s** | **max_rss** | **max_vms** | **max_uss** | **max_pss** | **io_in** | **io_out** | **mean_load** | **cpu_time** |
-|:-------:|:---------:|:-----------:|:-----------:|:-----------:|:-----------:|:---------:|:----------:|:-------------:|:------------:|
-| 31.3048 |  0:00:31  |    763.04   |    904.29   |    757.89   |    758.37   |    1.81   |   230.18   |     37.09     |     11.78    |
-
-* `s` and `h:m:s` give the job wall clock time (in seconds and hours-minutes-seconds, respectively), which is the actual time taken from the start of a software to its end. You can use these results to infer a safe value for the `runtime` keyword
-* Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
-
-??? info "What are the other columns?"
-    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
-
-Here are some suggested values for the current workflow:
-
-* `fastq_trim`: 500 MB
-* `read_mapping`: 2 GB
-* `sam_to_bam`: 250 MB
-* `reads_quantification_genes`: 500 MB
-
-**Exercise:** Implement memory usage limit in a rule of your choice.
-
-??? tip "Two ways to declare memory values "
-    There are two ways to declare memory values in `resources`:
-
-    1. `mem_<unit> = n`
-    1. `mem = 'n<unit>'`: in this case, you must pass a **string**, so you have to enclose `n<unit>` with quotes `''`
-
-    `<unit>` is a unit in [B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB] and `n` is a **float**.
-
-??? success "Answer"
-    We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="18 19 45 46 72 73 101 102"
-    rule fastq_trim:
-        '''
-        This rule trims paired-end reads to improve their quality. Specifically, it removes:
-        - Low quality bases
-        - A stretches longer than 20 bases
-        - N stretches
-        '''
-        input:
-            reads1 = 'data/{sample}_1.fastq',
-            reads2 = 'data/{sample}_2.fastq',
-        output:
-            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
-            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
-        log:
-            'logs/{sample}/{sample}_atropos_trimming.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-        resources:  # Add directive
-            mem_mb = 500  # Add keyword and value with format 1
-        threads: 2
-        shell:
-            '''
-            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
-            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
-            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
-            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
-            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
-            echo "Trimming report saved in <{log}>" >> {log}
-            '''
-
-    rule read_mapping:
-        '''
-        This rule maps trimmed reads of a fastq onto a reference assembly.
-        '''
-        input:
-            trim1 = rules.fastq_trim.output.trim1,
-            trim2 = rules.fastq_trim.output.trim2
-        output:
-            sam = 'results/{sample}/{sample}_mapped_reads.sam',
-            report = 'results/{sample}/{sample}_mapping_report.txt'
-        log:
-            'logs/{sample}/{sample}_mapping.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping.txt'
-        resources:  # Add directive
-            mem_gb = 2  # Add keyword and value with format 1
-        threads: 4
-        shell:
-            '''
-            echo "Mapping the reads" > {log}
-            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
-            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
-            echo "Mapped reads saved in <{output.sam}>" >> {log}
-            echo "Mapping report saved in <{output.report}>" >> {log}
-            '''
-
-    rule sam_to_bam:
-        '''
-        This rule converts a sam file to bam format, sorts it and indexes it.
-        '''
-        input:
-            sam = rules.read_mapping.output.sam
-        output:
-            bam = 'results/{sample}/{sample}_mapped_reads.bam',
-            bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
-            index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
-        log:
-            'logs/{sample}/{sample}_mapping_sam_to_bam.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-        resources:  # Add directive
-            mem = '250MB'  # Add keyword and value with format 2
-        threads: 2
-        shell:
-            '''
-            echo "Converting <{input.sam}> to BAM format" > {log}
-            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}
-            echo "Sorting .bam file" >> {log}
-            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}
-            echo "Indexing sorted .bam file" >> {log}
-            samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
-            echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
-            '''
-
-    rule reads_quantification_genes:
-        '''
-        This rule quantifies the reads of a bam file mapping on genes and produces
-        a count table for all genes of the assembly. The strandedness parameter
-        is determined by get_strandedness().
-        '''
-        input:
-            bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
-        output:
-            gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
-            gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-        log:
-            'logs/{sample}/{sample}_genes_read_quantification.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-        resources:  # Add directive
-            mem = '500MB'  # Add keyword and value with format 2
-        threads: 2
-        shell:
-            '''
-            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
-            -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
-            echo "Renaming output files" >> {log}
-            mv {output.gene_level}.summary {output.gene_summary}
-            echo "Results saved in <{output.gene_level}>" >> {log}
-            echo "Report saved in <{output.gene_summary}>" >> {log}
-            '''
-    ```
-
-Finally, contrary to multithreading, note that you don't need to change the `snakemake` command to launch the workflow!
-
 ### Using non-file parameters and config files
 
 #### Non-file parameters
@@ -360,13 +43,14 @@ As you have seen, Snakemake execution revolves around input and output files. Ho
 
 This reduces readability and makes it very hard to change the values of these parameters, because this requires to change the `shell` directive code.
 
-The `params` directive was (partly) designed to solve this problem: it contains parameters and variables that can be accessed in the `shell` directive. It allows to specify additional non-file parameters instead of hard-coding them into shell commands or using them as inputs/outputs. Here are the main properties of parameters from the `params` directive:
+The `params` directive was (partly) designed to solve this problem: it contains parameters and variables that can be accessed in the `shell` directive. It allows to specify additional non-file parameters instead of hard-coding them into shell commands or using them as inputs/outputs.
 
-* Their values can be of any type (integer, string, list...)
-* Their values can depend on wildcard values and use input functions (explained [here](5_reproducibility_snakemake.md#gathering-the-input-files)). This means that parameters can be changed conditionally, for example depending on the value of a wildcard
-    * In contrast to the `input` directive, the `params` directive can take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`
-* Similarly to `{input}` and `{output}` placeholders, they can be accessed from within the `shell` directive with the `{params}` placeholder
-* Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and they can also be named. While it isn't mandatory, un-named parameters are not explicit at all, so **you should always name your parameters**
+??? info "Main properties of parameters from the `params` directive"
+    * Their values can be of any type (integer, string, list...)
+    * Their values can depend on wildcard values and use input functions (explained [here](5_reproducibility_snakemake.md#gathering-the-input-files)). This means that parameters can be changed conditionally, for example depending on the value of a wildcard
+        * In contrast to the `input` directive, the `params` directive can take more arguments than only `wildcards`, namely `input`, `output`, `threads`, and `resources`
+    * Similarly to `{input}` and `{output}` placeholders, they can be accessed from within the `shell` directive with the `{params}` placeholder
+    * Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and they can also be named. While it isn't mandatory, un-named parameters are not explicit at all, so you should **always name your parameters**
 
 Here is an example of `params` utilisation:
 
@@ -407,7 +91,7 @@ rule get_header:
         -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'  # Parameter was replaced here
     ```
 
-But doing this only shifted the problem: now, hard-coded paths are in `params` instead of `shell`. This is better, but not by much! Luckily, there is an even better way to handle parameters: instead of hard-coding parameter values in the Snakefile, Snakemake can use parameters (and their values) defined in config files.
+But doing this only shifted the problem: now, hard-coded paths are in `params` instead of `shell`. This is better, but not by much! Luckily, there is an even better way to handle parameters: instead of hard-coding parameter values in the Snakefile, Snakemake can use parameters (and values) defined in config files.
 
 #### Config files
 
@@ -487,13 +171,20 @@ From now on, if you need to change these values, you can easily do it in the con
 
 If you develop a large workflow, you are bound to encounter some cluttering problems. Have a look at your current Snakefile: with only four rules, it is already almost 150 lines long. Imagine what happens when your workflow has dozens of rules? The Snakefile may (will?) become messy and harder to maintain and edit. This is why it quickly becomes crucial to modularise your workflow. This approach also makes it easier to re-use pieces of one workflow into another. Snakemake can be modularised on three different levels:
 
-1. The most fine-grained level is wrappers. Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility. However their implementation can be 'rigid' and sometimes it may be better to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#wrappers) for more explanations
+1. The most fine-grained level is wrappers
+
+    ??? info "More information on wrappers"
+        Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility. However their implementation can be 'rigid' and sometimes it may be better to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#wrappers) for more explanations
+
 1. For larger parts belonging to the same workflow, it is recommended to split the main Snakefile into smaller snakefiles, each containing rules with a common topic. Smaller snakefiles are then integrated into the main Snakefile with the `include` statement. In this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#includes) for more explanations
 
     ??? info "Rules organisation"
         There is no official guideline on how to regroup rules, but a simple and logic approach is to create "thematic" snakefiles, _i.e._ place rules related to the same topic in the same file. Modularisation is a common practice in programming in general: it is often easier to group all variables, functions, classes... related to a common theme into a single script, package, software...
 
-1. The final level of modularisation enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#snakefiles-modules) for more explanations
+1. The final level of modularisation is modules
+
+    ??? info "More on modules"
+        It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#snakefiles-modules) for more explanations
 
 In this course, you will only use the second level of modularisation. Briefly, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefile containing rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefile in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
 
@@ -697,7 +388,7 @@ But there is an even better solution! At the moment, samples are defined as a li
 ??? success "Answer"
     You can run the workflow by removing `-F` and `-n` from the dry-run command, which makes a very simple command:
     ```sh
-    snakemake -c 4 -p
+    snakemake -c 4 -p --sdm=apptainer
     ```
 
     To generate the DAG, you can use:
@@ -716,6 +407,341 @@ But there is an even better solution! At the moment, samples are defined as a li
       <img src="../../../assets/images/all_samples_filegraph.png" width="50%"/>
     </p>
     You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is the rule implemented in the supplementary exercise below.
+
+### Extra: optimising resource usage in a workflow
+
+This part is an extra-exercise about resource usage in Snakemake. It is quite long, so do it only if you finished all the other exercises.
+
+#### Multithreading
+
+When working with real, larger, datasets, some processes can take a long time to run. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
+
+**Exercise:** What are the two things you need to add to a rule to enable multithreading?
+
+??? success "Answer"
+    You need to add:
+
+    1. The `threads` directive to tell Snakemake that it needs to allocate several threads to this rule
+    1. The software-specific parameters in the `shell` directive to tell a software that it can use several threads
+
+    If you add only the first element, the software will not be aware of the number of threads allocated to it and will use its default number of threads (usually one). If you add only the second element, Snakemake will allocate only one thread to the software, which means that it will run slowly or crash (the software expects multiple threads but gets one).
+
+Usually, you need to read documentation to identify which software can make use of multithreading and which parameters control multithreading. We did it for you to save some time:
+
+* `atropos trim`, `hisat2`, `samtools view`, and `samtools sort` can parallelise with the `--threads <nb_thread>` parameter
+* `featureCounts` can parallelise with the `-T <nb_thread>` parameter
+* `samtools index` can't parallelise. Remember that multithreading only applies to software that were developed to this end, Snakemake itself cannot parallelise a software!
+
+Unfortunately, there is no easy way to find the optimal number of threads for a job. It depends on tasks, datasets, software, resources you have at your disposal... It often takes of few rounds of trial and error to see what works best. We already decided the number of threads to use for each software:
+
+* 4 threads for `hisat2`
+* 2 for all the other software
+
+**Exercise:** Implement multithreading in a rule of your choice (it's usually best to start by multithreading the longest job, here `read_mapping`, but the example dataset is small, so it doesn't really matter).
+
+??? tip "`threads` placeholder"
+    `threads` can also be replaced by a `{threads}` placeholder in the `shell` directive.
+
+??? success "Answer"
+    We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
+    ```python linenums="1" hl_lines="18 25 45 52 72 78 80 101 109"
+    rule fastq_trim:
+        '''
+        This rule trims paired-end reads to improve their quality. Specifically, it removes:
+        - Low quality bases
+        - A stretches longer than 20 bases
+        - N stretches
+        '''
+        input:
+            reads1 = 'data/{sample}_1.fastq',
+            reads2 = 'data/{sample}_2.fastq',
+        output:
+            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
+            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
+        log:
+            'logs/{sample}/{sample}_atropos_trimming.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
+        threads: 2  # Add directive
+        container:
+            'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
+        shell:
+            '''
+            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
+            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
+            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \  # Add multithreading to software
+            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
+            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
+            echo "Trimming report saved in <{log}>" >> {log}
+            '''
+
+    rule read_mapping:
+        '''
+        This rule maps trimmed reads of a fastq onto a reference assembly.
+        '''
+        input:
+            trim1 = rules.fastq_trim.output.trim1,
+            trim2 = rules.fastq_trim.output.trim2
+        output:
+            sam = 'results/{sample}/{sample}_mapped_reads.sam',
+            report = 'results/{sample}/{sample}_mapping_report.txt'
+        log:
+            'logs/{sample}/{sample}_mapping.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_mapping.txt'
+        threads: 4  # Add directive
+        container:
+            'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
+        shell:
+            '''
+            echo "Mapping the reads" > {log}
+            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+            -x resources/genome_indices/Scerevisiae_index --threads {threads} \  # Add multithreading to software
+            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
+            echo "Mapped reads saved in <{output.sam}>" >> {log}
+            echo "Mapping report saved in <{output.report}>" >> {log}
+            '''
+
+    rule sam_to_bam:
+        '''
+        This rule converts a sam file to bam format, sorts it and indexes it.
+        '''
+        input:
+            sam = rules.read_mapping.output.sam
+        output:
+            bam = 'results/{sample}/{sample}_mapped_reads.bam',
+            bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
+            index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
+        log:
+            'logs/{sample}/{sample}_mapping_sam_to_bam.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
+        threads: 2  # Add directive
+        container:
+            'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
+        shell:
+            '''
+            echo "Converting <{input.sam}> to BAM format" > {log}
+            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  # Add multithreading to software
+            echo "Sorting .bam file" >> {log}
+            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  # Add multithreading to software
+            echo "Indexing sorted .bam file" >> {log}
+            samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
+            echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
+            '''
+
+    rule reads_quantification_genes:
+        '''
+        This rule quantifies the reads of a bam file mapping on genes and produces
+        a count table for all genes of the assembly. The strandedness parameter
+        is determined by get_strandedness().
+        '''
+        input:
+            bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
+        output:
+            gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
+            gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
+        log:
+            'logs/{sample}/{sample}_genes_read_quantification.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
+        threads: 2  # Add directive
+        container:
+            'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
+        shell:
+            '''
+            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
+            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+            -B -C --largestOverlap --verbose -F GTF \
+            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}  # Add multithreading to software
+            echo "Renaming output files" >> {log}
+            mv {output.gene_level}.summary {output.gene_summary}
+            echo "Results saved in <{output.gene_level}>" >> {log}
+            echo "Report saved in <{output.gene_summary}>" >> {log}
+            '''
+    ```
+
+**Exercise:** Do you need to change anything in the `snakemake` command to run the workflow with 4 cores?
+
+??? success "Answer"
+    You need to provide additional cores to Snakemake with the parameter `-c 4`. Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
+    ```sh
+    snakemake -c 4 -F -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    ```
+
+    The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you use `-c 1`, Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap rule threads at `--cores` to avoid requesting too many. Another benefit of increasing `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running two jobs using two threads each).
+
+If you run the workflow from scratch with multithreading in all rules, it should take ~6 min, compared to ~10 min before (_i.e._ a 40% decrease!). This gives you an idea of how powerful multithreading is when datasets and computing power get bigger!
+
+??? warning "Things to keep in mind when using parallel execution"
+    * On-screen output from parallel jobs will be mixed, so save any output to log files instead
+    * Parallel jobs use more RAM. If you run out then either your OS will swap data to disk (which slows data access), or a process will die (which can crash Snakemake)
+    * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop).
+
+#### Controlling memory usage and runtime
+
+Another way to optimise resource usage in a workflow is to control the amount of memory and runtime of each job. This ensures your instance (computer, cluster...) won't run out of memory during computation (which could interrupt jobs or even crash the instance) and that your jobs will run in a reasonable amount of time (a job taking more time to run than usual might be a sign that something is going on).
+
+??? info "Resource usage and schedulers"
+    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start first.
+
+Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... **after the first run** of your workflow. Do you remember the benchmark files you (may have) obtained at the end of the previous series of exercises? Now is the time to take a look at them:
+
+|  **s**  | **h: m: s** | **max_rss** | **max_vms** | **max_uss** | **max_pss** | **io_in** | **io_out** | **mean_load** | **cpu_time** |
+|:-------:|:---------:|:-----------:|:-----------:|:-----------:|:-----------:|:---------:|:----------:|:-------------:|:------------:|
+| 31.3048 |  0:00:31  |    763.04   |    904.29   |    757.89   |    758.37   |    1.81   |   230.18   |     37.09     |     11.78    |
+
+* `s` and `h:m:s` give the job wall clock time (in seconds and hours-minutes-seconds, respectively), which is the actual time taken from the start of a software to its end. You can use these results to infer a safe value for the `runtime` keyword
+* Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
+
+??? info "What are the other columns?"
+    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
+
+Here are some suggested values for the current workflow:
+
+* `fastq_trim`: 500 MB
+* `read_mapping`: 2 GB
+* `sam_to_bam`: 250 MB
+* `reads_quantification_genes`: 500 MB
+
+**Exercise:** Implement memory usage limit in a rule of your choice.
+
+??? tip "Two ways to declare memory values "
+    There are two ways to declare memory values in `resources`:
+
+    1. `mem_<unit> = n`
+    1. `mem = 'n<unit>'`: in this case, you must pass a **string**, so you have to enclose `n<unit>` with quotes `''`
+
+    `<unit>` is a unit in [B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB] and `n` is a **float**.
+
+??? success "Answer"
+    We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile:
+    ```python linenums="1" hl_lines="18 19 47 48 76 77 107 108"
+    rule fastq_trim:
+        '''
+        This rule trims paired-end reads to improve their quality. Specifically, it removes:
+        - Low quality bases
+        - A stretches longer than 20 bases
+        - N stretches
+        '''
+        input:
+            reads1 = 'data/{sample}_1.fastq',
+            reads2 = 'data/{sample}_2.fastq',
+        output:
+            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
+            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
+        log:
+            'logs/{sample}/{sample}_atropos_trimming.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
+        resources:  # Add directive
+            mem_mb = 500  # Add keyword and value with format 1
+        threads: 2
+        container:
+            'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
+        shell:
+            '''
+            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
+            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
+            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
+            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
+            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
+            echo "Trimming report saved in <{log}>" >> {log}
+            '''
+
+    rule read_mapping:
+        '''
+        This rule maps trimmed reads of a fastq onto a reference assembly.
+        '''
+        input:
+            trim1 = rules.fastq_trim.output.trim1,
+            trim2 = rules.fastq_trim.output.trim2
+        output:
+            sam = 'results/{sample}/{sample}_mapped_reads.sam',
+            report = 'results/{sample}/{sample}_mapping_report.txt'
+        log:
+            'logs/{sample}/{sample}_mapping.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_mapping.txt'
+        resources:  # Add directive
+            mem_gb = 2  # Add keyword and value with format 1
+        threads: 4
+        container:
+            'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
+        shell:
+            '''
+            echo "Mapping the reads" > {log}
+            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
+            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
+            echo "Mapped reads saved in <{output.sam}>" >> {log}
+            echo "Mapping report saved in <{output.report}>" >> {log}
+            '''
+
+    rule sam_to_bam:
+        '''
+        This rule converts a sam file to bam format, sorts it and indexes it.
+        '''
+        input:
+            sam = rules.read_mapping.output.sam
+        output:
+            bam = 'results/{sample}/{sample}_mapped_reads.bam',
+            bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
+            index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
+        log:
+            'logs/{sample}/{sample}_mapping_sam_to_bam.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
+        resources:  # Add directive
+            mem = '250MB'  # Add keyword and value with format 2
+        threads: 2
+        container:
+            'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
+        shell:
+            '''
+            echo "Converting <{input.sam}> to BAM format" > {log}
+            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}
+            echo "Sorting .bam file" >> {log}
+            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}
+            echo "Indexing sorted .bam file" >> {log}
+            samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
+            echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
+            '''
+
+    rule reads_quantification_genes:
+        '''
+        This rule quantifies the reads of a bam file mapping on genes and produces
+        a count table for all genes of the assembly. The strandedness parameter
+        is determined by get_strandedness().
+        '''
+        input:
+            bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
+        output:
+            gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
+            gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
+        log:
+            'logs/{sample}/{sample}_genes_read_quantification.log'
+        benchmark:
+            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
+        resources:  # Add directive
+            mem = '500MB'  # Add keyword and value with format 2
+        threads: 2
+        container:
+            'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
+        shell:
+            '''
+            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
+            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+            -B -C --largestOverlap --verbose -F GTF \
+            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            echo "Renaming output files" >> {log}
+            mv {output.gene_level}.summary {output.gene_summary}
+            echo "Results saved in <{output.gene_level}>" >> {log}
+            echo "Report saved in <{output.gene_summary}>" >> {log}
+            '''
+    ```
+
+Finally, contrary to multithreading, note that you don't need to change the `snakemake` command to launch the workflow!
 
 ### Extra: using non-conventional outputs
 
