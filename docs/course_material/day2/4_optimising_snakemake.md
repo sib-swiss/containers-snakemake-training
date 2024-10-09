@@ -13,15 +13,17 @@
 
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/4_optimising_snakemake.pdf){: .md-button }
 
+## Snakefile from previous session
+
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules. You can download it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
+
+```sh
+wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
+```
+
 ## Exercises
 
 This series of exercises focuses on how to improve the workflow that you developed in the previous session. As a result, you will add only one rule to your workflow. But, fear not, it's a crucial one!
-
-??? tip "Snakefile from previous session"
-    If you want to restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules, you can manually get it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
-    ```sh
-    wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
-    ```
 
 ??? tip "Development and back-up"
     During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.

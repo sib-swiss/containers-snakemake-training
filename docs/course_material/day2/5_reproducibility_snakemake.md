@@ -11,15 +11,18 @@
 
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/5_reproducibility_snakemake.pdf){: .md-button }
 
+## Snakefile from previous session
+
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading, memory usage control implemented in all rules. You can download the files [here](https://github.com/sib-swiss/containers-snakemake-training/tree/2024_update/docs/solutions_day2/session3) or copy them locally if you cloned the course repository (they are located in `containers-snakemake-training/docs/solutions_day2/session3`):
+
+```sh
+# Go to repository root, containers-snakemake-training, then copy folder with:
+cp -r docs/solutions_day2/session3 <destination_path>
+```
+
 ## Exercises
 
 In this series of exercises, you will create the last two rules of the workflow. Each rule will execute a script (one in Python and one in R; don't worry, this is not a programming course, so we wrote the scripts for you!), and both rules will have dedicated environments that you will need to take into account in the snakefiles.
-
-??? tip "Snakefile from previous session"
-    If you want to restart from a fully commented workflow (including a supplementary rule for .fastq files quality check), with multithreading and resource usage control implemented in all rules, you can manually get it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session3) or download it in your current directory with:
-    ```sh
-    wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
-    ```
 
 ??? tip "Development and back-up"
     During this session as well, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
