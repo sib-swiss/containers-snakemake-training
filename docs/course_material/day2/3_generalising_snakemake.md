@@ -16,16 +16,13 @@
 In each rule, you should try (as much as possible) to:
 
 * Choose meaningful rule names
+* Use placeholders and `wildcards`
+    * Choose meaningful wildcard names
+    * You can use the same wildcard names in multiple rules for consistency and readability, but remember that Snakemake will treat them as independent `wildcards` and their values will not be shared: rules are self-contained and `wildcards` are local to each rule (see this [very nice summary](http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html) on `wildcards`)
+* Use multiple (named) inputs/outputs when needed/possible
 * Use rules dependency, with the syntax `rules.<rule_name>.output`
     * If you use named outputs (recommended), the syntax becomes `rules.<rule_name>.output.<output_name>`
-    * If you use numbered outputs, the syntax becomes `rules.<rule_name>.output[n]` (with `n` starting at 0)
-* Use multiple inputs/outputs when needed/possible
-* Use placeholders
-* Use `wildcards`
-    * Choose meaningful wildcard names
-    * You can use the same wildcard names in multiple rules for consistency and readability, but Snakemake will treat them as independent `wildcards` and their values will not be shared: rules are self-contained and `wildcards` are local to each rule (see this [very nice summary](http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html) on `wildcards`)
-* Create a log file with the `log` directive and a benchmark file with the `benchmark` directive
-    * `output`, `log`, and `benchmark` must contain the same `wildcards`!
+    * If you use numbered outputs (don't), the syntax becomes `rules.<rule_name>.output[n]`, with `n` starting at 0 (Python indexing)
 
 ## Testing your workflow's logic
 

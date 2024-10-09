@@ -363,7 +363,7 @@ Given the presence of a non-default package in the script, we need to find a sol
                 '../scripts/count_table.py'
     ```
 
-Using conda environments improves reproducibility for many reasons, including version control and the fact that users do not need to manually manage software dependencies. **The first workflow execution after adding Conda environments will take more time than usual because `snakemake` (through `conda`) has to download and install all the software** in the working directory.
+Using conda environments improves reproducibility for many reasons, including version control and the fact that users do not need to manually manage software dependencies. The **first workflow execution after adding Conda environments will take more time than usual** because `snakemake` (through `conda`) has to **download and install all the software** in the working directory.
 
 #### Adapting the Snakefile and running the rule
 
@@ -469,7 +469,7 @@ As mentioned above, we don't need an input function because the input of rule `d
 
 ##### Downloading the script
 
-The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it with:
+The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/count_table.R) or with the command:
 
 ```sh
 wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/DESeq2.R
@@ -563,7 +563,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     ```
     Do not forget to add `--sdm apptainer`, otherwise Snakemake will not pull the image and the script will be executed in the default environment (which will most likely lead to a crash).
 
-    During the run, you should see new log messages about Snakemake managing the Docker image:
+    During the run, you should see log messages about Snakemake managing the Docker image:
     ```sh
     Pulling singularity image docker://geertvangeest/deseq2:v1.
     [...]
@@ -602,4 +602,4 @@ Now, all that is left is running the workflow, check its outputs and visualise i
       <img src="../../../assets/images/total_dag.png" width="100%"/>
     </figure>
 
-Congratulations, you made it to the end! You are now able to create a Snakemake workflow and make it reproducible thanks to Conda and Docker/Singularity! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!
+Congratulations, you made it to the end! You are now able to create a Snakemake workflow and make it reproducible thanks to Conda and Docker/Apptainer! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!
