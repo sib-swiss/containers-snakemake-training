@@ -570,7 +570,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
     ```
 
-    To find how many genes are differentially expressed, check out the last output file, `results/deg_list.tsv`. 9 genes are differentially expressed in total: 4 up-regulated and 5 down-regulated.
+    To find how many genes are differentially expressed, check out the last output file, `results/deg_list.tsv`. 10 genes are differentially expressed in total: 4 up-regulated and 6 down-regulated.
 
 ??? tip "Containerisation of Conda-based workflows"
     Snakemake can also automatically generate a Dockerfile that contains all required environments in a human readable way. If you want to see how a Snakemake-generated Dockerfile looks like, use:
