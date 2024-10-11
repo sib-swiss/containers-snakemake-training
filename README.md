@@ -18,46 +18,49 @@
 
 ## How to reuse this material?
 
-This is a combination of the [introduction to containers course](https://github.com/sib-swiss/containers-introduction-training) with a module on snakemake. The markdown files of the container course are added as a module. To clone the repository:
+This is a combination of the [introduction to containers course](https://github.com/sib-swiss/containers-introduction-training) with a module on Snakemake. The markdown files of the container course are added as a module.
 
-```bash
-git clone https://github.com/sib-swiss/containers-snakemake-training.git
-```
+To clone the entire repository:
 
-Then initialise the submodules:
+* Clone the repository:
+	```bash
+	git clone https://github.com/sib-swiss/containers-snakemake-training.git
+	```
 
-```bash
-git submodule update --init --recursive
-git submodule update 
-```
+* Initialise the submodules:
+	```bash
+	cd containers-snakemake-training
+	git submodule update --init --recursive
+	git submodule update
+	```
 
-To update to the most recent version of the submodule: 
+* Update to the most recent version of the submodules:
+	```bash
+	git submodule update --remote
+	```
 
-```bash
-git submodule update --remote
-```
+### How to host the website locally?
 
-This website is generated with [MkDocs](https://www.mkdocs.org/), with the theme [Material](https://squidfunk.github.io/mkdocs-material/).
+Once you have cloned the repo, you can host it on your local browser. The website is generated with [MkDocs](https://www.mkdocs.org/), with the [Material](https://squidfunk.github.io/mkdocs-material/) theme.
 
-To host it locally, install MkDocs:
-```bash
-pip install mkdocs
-```
+* Install MkDocs:
+	```bash
+	pip install mkdocs
+	```
 
-and Material:
-```bash
-pip install mkdocs-material
-```
+* And Material:
+	```bash
+	pip install mkdocs-material
+	```
 
-Fork this repository and clone it to your local computer. Then, make the repository your current directory and type:
+* Make sure you are in the repository directory and type:
+	```bash
+	mkdocs serve
+	```
 
-```bash
-mkdocs serve
-```
+The website will be hosted on your local browser at [http://localhost:8000/](http://localhost:8000/).
 
-To host it locally.
-
-Check it out with your browser at [http://localhost:8000/](http://localhost:8000/).
+### How to generate a github page?
 
 For an automatically generated github page, you can run:
 
