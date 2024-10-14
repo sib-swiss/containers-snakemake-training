@@ -12,7 +12,7 @@
         <link rel="prev" href="../2_introduction_snakemake/">
       
       
-        <link rel="next" href="../4_decorating_workflow/">
+        <link rel="next" href="../4_optimising_snakemake/">
       
       
       <link rel="icon" href="../../../assets/images/SIB_logo.svg">
@@ -577,6 +577,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#advice-and-reminders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advice and reminders
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-your-workflows-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing your workflow&rsquo;s logic
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-origin" class="md-nav__link">
     <span class="md-ellipsis">
       Data origin
@@ -596,20 +614,26 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#general-instructions-and-reminders" class="md-nav__link">
+  <a href="#downloading-data-and-setting-up-folder-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      General instructions and reminders
+      Downloading data and setting up folder structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Downloading data and setting up folder structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-do-not-process-all-the-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Important: do not process all the samples!
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#downloading-the-data-and-setting-up-the-directory-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      Downloading the data and setting up the directory structure
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -620,68 +644,23 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Creating a rule to trim reads">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#atropos-options" class="md-nav__link">
+  <a href="#creating-a-rule-to-map-trimmed-reads-onto-a-reference-genome" class="md-nav__link">
     <span class="md-ellipsis">
-      atropos options
+      Creating a rule to map trimmed reads onto a reference genome
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
-  <a href="#creating-a-rule-to-map-trimmed-reads-on-a-reference-genome" class="md-nav__link">
+  <a href="#creating-a-rule-to-convert-and-sort-sam-files-to-bam-format" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating a rule to map trimmed reads on a reference genome
+      Creating a rule to convert and sort .sam files to BAM format
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Creating a rule to map trimmed reads on a reference genome">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#hisat2-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      HISAT2 options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-a-rule-to-convert-and-sort-sam-files-to-bam" class="md-nav__link">
-    <span class="md-ellipsis">
-      Creating a rule to convert and sort SAM files to BAM
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Creating a rule to convert and sort SAM files to BAM">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samtools-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      Samtools options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -692,71 +671,23 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Creating a rule to count mapped reads">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#featurecounts-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      featureCounts options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
-  <a href="#running-the-workflow" class="md-nav__link">
+  <a href="#running-the-whole-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Running the workflow
+      Running the whole workflow
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#visualising-the-dag-of-the-workflow" class="md-nav__link">
+  <a href="#visualising-the-workflow-dag" class="md-nav__link">
     <span class="md-ellipsis">
-      Visualising the DAG of the workflow
+      Visualising the workflow DAG
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#designing-a-snakemake-workflow-and-debugging-it" class="md-nav__link">
-    <span class="md-ellipsis">
-      Designing a Snakemake workflow&hellip; and debugging it!
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Designing a Snakemake workflow… and debugging it!">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#designing-a-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Designing a workflow
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#debugging-a-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debugging a workflow
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -781,7 +712,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4_decorating_workflow/" class="md-nav__link">
+      <a href="../4_optimising_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -807,6 +738,27 @@
   
   <span class="md-ellipsis">
     Being reproducible with Snakemake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_debugging_snakemake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
   </span>
   
 
@@ -866,6 +818,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#advice-and-reminders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advice and reminders
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-your-workflows-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing your workflow&rsquo;s logic
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-origin" class="md-nav__link">
     <span class="md-ellipsis">
       Data origin
@@ -885,20 +855,26 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#general-instructions-and-reminders" class="md-nav__link">
+  <a href="#downloading-data-and-setting-up-folder-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      General instructions and reminders
+      Downloading data and setting up folder structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Downloading data and setting up folder structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-do-not-process-all-the-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Important: do not process all the samples!
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#downloading-the-data-and-setting-up-the-directory-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      Downloading the data and setting up the directory structure
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -909,68 +885,23 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Creating a rule to trim reads">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#atropos-options" class="md-nav__link">
+  <a href="#creating-a-rule-to-map-trimmed-reads-onto-a-reference-genome" class="md-nav__link">
     <span class="md-ellipsis">
-      atropos options
+      Creating a rule to map trimmed reads onto a reference genome
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
-  <a href="#creating-a-rule-to-map-trimmed-reads-on-a-reference-genome" class="md-nav__link">
+  <a href="#creating-a-rule-to-convert-and-sort-sam-files-to-bam-format" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating a rule to map trimmed reads on a reference genome
+      Creating a rule to convert and sort .sam files to BAM format
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Creating a rule to map trimmed reads on a reference genome">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#hisat2-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      HISAT2 options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-a-rule-to-convert-and-sort-sam-files-to-bam" class="md-nav__link">
-    <span class="md-ellipsis">
-      Creating a rule to convert and sort SAM files to BAM
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Creating a rule to convert and sort SAM files to BAM">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#samtools-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      Samtools options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -981,71 +912,23 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Creating a rule to count mapped reads">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#featurecounts-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      featureCounts options
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
-  <a href="#running-the-workflow" class="md-nav__link">
+  <a href="#running-the-whole-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Running the workflow
+      Running the whole workflow
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#visualising-the-dag-of-the-workflow" class="md-nav__link">
+  <a href="#visualising-the-workflow-dag" class="md-nav__link">
     <span class="md-ellipsis">
-      Visualising the DAG of the workflow
+      Visualising the workflow DAG
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#designing-a-snakemake-workflow-and-debugging-it" class="md-nav__link">
-    <span class="md-ellipsis">
-      Designing a Snakemake workflow&hellip; and debugging it!
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Designing a Snakemake workflow… and debugging it!">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#designing-a-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Designing a workflow
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#debugging-a-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debugging a workflow
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1078,62 +961,63 @@
 <p><strong>After having completed this chapter you will be able to:</strong></p>
 <ul>
 <li>Create rules with multiple inputs and outputs</li>
-<li>Make the code shorter and more general by using placeholders and wildcards</li>
-<li>Optimise the memory usage of a workflow and checking its performances</li>
+<li>Make the code shorter and more general by using placeholders and <code>wildcards</code></li>
 <li>Visualise a workflow DAG</li>
+<li>(Check a workflow&rsquo;s behaviour)</li>
 </ul>
 <h2 id="material">Material</h2>
-<p><a class="md-button" href="../../../assets/pdf/day2/2_generalising_snakemake.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
-<h2 id="data-origin">Data origin</h2>
-<p>The data we will use during the exercises was produced <a href="https://pubmed.ncbi.nlm.nih.gov/31654410/">in this work</a>. Briefly, the team studied the transcriptional response of a strain of baker&rsquo;s yeast, <a href="https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae"><em>Saccharomyces cerevisiae</em></a>, facing environments with different amount of CO<sub>2</sub>. To this end, they performed <strong>150 bp paired-end</strong> sequencing of mRNA-enriched samples. Detailed information on all the samples are available <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078">here</a>, but just know that for the purpose of the course, we selected <strong>6 samples</strong> (<strong>3 replicates per condition</strong>, <strong>low</strong> and <strong>high CO<sub>2</sub></strong>) and <strong>down-sampled</strong> them to <strong>1 million read-pairs each</strong> to reduce computation times.</p>
-<h2 id="exercises">Exercises</h2>
-<p>One of the aims of today&rsquo;s course is to develop a basic, yet efficient, workflow to analyse RNAseq data. This workflow takes reads coming from RNA sequencing as inputs and outputs a list of genes that are differentially expressed between two conditions. The files containing the reads are in <a href="https://en.wikipedia.org/wiki/FASTQ_format">FASTQ format</a> and the output will be a tab-separated file containing a list of genes with expression changes, results of statistical tests&hellip;</p>
-<p>In this series of exercises, we will create the &lsquo;backbone&rsquo; of the workflow, <em>i.e.</em> the rules that are the most computationally expensive, namely:</p>
-<ul>
-<li>A rule to trim poor-quality reads</li>
-<li>A rule to map the trimmed reads on a reference genome</li>
-<li>A rule to convert and sort files from the SAM format to the BAM format</li>
-<li>A rule to count the reads mapping on each gene</li>
-</ul>
-<p>At the end of this series of exercises, the DAG of your workflow should look like this:</p>
-<figure align="center">
-<p><img alt="backbone_rulegraph" src="../../../assets/images/backbone_rulegraph.png" />
-  </p>
-<figcaption>Rulegraph of the workflow at <br>the end of the session</figcaption>
-</figure>
-<div class="admonition note">
-<p class="admonition-title">Designing and debugging a workflow</p>
-<p>If you have problems designing your Snakemake workflow or debugging it, you can find some help <a href="#designing-a-snakemake-workflow-and-debugging-it">here</a>.</p>
-</div>
-<h3 id="general-instructions-and-reminders">General instructions and reminders</h3>
+<p><a class="md-button" href="../../../assets/pdf/day2/3_generalising_snakemake.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<h2 id="advice-and-reminders">Advice and reminders</h2>
 <p>In each rule, you should try (as much as possible) to:</p>
 <ul>
 <li>Choose meaningful rule names</li>
-<li>Use rules dependency, with the syntax <code>rules.&lt;rule_name&gt;.output</code><ul>
-<li>If you use numbered outputs, the syntax becomes <code>rules.&lt;rule_name&gt;.output[n]</code> (with <code>n</code> starting at 0)</li>
-<li>If you use named outputs, the syntax becomes <code>rules.&lt;rule_name&gt;.output.&lt;output_name&gt;</code></li>
-</ul>
-</li>
-<li>Use placeholders</li>
-<li>Use wildcards<ul>
+<li>Use placeholders and <code>wildcards</code><ul>
 <li>Choose meaningful wildcard names</li>
-<li>The <code>output</code>, <code>log</code>, and <code>benchmark</code> directives must have the same wildcard names!</li>
-<li>You can use the same wildcard names in multiple rules for consistency and readability, but Snakemake will treat them as independent wildcards and their values will not be shared: rules are self-contained and wildcards are local to each rule (<a href="http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html">see a very nice summary on wildcards</a>)</li>
+<li>You can use the same wildcard names in multiple rules for consistency and readability, but remember that Snakemake will treat them as independent <code>wildcards</code> and their values will not be shared: rules are self-contained and <code>wildcards</code> are local to each rule (see this <a href="http://ivory.idyll.org/blog/2023-snakemake-slithering-wildcards.html">very nice summary</a> on <code>wildcards</code>)</li>
 </ul>
 </li>
-<li>Use multiple inputs/outputs (when needed/possible)</li>
-<li>Create a log file with the <code>log</code> directive</li>
-<li>Create a benchmark file with the <code>benchmark</code> directive</li>
+<li>Use multiple (named) inputs/outputs when needed/possible</li>
+<li>Use rules dependency, with the syntax <code>rules.&lt;rule_name&gt;.output</code><ul>
+<li>If you use named outputs (recommended), the syntax becomes <code>rules.&lt;rule_name&gt;.output.&lt;output_name&gt;</code></li>
+<li>If you use numbered outputs (don&rsquo;t), the syntax becomes <code>rules.&lt;rule_name&gt;.output[n]</code>, with <code>n</code> starting at 0 (Python indexing)</li>
 </ul>
-<p>If you have a doubt, do not hesitate to test your workflow logic with a dry-run (the <code>-n</code> flag): <code>snakemake --cores 1 -n &lt;target&gt;</code>. Snakemake will then display all the jobs required to generate the target. To obtain additional information on why a specific job is necessary, run Snakemake with the <code>-r</code> flag (which can be -and usually is- combined with <code>-n</code>): <code>snakemake --cores 1 -n -r &lt;target&gt;</code>. For each job, Snakemake will print a <em>reason</em> field explaining why the job was required. To visualize the exact command executed by each job (with the placeholders and wildcards replaced by their values), run snakemake with the <code>-p</code> flag: <code>snakemake --cores 1 -n -r -p &lt;target&gt;</code>.</p>
-<h3 id="downloading-the-data-and-setting-up-the-directory-structure">Downloading the data and setting up the directory structure</h3>
-<p>In this part, we will download the data and start building the directory structure of our workflow according to the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html">official recommendations</a>. We already starting doing so in the previous series of exercises and ultimately, it should resemble this:</p>
+</li>
+</ul>
+<h2 id="testing-your-workflows-logic">Testing your workflow&rsquo;s logic</h2>
+<ul>
+<li>If you have a doubt, do not hesitate to test your workflow logic with a <strong>dry-run</strong> (<code>-n/--dry-run/--dryrun</code> parameter): <code>snakemake -c 1 -n &lt;target&gt;</code>. Snakemake will then show all the jobs needed to generate <code>&lt;target&gt;</code> as well as a <strong>reason</strong> field explaining why each job is required</li>
+<li>To visualise the exact commands executed by each job (with placeholders and <code>wildcards</code> replaced by their values), run snakemake with the <code>-p/--printshellcmds</code> parameter: <code>snakemake -c 1 -p &lt;target&gt;</code></li>
+<li>These two parameters are often used together to check an entire workflow: <code>snakemake -c 1 -n -p &lt;target&gt;</code></li>
+</ul>
+<h2 id="data-origin">Data origin</h2>
+<p>The data you will use during the exercises was produced <a href="https://pubmed.ncbi.nlm.nih.gov/31654410/">in this work</a>. Briefly, the team studied the transcriptional response of a strain of baker&rsquo;s yeast, <a href="https://en.wikipedia.org/wiki/Saccharomyces_cerevisiae"><em>Saccharomyces cerevisiae</em></a>, facing environments with different concentrations of CO<sub>2</sub>. To this end, they performed <strong>150 bp paired-end</strong> sequencing of mRNA-enriched samples. Detailed information on all the samples are available <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA550078">here</a>, but just know that for the purpose of the course, we selected <strong>6 samples</strong> (<strong>3 replicates per condition</strong>, <strong>low</strong> and <strong>high CO<sub>2</sub></strong>) and <strong>down-sampled</strong> them to <strong>1 million read pairs each</strong> to reduce computation time.</p>
+<h2 id="exercises">Exercises</h2>
+<p>One of the aims of today&rsquo;s course is to develop a simple, yet efficient, workflow to analyse bulk RNAseq data. This workflow takes reads coming from RNA sequencing as inputs and produces a list of genes that are differentially expressed between two conditions. The files containing reads are in <a href="https://en.wikipedia.org/wiki/FASTQ_format">FASTQ format</a> and the final output will be a tab-separated file containing a list of genes with expression changes, results of statistical tests&hellip;</p>
+<p>In this series of exercises, you will create the workflow &lsquo;backbone&rsquo;, <em>i.e.</em> rules that are the most computationally expensive, namely:</p>
+<ul>
+<li>A rule to trim poor-quality reads</li>
+<li>A rule to map trimmed reads on a reference genome</li>
+<li>A rule to convert and sort files from SAM format to BAM format</li>
+<li>A rule to count reads mapping on each gene</li>
+</ul>
+<details class="tip">
+<summary>Designing and debugging a workflow</summary>
+<p>If you have problems designing your Snakemake workflow or debugging it, you can find some help <a href="../6_debugging_snakemake/#designing-a-workflow">here</a>.</p>
+</details>
+<p>At the end of this series of exercises, your workflow should look like this:</p>
+<figure align="center">
+<p><img alt="backbone_rulegraph" src="../../../assets/images/backbone_rulegraph.png" />
+  </p>
+<figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
+</figure>
+<h3 id="downloading-data-and-setting-up-folder-structure">Downloading data and setting up folder structure</h3>
+<p>In this part, you will download the data and start building the directory structure of your workflow according to the <a href="https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html">official recommendations</a>. You already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
 <div class="highlight"><pre><span></span><code>│── .gitignore
 │── README.md
 │── LICENSE.md
 │── benchmarks
-│   │── sample1.fastq
-│   └── sample2.fastq
+│   │── sample1.txt
+│   └── sample2.txt
 │── config
 │   │── config.yaml
 │   └── some-sheet.tsv
@@ -1141,204 +1025,225 @@
 │   │── sample1.fastq
 │   └── sample2.fastq
 │── images
-│   └── rulegraph.svg
+│   │── dag.png
+│   │── filegraph.png
+│   └── rulegraph.png
 │── logs
 │   │── sample1.log
 │   └── sample2.log
 │── results
+│   │── DEG_list.tsv
 │   │── sample1
 │   │   └── sample1.bam
-│   │── sample2
-│   │   └── sample2.bam
-│   └── DEG_list.tsv
+│   └── sample2
+│       └── sample2.bam
 │── resources
 │   │── Scerevisiae.fasta
-│   └── Scerevisiae.gtf
+│   │── Scerevisiae.gtf
+│   └── genome_indices
+|       │── Scerevisiae_index.1.ht2
+|       │── Scerevisiae_index.2.ht2
+|       │── Scerevisiae_index.3.ht2
+|       │── Scerevisiae_index.4.ht2
+|       │── Scerevisiae_index.5.ht2
+|       │── Scerevisiae_index.6.ht2
+|       │── Scerevisiae_index.7.ht2
+|       └── Scerevisiae_index.8.ht2
 └── workflow
+    │── Snakefile
     │── envs
     │   │── tool1.yaml
     │   └── tool2.yaml
     │── rules
     │   │── module1.smk
     │   └── module2.smk
-    │── scripts
-    │   │── script1.py
-    │   └── script2.R
-    └── Snakefile
-</code></pre></div>
-<p>For now, the main thing to remember is that the workflow code goes into a subfolder called <code>workflow</code> and the rest is mostly input/output files, except for the <code>config</code> subfolder, which will be explained later. All output files generated in the workflow should be stored under <code>results/</code>.</p>
-<p>Now, let&rsquo;s download the data, uncompress it and build the first part of the directory structure.</p>
-<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>~/.ssh/key_username.pem<span class="w"> </span>username@18.195.170.182<span class="w">  </span><span class="c1"># Connect to the server</span>
-wget<span class="w"> </span>https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Download the data</span>
-tar<span class="w"> </span>-xvf<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Uncompress the archive</span>
-rm<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Delete the archive</span>
-<span class="nb">cd</span><span class="w"> </span>snakemake_rnaseq/<span class="w">  </span><span class="c1"># Start developing in a new folder</span>
-</code></pre></div>
-<p>In this new folder, you should now see 2 subfolders:</p>
+    └── scripts
+        │── script1.py
+        └── script2.R
+</code></pre></div></p>
+<p>For now, the main thing to remember is that <strong>code</strong> should go into the <strong><code>workflow</code> subfolder</strong>  and the <strong>rest</strong> is mostly <strong>input/output files</strong>. The only exception is the <strong><code>config</code> subfolder</strong>, but it will be <a href="../4_optimising_snakemake/#config-files">explained later</a>. All <strong>output files</strong> generated in the workflow should be stored under <strong><code>results/</code></strong>.</p>
+<p>Let&rsquo;s download the data, uncompress them and build the first part of the directory structure.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>~/.ssh/key_username.pem<span class="w"> </span>username@18.195.170.182<span class="w">  </span><span class="c1"># Connect to server; don&#39;t forget to change key_username and username</span>
+wget<span class="w"> </span>https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Download data</span>
+tar<span class="w"> </span>-xvf<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Uncompress archive</span>
+rm<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Delete archive</span>
+<span class="nb">cd</span><span class="w"> </span>snakemake_rnaseq/<span class="w">  </span><span class="c1"># Start developing in new folder</span>
+</code></pre></div></td></tr></table></div>
+<p>In <code>snakemake_rnaseq/</code>, you should see two subfolders:</p>
 <ul>
-<li><code>data/</code>, which contains the data to analyse</li>
-<li><code>resources/</code>, which contains retrieved resources, here the assembly, the genome indices and the annotation file of <em>S. cerevisiae</em>. It may also contain small resources delivered along with the workflow via git</li>
+<li><code>data/</code>, which contains data to analyse</li>
+<li><code>resources/</code>, which contains retrieved resources, here assembly, genome indices and annotation file of <em>S. cerevisiae</em>. It may also contain small resources delivered along with the workflow</li>
 </ul>
-<p>Let&rsquo;s create another subfolder, this time to host all the files containing the code, as well as the Snakefile:</p>
-<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>workflow<span class="w">  </span><span class="c1"># Create a new folder</span>
-touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span class="c1"># Create an empty Snakefile</span>
-</code></pre></div>
-<p>The Snakefile marks the entrypoint of the workflow. It will be automatically discovered when running Snakemake from the root of the structure, here <code>snakemake_rnaseq/</code>. We can also tell Snakemake to use a specific Snakefile with the <code>-s</code> flag: <code>snakemake --cores 1 -s &lt;Snakefile_path&gt; &lt;target&gt;</code>, but it is highly discouraged as it hampers reproducibility.</p>
-<p>If you followed the <a href="#general-instructions-and-reminders">general instructions</a>, Snakemake should create all the other missing folders by itself (except one that you will discover at the end of this series of exercises), so it is now time to create the rules mentioned <a href="#exercises">earlier</a>. Have a look <a href="#designing-a-workflow">here</a> for a few pieces of advice on workflow design.</p>
-<div class="admonition note">
-<p class="admonition-title">&lsquo;bottom-up&rsquo; or &lsquo;top-down&rsquo; development?</p>
-<p>Even if it is often easier to start from the final outputs and work backwards to the first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand. That being said, feel free to work and develop your code in the order you prefer!</p>
-</div>
-<p><strong>Even if we asked you to use wildards, do not try to process all the samples yet. Choose and work with one sample (which means two .fastq files because reads are paired-end) in this series of exercises. We will see an efficient way to process list of files in the next series of exercises.</strong></p>
-<h3 id="creating-a-rule-to-trim-reads">Creating a rule to trim reads</h3>
-<p>Usually, the first step in dealing with sequencing data is to improve the reads quality by removing low quality bases, stretches of As and Ns and reads that are too short.</p>
-<div class="admonition note">
-<p class="admonition-title">Adapters trimming</p>
-<p>In theory, trimming also removes sequencing adapters, but we will not do it here to keep computation time low and avoid having to parse other files to extract the adapter sequences.</p>
-</div>
-<p><strong>Exercise:</strong> Implement a rule to trim the reads contained in .fastq files using <a href="https://peerj.com/articles/3720/">atropos</a>.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<ul>
-<li>You can find information on how to use atropos and its parameters with <code>atropos trim -h</code></li>
-<li>The files to trim are located in <code>data/</code></li>
-<li>The base of the trimming command is <code>atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 --no-cache-adapters -a "A{{20}}" -A "A{{20}}"</code><ul>
-<li>If you are interested in what these options mean, see <a href="#atropos-options">below</a> for an explanation</li>
-</ul>
-</li>
-<li>The paths of the files to trim (<em>i.e.</em> input files, in FASTQ format) are specified with the options <code>-pe1</code> (first read) and <code>-pe2</code> (second read)</li>
-<li>The paths of the trimmed files (<em>i.e.</em> output files, also in FASTQ format) are specified with the options <code>-o</code> (first read) and <code>-p</code> (second read)</li>
-<li>atropos outputs some information as well as its trimming report in the terminal (stdout to be exact); do not forget to redirect these information to the log file with <code>&gt;&gt; {log}</code></li>
-</ul>
-</div>
-<p>Please give it a try before looking at the answer!</p>
-<details class="done">
-<summary>Answer</summary>
-<p>This is one way of writing this rule, but definitely not the only way! This is true for all the rules presented here.</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_trim</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    This rule trims paired-end reads to improve their quality. Specifically, it removes:</span>
-<span class="sd">    - Low quality bases</span>
-<span class="sd">    - A stretches longer than 20 bases</span>
-<span class="sd">    - N stretches</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="nb">input</span><span class="p">:</span>
-        <span class="n">reads1</span> <span class="o">=</span> <span class="s1">&#39;data/</span><span class="si">{sample}</span><span class="s1">_1.fastq&#39;</span><span class="p">,</span>
-        <span class="n">reads2</span> <span class="o">=</span> <span class="s1">&#39;data/</span><span class="si">{sample}</span><span class="s1">_2.fastq&#39;</span><span class="p">,</span>
-    <span class="n">output</span><span class="p">:</span>
-        <span class="n">trim1</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1.fastq&#39;</span><span class="p">,</span>
-        <span class="n">trim2</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2.fastq&#39;</span>
-    <span class="n">log</span><span class="p">:</span>
-        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimming.log&#39;</span>
-    <span class="n">benchmark</span><span class="p">:</span>
-        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimming.txt&#39;</span>
-    <span class="n">resources</span><span class="p">:</span>
-        <span class="n">mem_mb</span> <span class="o">=</span> <span class="mi">500</span>
-    <span class="n">shell</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        echo &quot;Trimming reads in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt; {log}</span>
-<span class="sd">        atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \</span>
-<span class="sd">        --no-cache-adapters -a &quot;A{{20}}&quot; -A &quot;A{{20}}&quot; \</span>
-<span class="sd">        -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &amp;&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Trimmed files saved in &lt;{output.trim1}&gt; and &lt;{output.trim2}&gt; respectively&quot; &gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Trimming report saved in &lt;{log}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-</code></pre></div>
-<p>Note the three things that are happening here:</p>
-<ol>
-<li>We used the <code>{sample}</code> wildcards twice in the output paths. This is because we prefer to have all the files linked to a sample in the same directory</li>
-<li>We added a memory limit for this job: 500 MB. Because we have limited resources in this server compared to a High Performance Computing cluster (HPC), this will help Snakemake to better allocate resources and parallelise jobs. You can determine the maximum amount of memory used by a rule thanks to the max_rss column in a benchmark result (results are shown in MB). More information <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules">here</a></li>
-<li>We used a backslash <code>\</code> to split a very long line in smaller lines. This is purely &lsquo;cosmetic&rsquo;, to avoid very long lines that are painful to read, copy&hellip;</li>
-</ol>
+<p>We also need to create the other missing subfolders and the Snakefile:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>config/<span class="w"> </span>images/<span class="w"> </span>workflow/envs<span class="w"> </span>workflow/rules<span class="w"> </span>workflow/scripts<span class="w">  </span><span class="c1"># Create subfolder structure</span>
+touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span class="c1"># Create empty Snakefile</span>
+</code></pre></div></td></tr></table></div>
+<details class="info">
+<summary>What does <code>-p</code> do?</summary>
+<p>The <code>-p</code> parameter of <code>mkdir</code> make parent directories as needed and does not return an error if the directory already exists.</p>
 </details>
-<div class="admonition warning">
-<p class="admonition-title">Paths in Snakemake</p>
-<p>All the paths in the Snakefile are relative to the working directory in which the <code>snakemake</code> command is executed.</p>
+<p><strong>Snakefile</strong> marks the workflow <strong>entry point</strong>. It will be automatically discovered when running Snakemake from the root folder, here <code>snakemake_rnaseq/</code>.</p>
+<details class="info">
+<summary>Using a Snakefile from a non-default location</summary>
+<p>Snakemake can use a Snakefile from a non-default location thanks to the <code>-s/--snakefile</code> parameter:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-s<span class="w"> </span>&lt;Snakefile_path&gt;<span class="w"> </span>&lt;target&gt;
+</code></pre></div></p>
+<p>However, it is <strong>highly discouraged</strong> as it <strong>hampers reproducibility</strong>.</p>
+</details>
+<details class="warning">
+<summary>Relative paths in Snakemake</summary>
+<p>All paths in a Snakefile are relative to the working directory in which the <code>snakemake</code> command is executed:</p>
 <ul>
 <li>If you execute Snakemake in <code>snakemake_rnaseq/</code>, the relative path to the input files in the rule is <code>data/&lt;sample&gt;.fastq</code></li>
 <li>If you execute Snakemake in <code>snakemake_rnaseq/workflow/</code>, the relative path to the input files in the rule is <code>../data/&lt;sample&gt;.fastq</code></li>
 </ul>
-</div>
-<p><strong>Exercise:</strong> If you had to run the workflow by specifying only one output, what command would you use?</p>
-<details class="done">
-<summary>Answer</summary>
-<p><code>snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq</code></p>
-<p>If you run it now, don&rsquo;t forget to have a look at the log and benchmark files!</p>
 </details>
-<h4 id="atropos-options">atropos options</h4>
+<p>If you followed the <a href="#advice-and-reminders">advice</a> at the top of this page, Snakemake should create all the other missing folders by itself, so it is time to create the rules mentioned <a href="#exercises">earlier</a>. If needed, you can check <a href="../6_debugging_snakemake/#designing-a-workflow">here</a> for a few pieces of advice on workflow design.</p>
+<details class="info">
+<summary>&lsquo;bottom-up&rsquo; or &lsquo;top-down&rsquo; development?</summary>
+<p>Even if it is often easier to start from final outputs and work backwards to first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand.</p>
+</details>
+<h4 id="important-do-not-process-all-the-samples">Important: do not process all the samples!</h4>
+<p><strong>Do not try to process all the samples yet, even if we asked you to use wildcards. For now, choose only one sample (which means two .fastq files because reads are paired-end). You will see an efficient way to process a list of files in the next series of exercises.</strong></p>
+<h3 id="creating-a-rule-to-trim-reads">Creating a rule to trim reads</h3>
+<p>Usually, when dealing with sequencing data, the first step is to improve read quality by removing low quality bases, stretches of As and Ns and reads that are too short.</p>
+<details class="info">
+<summary>Trimming sequencing adapters</summary>
+<p>In theory, trimming should also remove sequencing adapters, but you will not do it here to keep computation time low and avoid parsing other files to extract adapter sequences.</p>
+</details>
+<p>You will use <a href="https://peerj.com/articles/3720/">atropos</a> to trim reads. The first part of the trimming command is:
+<div class="highlight"><pre><span></span><code>atropos<span class="w"> </span>trim<span class="w"> </span>-q<span class="w"> </span><span class="m">20</span>,20<span class="w"> </span>--minimum-length<span class="w"> </span><span class="m">25</span><span class="w"> </span>--trim-n<span class="w"> </span>--preserve-order<span class="w"> </span>--max-n<span class="w"> </span><span class="m">10</span><span class="w"> </span>--no-cache-adapters<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;A{{20}}&quot;</span><span class="w"> </span>-A<span class="w"> </span><span class="s2">&quot;A{{20}}&quot;</span>
+</code></pre></div></p>
+<details class="info">
+<summary>Explanation of atropos parameters</summary>
 <ul>
-<li><code>-q 20,20</code>: trim low-quality bases from 5&rsquo;, 3&rsquo; ends of each read before adapter removal</li>
+<li><code>-q 20,20</code>: trim low-quality bases from 5&rsquo; and 3&rsquo; ends of each read before adapter removal</li>
 <li><code>--minimum-length 25</code>: discard trimmed reads that are shorter than 25 bp</li>
-<li><code>--trim-n</code>: trim N&rsquo;s on ends of reads</li>
+<li><code>--trim-n</code>: trim Ns at the ends of reads</li>
 <li><code>--preserve-order</code>: preserve order of reads in input files</li>
-<li><code>--max-n 10</code>: discard reads with more than 10 N</li>
+<li><code>--max-n 10</code>: discard reads with more than 10 Ns</li>
 <li><code>--no-cache-adapters</code>: do not cache adapters list as &lsquo;.adapters&rsquo; in the working directory</li>
-<li><code>-a "A{{20}}" -A "A{{20}}"</code>: remove series of 20 As in the adapter sequence (<code>-a</code> for the first read of the pair, <code>-A</code> for the second one)<ul>
+<li><code>-a "A{{20}}" -A "A{{20}}"</code>: remove series of 20 As in adapter sequences (<code>-a</code> for first read of the pair, <code>-A</code> for the second one)<ul>
 <li>The usual command-line syntax is <code>-a "A{20}"</code>. Here, brackets were doubled to prevent Snakemake from interpreting <code>{20}</code> as a wildcard</li>
 </ul>
 </li>
 </ul>
-<h3 id="creating-a-rule-to-map-trimmed-reads-on-a-reference-genome">Creating a rule to map trimmed reads on a reference genome</h3>
-<p>Once we have trimmed reads, the next step is to map those reads onto a reference assembly, here <em>S. cerevisiae</em> strain S288C, to eventually obtain read counts. The assembly used in this exercise is <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/">RefSeq GCF_000146045.2</a> and was retrieved via the NCBI genome website.</p>
-<p><strong>Exercise:</strong> Implement a rule to map the trimmed reads on the <em>S. cerevisiae</em> assembly using <a href="https://www.nature.com/articles/s41587-019-0201-4">HISAT2</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">HISAT2 genome index</p>
-<p>To align reads to a genome, HISAT2 relies on a graph-based index. We built the genome index for you, using the command <code>hisat2-build -p 24 -f Scerevisiae.fasta resources/genome_indices/Scerevisiae_index</code>.
-<br><code>-p</code> is the number of threads to use, <code>-f</code> is the genomic sequence in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a> and <code>Scerevisiae_index</code> is the global name shared by all the index files.</p>
-</div>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+</details>
+<p>Now, a few questions might come to mind when you need to use specific software in a workflow:</p>
 <ul>
-<li>You can find information on how to use HISAT2 and its parameters with <code>hisat2 -h</code></li>
-<li>The base of the mapping command is <code>hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal</code><ul>
-<li>If you are interested in what these options mean, see <a href="#hisat2-options">below</a> for an explanation</li>
+<li>Is the software already installed in the machine I am working on?</li>
+<li>If not, how do I install it quickly and easily?</li>
+<li>How can I make sure that everyone using my workflow has it installed? With the exact same version?!</li>
+</ul>
+<p>To solve this problem, Snakemake can use package managers (more on this <a href="../5_reproducibility_snakemake/#providing-a-rule-specific-conda-environment">later</a>) or container managers, like <code>docker</code> and <code>apptainer</code>, to deploy rule-specific environments. The latter is done with the <strong><code>container</code> directive</strong> and its value should be the location of the image: it can be either a local path or a remote URL. Allowed URLs are everything supported by <code>apptainer</code>, including <code>shub://</code> and <code>docker://</code>.</p>
+<p><strong>Exercise:</strong></p>
+<ul>
+<li>Complete the atropos command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)<ul>
+<li>You can find information on how to use <code>atropos</code> and its parameters with <code>atropos trim -h</code> or you can look at the tip below</li>
 </ul>
 </li>
-<li>The path of the genome indices (<em>i.e.</em> input files, in binary format) is specified with the option <code>-x</code>. The files have a shared title of <code>resources/genome_indices/Scerevisiae_index</code>, which is the value you need to use for <code>-x</code></li>
-<li>The paths of the trimmed files (<em>i.e.</em> input files) are specified with the options <code>-1</code> (first read) and <code>-2</code> (second read)</li>
-<li>The path of the mapped reads file (<em>i.e.</em> output file, in SAM format) is specified with the option <code>-S</code> (do not forget the .sam extension to the filename)</li>
-<li>The path of the mapping report (<em>i.e.</em> output file, in text format) is specified with the option <code>--summary-file</code></li>
-<li>HISAT2 also outputs information in the terminal (stderr to be exact); do not forget to redirect these to the log file with <code>2&gt;&gt; {log}</code></li>
-<li>This step is the longest of the workflow. With the current settings, it should take ~6 min to complete. If you decide to run it now, you should launch it and start working on the next rules</li>
+<li>Implement a rule containing your command to trim reads contained in a .fastq files<ul>
+<li>You will need a rule name, and the <code>input</code>, <code>output</code>, <code>container</code> and <code>shell</code> directives</li>
+<li>The container image can be found at <code>https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2</code></li>
 </ul>
-</div>
-<p>Please give it a try before looking at the answer!</p>
-<details class="done">
+</li>
+</ul>
+<details class="tip">
+<summary>atropos inputs and outputs</summary>
+<ul>
+<li>.fastq files to trim are located in <code>data/</code></li>
+<li>Paths of files to trim (<em>i.e.</em> input files, in FASTQ format) are specified with the parameters <code>-pe1</code> (first read) and <code>-pe2</code> (second read)</li>
+<li>Paths of trimmed files (<em>i.e.</em> output files, also in FASTQ format) are specified with the parameters <code>-o</code> (first read) and <code>-p</code> (second read)</li>
+</ul>
+</details>
+<details class="success">
 <summary>Answer</summary>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">read_mapping</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    This rule maps trimmed reads of a fastq on a reference assembly.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="nb">input</span><span class="p">:</span>
-        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
-        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+<p>This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_trim</span><span class="p">:</span>
+<span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    This rule trims paired-end reads to improve their quality. Specifically, it removes:</span>
+</span><span class="hll"><span class="sd">    - Low quality bases</span>
+</span><span class="hll"><span class="sd">    - A stretches longer than 20 bases</span>
+</span><span class="hll"><span class="sd">    - N stretches</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">reads1</span> <span class="o">=</span> <span class="s1">&#39;data/</span><span class="si">{sample}</span><span class="s1">_1.fastq&#39;</span><span class="p">,</span>
+        <span class="n">reads2</span> <span class="o">=</span> <span class="s1">&#39;data/</span><span class="si">{sample}</span><span class="s1">_2.fastq&#39;</span><span class="p">,</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="n">sam</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.sam&#39;</span><span class="p">,</span>
-        <span class="n">report</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping_report.txt&#39;</span>
-    <span class="n">log</span><span class="p">:</span>
-        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping.log&#39;</span>
-    <span class="n">benchmark</span><span class="p">:</span>
-        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping.txt&#39;</span>
-    <span class="n">resources</span><span class="p">:</span>
-        <span class="n">mem_gb</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">shell</span><span class="p">:</span>
+<span class="hll">        <span class="n">trim1</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1.fastq&#39;</span><span class="p">,</span>
+</span><span class="hll">        <span class="n">trim2</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2.fastq&#39;</span>
+</span><span class="hll">    <span class="n">container</span><span class="p">:</span>
+</span><span class="hll">        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2&#39;</span>
+</span>    <span class="n">shell</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        echo &quot;Mapping the reads&quot; &gt; {log}</span>
-<span class="sd">        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
-<span class="sd">        -x resources/genome_indices/Scerevisiae_index \</span>
-<span class="sd">        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \</span>
+</span><span class="hll"><span class="sd">        --no-cache-adapters -a &quot;A{{20}}&quot; -A &quot;A{{20}}&quot; \</span>
+</span><span class="sd">        -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2}</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-</code></pre></div>
+</code></pre></div></td></tr></table></div></p>
+<p>There are three interesting things happening here:</p>
+<ol>
+<li>We added a comment between double quotes under the rule name (L2-7). In Python, it is called a docstring. While it is not mandatory, it is good practice (and very recommended) to write docstrings to explain what a rule does, what are its inputs, outputs, parameters&hellip;</li>
+<li>We used the <code>{sample}</code> wildcards twice in output paths (L12-13). This is because we prefer to have all files from a single sample in the same directory</li>
+<li>We used a backslash <code>\</code> at the end of L18-19 to split a very long command in smaller lines. This is purely &lsquo;cosmetic&rsquo; but it avoids very long lines that are painful to read, understand and debug&hellip;</li>
+</ol>
 </details>
 <p><strong>Exercise:</strong> If you had to run the workflow by specifying only one output, what command would you use?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
-<p><code>snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads.sam</code></p>
-<p>If you run it now, don&rsquo;t forget to have a look at the log and benchmark files!</p>
+<p>To process the sample <code>highCO2_sample1</code>, for example, you would use:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-p<span class="w"> </span>--sdm<span class="o">=</span>apptainer<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
+</code></pre></div></p>
+<ul>
+<li>You don&rsquo;t need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if <strong>both</strong> outputs are present. Like with <a href="../2_introduction_snakemake/#chaining-rules">intermediary files</a>, this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!</li>
+<li>Do not forget to add <code>--sdm=apptainer</code>, otherwise Snakemake will not pull the image and the command will be executed in the default environment (which will most likely lead to a crash). Don&rsquo;t worry if the first execution is somewhat slow: Snakemake has to download the image. The next ones will be much faster as the images are cached</li>
+</ul>
 </details>
-<h4 id="hisat2-options">HISAT2 options</h4>
+<h3 id="creating-a-rule-to-map-trimmed-reads-onto-a-reference-genome">Creating a rule to map trimmed reads onto a reference genome</h3>
+<p>Once the reads are trimmed, the next step is to map those reads onto the species genome (<em>S. cerevisiae</em> strain S288C) to eventually obtain read counts. The reference assembly used in this exercise is <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/">RefSeq GCF_000146045.2</a> and was retrieved via the NCBI website. You will use <a href="https://www.nature.com/articles/s41587-019-0201-4">HISAT2</a> to map reads.</p>
+<details class="info">
+<summary>HISAT2 genome index</summary>
+<p>To align reads to a genome, HISAT2 relies on a graph-based index. To save some time, we built the genome index for you, using:
+<div class="highlight"><pre><span></span><code>hisat2-build<span class="w"> </span>-p<span class="w"> </span><span class="m">24</span><span class="w"> </span>-f<span class="w"> </span>resources/Scerevisiae.fasta<span class="w"> </span>resources/genome_indices/Scerevisiae_index
+</code></pre></div>
+The parameters are:</p>
+<ul>
+<li><code>-p</code>: number of threads to use</li>
+<li><code>-f</code>: genomic sequence in <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA format</a></li>
+<li><code>Scerevisiae_index</code>: global name shared by all the index files</li>
+</ul>
+<p>Genome indices can be found in <code>resources/genome_indices/</code>.</p>
+</details>
+<p>The first part of the mapping command is:
+<div class="highlight"><pre><span></span><code>hisat2<span class="w"> </span>--dta<span class="w"> </span>--fr<span class="w"> </span>--no-mixed<span class="w"> </span>--no-discordant<span class="w"> </span>--time<span class="w"> </span>--new-summary<span class="w"> </span>--no-unal
+</code></pre></div></p>
+<details class="info">
+<summary>Explanation of HISAT2 parameters</summary>
 <ul>
 <li><code>--dta</code>: report alignments tailored for transcript assemblers</li>
 <li><code>--fr</code>: set alignment of -1, -2 mates to forward/reverse (position of reads in a pair relatively to each other)</li>
@@ -1348,325 +1253,481 @@ touch<span class="w"> </span>workflow/Snakefile<span class="w">  </span><span cl
 <li><code>--new-summary</code>: print alignment summary in a new style</li>
 <li><code>--no-unal</code>: suppress SAM records for reads that failed to align</li>
 </ul>
-<h3 id="creating-a-rule-to-convert-and-sort-sam-files-to-bam">Creating a rule to convert and sort SAM files to BAM</h3>
-<p>HISAT2 only outputs mapped reads in the <a href="https://en.wikipedia.org/wiki/SAM_(file_format)">SAM format</a>. However, most downstream analysis tools use the <a href="https://en.wikipedia.org/wiki/Binary_Alignment_Map">BAM format</a>, which is the compressed binary version of the SAM format and, as such, is much smaller, easier to manipulate and transfer and allows a faster data retrieval. Additionally, many analyses require that BAM files are sorted by genomic coordinates and indexed, because sorted BAM files can be processed much more easily and quickly than unsorted ones.</p>
-<div class="admonition note">
-<p class="admonition-title">Alignment data files</p>
-<p>More information on alignment data files and other formats on the <a href="https://github.com/samtools/hts-specs">official github repository</a> of the formats.</p>
-</div>
-<p><strong>Exercise:</strong> Implement a <strong>single</strong> rule to:</p>
-<ol>
-<li>Convert SAM files to BAM using <a href="https://doi.org/10.1093/gigascience/giab008">Samtools</a></li>
-<li>Sort the BAM files using Samtools</li>
-<li>Index the sorted BAM files using Samtools</li>
-</ol>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+</details>
+<p><strong>Exercise:</strong></p>
 <ul>
-<li>You can find information on how to use Samtools and its parameters with <code>samtools --help</code></li>
-<li>You need to write 3 commands that will be executed sequentially: the output of command 1 will be the input of command 2 etc&hellip;<ul>
-<li>No panic! These commands are pretty simple and do not use many options!</li>
+<li>Complete the HISAT2 command given above with parameters to specify inputs and outputs<ul>
+<li>You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)<ul>
+<li>You can find more information on how to use HISAT2 and its parameters with <code>hisat2 -h</code> or you can look at the tip below</li>
 </ul>
 </li>
-<li>To convert SAM format to the BAM format, use the command <code>samtools view &lt;input_file&gt; -b -o &lt;output_file&gt;</code></li>
-<li>To sort a BAM file, use the command <code>samtools sort &lt;input_file&gt; -O bam -o &lt;output_file&gt;</code></li>
-<li>To index a BAM file, use the command <code>samtools index -b &lt;input_file&gt; -o &lt;output_file&gt;</code><ul>
-<li>The index must have the exact same name than its associated BAM file, except it finishes with the extension <code>.bam.bai</code> instead of <code>.bam</code></li>
 </ul>
 </li>
-<li>If you are interested in what these options mean, see <a href="#samtools-options">below</a> for an explanation</li>
-<li>To catch potential information and errors, do not forget to redirect <code>stderr</code> to the log file with <code>2&gt;&gt; {log}</code></li>
+<li>Implement a rule containing your command to map trimmed reads contained in .fastq files<ul>
+<li>You will need a rule name, and the <code>input</code>, <code>output</code>, <code>container</code> and <code>shell</code> directives</li>
+<li>The container image can be found at <code>https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6</code></li>
 </ul>
-</div>
-<p>Please give it a try before looking at the answer!</p>
-<details class="done">
+</li>
+</ul>
+<details class="tip">
+<summary>HISAT2 inputs and outputs</summary>
+<ul>
+<li>Paths of trimmed files (<em>i.e.</em> input files) are specified with the parameters <code>-1</code> (first read) and <code>-2</code> (second read)</li>
+<li>Basename of genome indices (binary format) is specified with the parameter <code>-x</code>. The files have a shared name of <code>resources/genome_indices/Scerevisiae_index</code>, which is the value you need to use for <code>-x</code></li>
+<li>Path of mapped reads files (<em>i.e.</em> output file, in SAM format) is specified with the parameter <code>-S</code> (do not forget the .sam extension at the end of the filename)</li>
+<li>Path of mapping report (<em>i.e.</em> output file, in text format) is specified with the parameter <code>--summary-file</code></li>
+</ul>
+</details>
+<details class="success">
 <summary>Answer</summary>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">sam_to_bam</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">read_mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This rule maps trimmed reads of a fastq onto a reference assembly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">sam</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.sam&#39;</span><span class="p">,</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping_report.txt&#39;</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
+<span class="sd">        -x resources/genome_indices/Scerevisiae_index \</span>
+<span class="sd">        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div>
+</details>
+<p><strong>Exercise:</strong> What do you think about the value of <code>-x</code>?</p>
+<details class="success">
+<summary>Answer</summary>
+<p>Something very interesting is happening here: to run, HISAT2 requires several genome index files. As such, they could (should?) be considered as inputs&hellip; and this is a problem:</p>
+<ul>
+<li>On one hand, the <code>-x</code> parameter only accepts strings containing a file path and common name. This means that if you were to manually add all the indices as inputs, HISAT2 would not recognize them&hellip; and crash!</li>
+<li>On the other hand, if you were add the value of <code>-x</code> as input, Snakemake would look for a file called <code>resources/genome_indices/Scerevisiae_index</code>&hellip; and crash because this file doesn&rsquo;t exist!</li>
+</ul>
+<p>This highlights the fact that <strong>inputs must be files</strong> and this is why we directly added the value of <code>-x</code> in the command. However, this is not very convenient: you will see later a better way to deal with this problem.</p>
+</details>
+<p>Using the same sample as before (<code>highCO2_sample1</code>), the workflow can be run with:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>--sdm<span class="o">=</span>apptainer<span class="w"> </span>-p<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_mapped_reads.sam
+</code></pre></div></p>
+<p>That being said, we recommend <strong>not to run it for the moment</strong>, because this step is the longest of the workflow (with current settings, it will take ~6 min to complete). Still, if you want to run it now, you can, but you should launch it and start working on the next rules while it finishes.</p>
+<h3 id="creating-a-rule-to-convert-and-sort-sam-files-to-bam-format">Creating a rule to convert and sort .sam files to BAM format</h3>
+<p>HISAT2 only outputs mapped reads in <a href="https://en.wikipedia.org/wiki/SAM_(file_format)">SAM format</a>. However, most downstream analysis tools use <a href="https://en.wikipedia.org/wiki/Binary_Alignment_Map">BAM format</a>, which is the compressed binary version of SAM format and, as such, is much smaller, easier to manipulate and transfer and allows a faster data retrieval. Additionally, many analyses require .bam files to be sorted by genomic coordinates and indexed because sorted .bam files can be processed much more easily and quickly than unsorted ones. Operations on .sam and .bam files are usually performed with <a href="https://doi.org/10.1093/gigascience/giab008">Samtools</a>.</p>
+<details class="info">
+<summary>What are alignment formats?</summary>
+<p>More information on alignment formats can be found on <a href="https://github.com/samtools/hts-specs">samtools github repository</a>.</p>
+</details>
+<p>We wrote a <strong>single rule</strong> performing all these operations for you:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">sam_to_bam</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This rule converts a sam file to bam format, sorts it and indexes it.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">input</span><span class="p">:</span>
         <span class="n">sam</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">read_mapping</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">sam</span>
     <span class="n">output</span><span class="p">:</span>
         <span class="n">bam</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.bam&#39;</span><span class="p">,</span>
         <span class="n">bam_sorted</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads_sorted.bam&#39;</span><span class="p">,</span>
         <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads_sorted.bam.bai&#39;</span>
-    <span class="n">log</span><span class="p">:</span>
-        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping_sam_to_bam.log&#39;</span>
-    <span class="n">benchmark</span><span class="p">:</span>
-        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping_sam_to_bam.txt&#39;</span>
-    <span class="n">resources</span><span class="p">:</span>
-        <span class="n">mem_mb</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        echo &quot;Converting &lt;{input.sam}&gt; to BAM format&quot; &gt; {log}</span>
-<span class="sd">        samtools view {input.sam} -b -o {output.bam} 2&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Sorting BAM file&quot; &gt;&gt; {log}</span>
-<span class="sd">        samtools sort {output.bam} -O bam -o {output.bam_sorted} 2&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Indexing the sorted BAM file&quot; &gt;&gt; {log}</span>
-<span class="sd">        samtools index -b {output.bam_sorted} -o {output.index} 2&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Sorted file saved in &lt;{output.bam_sorted}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        samtools view {input.sam} -b -o {output.bam}</span>
+<span class="sd">        samtools sort {output.bam} -O bam -o {output.bam_sorted}</span>
+<span class="sd">        samtools index -b {output.bam_sorted} -o {output.index}</span>
 <span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div>
+<details class="info">
+<summary>Explanation of Samtools parameters</summary>
+<ul>
+<li>You can find information on how to use Samtools and its parameters with <code>samtools --help</code></li>
+<li><code>samtools view</code>:<ul>
+<li><code>-b</code>: create an output in BAM format</li>
+<li><code>-o</code>: path of output file</li>
+</ul>
+</li>
+<li><code>samtools sort</code>:<ul>
+<li><code>-O bam</code>: create an output in BAM format</li>
+<li><code>-o</code>: path of output file</li>
+</ul>
+</li>
+<li><code>samtools index</code>:<ul>
+<li><code>-b</code>: create an index in BAI format</li>
+</ul>
+</li>
+</ul>
+</details>
+<p><strong>Exercise:</strong> Copy this rule in your Snakefile. Don&rsquo;t forget to update the output values to match the ones you used in your previous rules. Do you notice anything surprising in this rule?</p>
+<details class="success">
+<summary>Answer</summary>
+<p>Let&rsquo;s start with a quick breakdown of the <code>shell</code> directive:</p>
+<ul>
+<li>L15: <code>samtools view</code> converts a file in SAM format to BAM format</li>
+<li>L16: <code>samtools sort</code> sorts a .bam file by genomic coordinates</li>
+<li>L17: <code>samtools index</code> indexes a sorted .bam file. The index must have the exact same basename as its associated .bam file; the only difference is that it finishes with the extension <code>.bam.bai</code> instead of <code>.bam</code></li>
+</ul>
+<p>The interesting thing is that so far, all the rules had only one command in the <code>shell</code> directive. In this rule, there are three commands grouped together, each with their own inputs and outputs. This means two things:</p>
+<ol>
+<li>We could have split this rule into 3 separate rules with dependencies. There is no official guideline on whether to split rules like this, but a good rule of thumb is: does it make sense to run these commands together? Is it not too computationally expensive (time, memory, CPU) to run these rules together?</li>
+<li><code>{output.bam}</code> and <code>{output.bam_sorted}</code> are outputs of  <code>samtools view</code> and  <code>samtools sort</code>&hellip; But they are also inputs of  <code>samtools sort</code> and  <code>samtools index</code>! This means that files that are created by a command can instantly be re-used in subsequent commands <strong>within a same rule</strong>!</li>
+</ol>
+</details>
+<p><strong>Exercise:</strong> Do you see any drawbacks to using a rule like this?</p>
+<details class="success">
+<summary>Answer</summary>
+<p>When Snakemake has a problem and crashes, it removes the current rule outputs to avoid further computation with corrupted files. This means that if the first two commands complete but the last one (here, <code>samtools index</code>) fails and doesn&rsquo;t produce the expected output, Snakemake will remove <strong>all the outputs</strong>, including those that were created without error (here, <code>{output.bam}</code> and <code>{output.bam_sorted}</code>), causing a waste of time and money</p>
+</details>
+<p>Using the same sample as before (<code>highCO2_sample1</code>), the workflow can be run with
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-p<span class="w"> </span>--sdm<span class="o">=</span>apptainer<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
 </code></pre></div>
-</details>
-<p><strong>Exercise:</strong> If you had to run the workflow by specifying only one output, what command would you use?</p>
-<details class="done">
-<summary>Answer</summary>
-<p><code>snakemake --cores 1 -r -p results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam</code></p>
-<p>If you run it now, don&rsquo;t forget to have a look at the log and benchmark files!</p>
-</details>
-<h4 id="samtools-options">Samtools options</h4>
-<ul>
-<li>samtools view<ul>
-<li><code>-b</code>: flag to tell Samtools to create an output in BAM format</li>
-<li><code>-o</code>: path of the output file</li>
-</ul>
-</li>
-<li>samtools view<ul>
-<li><code>-O bam</code>: flag to tell Samtools to create an output in BAM format</li>
-<li><code>-o</code>: path of the output file</li>
-</ul>
-</li>
-<li>samtools index<ul>
-<li><code>-b</code>: flag to tell Samtools to create an index in BAI format</li>
-</ul>
-</li>
-</ul>
+However, you will soon run the entire workflow, so it might be worth waiting!</p>
 <h3 id="creating-a-rule-to-count-mapped-reads">Creating a rule to count mapped reads</h3>
-<p>Most of the analyses happening downstream the alignment step, including Differential Expression Analyses, are starting off read counts, either by exon or gene. However, we are still missing those counts!</p>
-<div class="admonition note">
-<p class="admonition-title">Counting reads on exons/genes</p>
-<p>To count reads mapping on genomic features, we first need a definition of those features. In this case, we picked one of the best-known model organism, <em>S. cerevisiae</em>, which has been annotated for a long time. These annotations are easily available on the <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/">NCBI</a> or the <a href="https://www.yeastgenome.org/">Saccharomyces Genome Database</a>. If your organism has not been annotated yet, there are ways to work around this problem, but this is an entirely different field that we won&rsquo;t discuss here!</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Chromosome names</p>
-<p>If you are working with genome sequences and annotations from different sources, remember that they <strong>must</strong> contain the chromosome names, otherwise counting will not work.</p>
-</div>
-<p><strong>Exercise:</strong> Implement a rule to count the reads mapping on each gene of the <em>S. cerevisiae</em> genome using <a href="https://academic.oup.com/bioinformatics/article/30/7/923/232889">featureCounts</a>.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<p>Most of analyses happening downstream the alignment step, including Differential Expression Analyses, are starting off read counts, by exon or by gene. However, you are still missing those counts!</p>
+<details class="info">
+<summary>Genome annotations</summary>
 <ul>
-<li>You can find information on how to use featureCounts and its parameters with <code>featureCounts -h</code></li>
-<li>The base of the mapping command is <code>featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF</code><ul>
-<li>If you are interested in what these options mean, see <a href="#featurecounts-options">below</a> for an explanation</li>
+<li>To count reads mapping on genomic features, we first need a definition of those features, called annotations. Here, we chose one of the best-known model organism, <em>S. cerevisiae</em>, which has been annotated for a long time. Its annotations are easily findable on the <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000146045.2/">NCBI</a> or the <a href="https://www.yeastgenome.org/">Saccharomyces Genome Database</a>. If an organism has not been annotated yet, there are ways to work around this problem, but this is an entirely different field that we won&rsquo;t discuss here!</li>
+<li>You should also know that there are two main annotations format: <a href="http://mblab.wustl.edu/GTF2.html">GTF</a> and <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>. Former is lighter and easier to work with, so this is what you will use</li>
 </ul>
-</li>
-<li>The path of the file containing the annotations (<em>i.e.</em> input files, in GTF format) is specified with the <code>-a</code> option. This file is located at <code>resources/Scerevisiae.gtf</code><ul>
-<li>There are two main annotations format: <a href="http://mblab.wustl.edu/GTF2.html">GTF</a> and <a href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>. The former is lighter and easier to work with, so that is the one we will use</li>
-</ul>
-</li>
-<li>The paths of the sorted BAM file(s) (<em>i.e.</em> input file(s)) are not specified with an option, they are simply added at the end of the command</li>
-<li>The path of the file containing the count results (<em>i.e.</em> output file, in tsv format) is specified with the option <code>-o</code><ul>
-<li>featureCounts will also output a separate file (in tsv format) including summary statistics of counting results, with the name <code>&lt;output_name&gt;</code>.summary. For example, if the output is <code>test.tsv</code>, the summary will be printed in <code>test.tsv.summary</code>. Do not forget this output in your rule</li>
-</ul>
-</li>
-<li>featureCounts also outputs information in the terminal (stderr to be exact); do not forget to redirect these to the log file with <code>2&gt;&gt; {log}</code></li>
-</ul>
-</div>
-<p>Please give it a try before looking at the answer!</p>
-<details class="done">
-<summary>Answer</summary>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">reads_quantification_genes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+</details>
+<details class="warning">
+<summary>Chromosome names must match between files</summary>
+<p>If you are working with genome sequences and annotations from different sources, remember that they <strong>must</strong> contain matching chromosome names, otherwise counting will not work, as the counting software will not be able to read counts to match exon/gene locations.</p>
+</details>
+<p>We already wrote a rule to count reads mapping on each gene of the <em>S. cerevisiae</em> genome using <a href="https://academic.oup.com/bioinformatics/article/30/7/923/232889">featureCounts</a>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">reads_quantification_genes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This rule quantifies the reads of a bam file mapping on genes and produces</span>
 <span class="sd">    a count table for all genes of the assembly.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">input</span><span class="p">:</span>
         <span class="n">bam_once_sorted</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">sam_to_bam</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">bam_sorted</span><span class="p">,</span>
     <span class="n">output</span><span class="p">:</span>
         <span class="n">gene_level</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.tsv&#39;</span><span class="p">,</span>
         <span class="n">gene_summary</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.summary&#39;</span>
-    <span class="n">log</span><span class="p">:</span>
-        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.log&#39;</span>
-    <span class="n">benchmark</span><span class="p">:</span>
-        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.txt&#39;</span>
-    <span class="n">resources</span><span class="p">:</span>
-        <span class="n">mem_mb</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        echo &quot;Counting reads mapping on genes in &lt;{input.bam_once_sorted}&gt;&quot; &gt; {log}</span>
-<span class="sd">        featureCounts -t exon -g gene_id -s 2 -p -B -C --largestOverlap --verbose -F GTF \</span>
-<span class="sd">        -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Renaming output files&quot; &gt;&gt; {log}</span>
-<span class="sd">        mv {output.gene_level}.summary {output.gene_summary}</span>
-<span class="sd">        echo &quot;Results saved in &lt;{output.gene_level}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        echo &quot;Report saved in &lt;{output.gene_summary}&gt;&quot; &gt;&gt; {log}</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-</code></pre></div>
-</details>
-<h4 id="featurecounts-options">featureCounts options</h4>
+<span class="sd">        featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \</span>
+<span class="sd">        -B -C --largestOverlap --verbose -F GTF \</span>
+<span class="sd">        -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted}</span>
+<span class="hll"><span class="sd">        mv {output.gene_level}.summary {output.gene_summary}</span>
+</span><span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div>
+<details class="info">
+<summary>Explanation of featureCounts command</summary>
 <ul>
-<li><code>-t</code>: specify on which feature type to count the reads</li>
-<li><code>-g</code>: specify if and how to gather feature counts. Here, reads are counted by exon (<code>-t</code>) and the exon counts are gathered by genes &lsquo;meta-features’ (<code>-g</code>)</li>
+<li>You can find information on how to use featureCounts and its parameters with <code>featureCounts -h</code></li>
+<li><code>-t</code>: specify on which feature type to count reads</li>
+<li><code>-g</code>: specify if and how to gather feature counts. Here, reads are counted by features (exon) (<code>-t</code>) and exon counts are gathered by &lsquo;meta-features’ (genes) (<code>-g</code>)</li>
 <li><code>-s</code>: perform strand-specific read counting<ul>
-<li>Strandedness is determined by looking at the mRNA library preparation kit. It can also be determined <em>a posteriori</em> with scripts such as <a href="https://rseqc.sourceforge.net/#infer-experiment-py">infer_experiment.py</a> from the <a href="http://doi.org/10.1093/bioinformatics/bts356">RSeQC package</a></li>
+<li>Strandedness is determined by looking at mRNA library preparation kit. It can also be determined <em>a posteriori</em> with scripts such as <a href="https://rseqc.sourceforge.net/#infer-experiment-py">infer_experiment.py</a> from the <a href="http://doi.org/10.1093/bioinformatics/bts356">RSeQC package</a></li>
 </ul>
 </li>
-<li><code>-p</code>: count fragments instead of reads.<ul>
-<li>If you don&rsquo;t use this option with paired-end reads, featureCounts won&rsquo;t be able to assign the read-pairs to features</li>
-</ul>
-</li>
+<li><code>-p</code>: specify that input data contain paired-end reads</li>
+<li><code>--countReadPairs</code>: count read pairs instead of reads</li>
 <li><code>-B</code>: only count read pairs that have both ends aligned</li>
-<li><code>-C</code>: do not count read pairs that have their two ends mapping to different chromosomes or mapping on the same chromosome but on different strands</li>
-<li><code>--largestOverlap</code>: assign reads to the meta-feature/feature that has the largest number of overlapping bases</li>
-<li><code>-F</code>: specify format of the provided annotation file</li>
+<li><code>-C</code>: do not count read pairs that have their two ends mapping to different chromosomes or mapping on same chromosome but on different strands</li>
+<li><code>--largestOverlap</code>: assign reads to meta-feature/feature that has largest number of overlapping bases</li>
 <li><code>--verbose</code>: output verbose information, such as unmatched chromosome/contig names</li>
+<li><code>-F</code>: specify format of annotation file</li>
+<li><code>-a</code>: specify path of file containing annotations (<em>i.e.</em> input files, in GTF format)</li>
+<li><code>-o</code>: specify path of file containing count results (<em>i.e.</em> output file, in tsv format)</li>
+<li>Paths of sorted .bam file(s) (<em>i.e.</em> input file(s)) are not specified with an parameter, they are simply added at the end of the command</li>
 </ul>
-<h3 id="running-the-workflow">Running the workflow</h3>
-<p><strong>Exercise:</strong> If you have not done it after each step, it is now time to run the entire workflow on your sample of choice. What command will you use to run it?</p>
-<details class="done">
-<summary>Answer</summary>
-<p>Because all the rules are chained together, you only need to specify one of the final outputs to trigger the execution of all the previous rules:</p>
-<p><code>snakemake --cores 1 -F -r -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv</code></p>
-<p>You can add the <code>-F</code> flag to force an entire re-run. The entire run should take about ~10 min to complete.</p>
 </details>
-<p><strong>Exercise:</strong> Check Snakemake&rsquo;s log in <code>.snakemake/log/</code>. Is everything as you expected, especially the wildcard values, input and output names etc&hellip;?</p>
-<details class="done">
+<p><strong>Exercise:</strong> Copy this rule in your Snakefile. What does L18 do? Why did we add it?</p>
+<details class="success">
 <summary>Answer</summary>
-<p><code>cat .snakemake/log/&lt;latest_log&gt;</code></p>
+<p>The <code>mv</code> command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about read counting, with the name <code>&lt;output_name&gt;.summary</code>. For example, if the output is <code>test.tsv</code>, summary will be printed in <code>test.tsv.summary</code>. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.</p>
 </details>
-<h3 id="visualising-the-dag-of-the-workflow">Visualising the DAG of the workflow</h3>
-<p>We have now implemented and run the main steps of our workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake&rsquo;s has a built-in workflow visualisation feature to do this.</p>
-<p><strong>Exercise:</strong> Visualise the entire workflow’s Directed Acyclic Graph using the <code>--dag</code> flag. Do you need to specify a target?</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<p>It would be interesting to know what is happening when featureCounts runs. This is where the <code>log</code> and <code>benchmark</code> directives come into play!</p>
+<p><strong>(Optional) Exercise:</strong> If you have time, add the <code>log</code> and <code>benchmark</code> directives to the rule. Don&rsquo;t forget to update the directive values to match the ones you used in your previous rules. You can check out slides 29-35 of the presentation (available <a href="#material">here</a>) for information on those directives.</p>
+<details class="tip">
+<summary>Logs and benchmarks</summary>
 <ul>
-<li>Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the <code>images/</code> subfolder</li>
-<li>Snakemake prints a DAG in text format, so we need to use the <code>dot</code> command to transform it into a picture</li>
-<li>Save the result as a PNG picture</li>
+<li><code>log</code> and <code>benchmark</code> directives must contain the same <code>wildcards</code> as the <code>output</code> directive, here <code>sample</code></li>
+<li>Logs need to be handled manually, so you need to redirect what is produced by featureCounts to the log file. You can redirect both <code>stdout</code> and <code>stderr</code> streams with <code>&amp;&gt; {log}</code> at the end of the command</li>
 </ul>
-</div>
-<details class="done">
+</details>
+<details class="success">
 <summary>Answer</summary>
-<p>If we run the command without target: <code>snakemake --cores 1 --dag -F | dot -Tpng &gt; images/dag.png</code>, we will get a <code>Target rules may not contain wildcards.</code> error, which means we need to add a target. Same as before, it makes sense to use one of the final outputs to get the entire workflow: <code>snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng &gt; images/dag.png</code>.</p>
-<p>But once again, we will get an error: <code>BrokenPipeError: [Errno 32] Broken pipe</code>. This is because we are piping the command output to a folder (<code>images/</code>) that does not exist yet The folder is not created by Snakemake because it isn&rsquo;t handled as part of an actual run. So we have to create the folder before generating the DAG:</p>
-<div class="highlight"><pre><span></span><code>mkdir images
-snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpng &gt; images/dag.png
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">reads_quantification_genes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This rule quantifies the reads of a bam file mapping on genes and produces</span>
+<span class="sd">    a count table for all genes of the assembly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">bam_once_sorted</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">sam_to_bam</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">bam_sorted</span><span class="p">,</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">gene_level</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.tsv&#39;</span><span class="p">,</span>
+        <span class="n">gene_summary</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.summary&#39;</span>
+<span class="hll">    <span class="n">log</span><span class="p">:</span>  <span class="c1"># log directive</span>
+</span><span class="hll">        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.log&#39;</span>  <span class="c1"># Path of log file</span>
+</span><span class="hll">    <span class="n">benchmark</span><span class="p">:</span>  <span class="c1"># benchmark directive</span>
+</span><span class="hll">        <span class="s1">&#39;benchmarks/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_genes_read_quantification.txt&#39;</span>  <span class="c1"># Path of benchmark file</span>
+</span>    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \</span>
+<span class="sd">        -B -C --largestOverlap --verbose -F GTF \</span>
+<span class="sd">        -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}</span>
+<span class="sd">        mv {output.gene_level}.summary {output.gene_summary}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div>
+</details>
+<h3 id="running-the-whole-workflow">Running the whole workflow</h3>
+<p><strong>Exercise:</strong> If you have not done it after each step, run the entire workflow on your sample of choice. What command will you use to run it? Once Snakemake has finished, check the log of rule <code>reads_quantification_genes</code>. Does it contain anything? How many read pairs were assigned to a feature?</p>
+<details class="success">
+<summary>Answer</summary>
+<p>Because all rules are chained together, you only need to specify one final output to trigger the execution of all previous rules. Using the same sample as before (<code>highCO2_sample1</code>). You can add the <code>-F</code> parameter to force an entire re-run, which should take ~10 min.:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>--sdm<span class="o">=</span>apptainer<span class="w"> </span>-p<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
 </code></pre></div>
-<p>Some explanations on the command:</p>
-<ul>
-<li><code>-F</code>: force to show the entire worklow and ensures all jobs are shown. You can also use <code>-f &lt;target&gt;</code> to show fewer jobs</li>
-<li><a href="https://graphviz.org/docs/layouts/dot/"><code>dot</code></a>: tool that is a part of the <a href="https://graphviz.org/">graphviz package</a> and is used to draw hierarchical or layered drawings of directed graphs, <em>i.e.</em> graphs in which edges (arrows) have a direction</li>
-<li><code>-T</code>: control the image format. Available formats are listed <a href="https://graphviz.org/docs/outputs/">here</a></li>
-</ul>
-</details>
-<div class="admonition note">
-<p class="admonition-title">DAG aspect</p>
-<p>If you already computed all the outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add <code>-F/--forceall</code> to the snakemake command to force the execution of all jobs.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">DAG = dry-run</p>
-<p>The <code>--dag</code> flag implicitly activates the <code>--dry-run/--dryrun/-n</code> option, which means that no jobs are executed during the plot creation.</p>
-</div>
-<p>There are actually 3 types of DAG:</p>
-<ul>
-<li>A DAG, created with the <code>--dag</code> option</li>
-<li>A filegraph, created with the <code>--filegraph</code> option</li>
-<li>A rulegraph, created with the <code>--rulegraph</code> option</li>
-</ul>
-<p><strong>Exercise:</strong> Generate the filegraph and rulegraph of your workflow. Feel free to try different pictures format. What are the differences between the plots?</p>
-<details class="done">
-<summary>Answer</summary>
-<ul>
-<li>Generate the rulegraph: <code>snakemake --cores 1 --rulegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tpdf &gt; images/rulegraph.pdf</code></li>
-<li>Generate the filegraph: <code>snakemake --cores 1 --filegraph -F results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv | dot -Tjpg &gt; images/filegraph.jpg</code></li>
-</ul>
-</details>
-<p>You should obtain the 3 following figures:</p>
-<figure>
-  <img src="../../../assets/images/backbone_dag.png" width="30%" height="450" align="center"/>
-  <img src="../../../assets/images/backbone_rulegraph.png" width="30%" height="450" align="center"/>
-  <img src="../../../assets/images/backbone_filegraph.png" width="30%" height="450" align="center"/>
-  <figcaption>DAG, rulegraph and filegraph (respectively) of the workflow<br>at the end of the session</figcaption>
-</figure>
+If you used the same path for the log file as the rule given above, you can check it with:
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>logs/highCO2_sample1/highCO2_sample1_genes_read_quantification.log
+</code></pre></div>
+In the log files, you can find a summary of the parameters used by <code>featureCounts</code>, its inputs and outputs&hellip; and the number of read pairs successfully assigned to a gene; with <code>highCO2_sample1</code>, 817894 read pairs (83.8% of total) were assigned:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code>        ==========     _____ _    _ ____  _____  ______          _____
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ &lt;|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+      v2.0.6
 
-<p>The differences between these plots are:</p>
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 1 BAM file                                       ||
+||                                                                            ||
+||                           highCO2_sample1_mapped_reads_sorted.bam          ||
+||                                                                            ||
+||             Output file : highCO2_sample1_genes_read_quantification.tsv    ||
+||                 Summary : highCO2_sample1_genes_read_quantification.ts ... ||
+||              Paired-end : yes                                              ||
+||        Count read pairs : yes                                              ||
+||              Annotation : Scerevisiae.gtf (GTF)                            ||
+||      Dir for temp files : results/highCO2_sample1                          ||
+||                                                                            ||
+||                 Threads : 1                                                ||
+||                   Level : meta-feature level                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : not counted                                      ||
+||   Min overlapping bases : 1                                                ||
+||                                                                            ||
+\\============================================================================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file Scerevisiae.gtf ...                                   ||
+||    Features : 7507                                                         ||
+||    Meta-features : 7127                                                    ||
+||    Chromosomes/contigs : 17                                                ||
+||                                                                            ||
+|| Process BAM file highCO2_sample1_mapped_reads_sorted.bam...                ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    Total alignments : 975705                                               ||
+<span class="hll">||    Successfully assigned alignments : 817894 (83.8%)                       ||
+</span>||    Running time : 0.02 minutes                                             ||
+||                                                                            ||
+|| Write the final count table.                                               ||
+|| Write the read assignment summary.                                         ||
+||                                                                            ||
+|| Summary of counting results can be found in file &quot;results/highCO2_sample1  ||
+|| /highCO2_sample1_genes_read_quantification.tsv.summary&quot;                    ||
+||                                                                            ||
+\\============================================================================//
+</code></pre></div></td></tr></table></div></p>
+</details>
+<p><strong>(Optional) Exercise:</strong> If you have time, check Snakemake&rsquo;s log in <code>.snakemake/log/</code>. Is everything as you expected, especially wildcard values, input and output names&hellip;?</p>
+<details class="success">
+<summary>Answer</summary>
+<p>You can check the logs with:
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>.snakemake/log/&lt;latest_log&gt;
+</code></pre></div>
+This general log says exactly what was run by Snakemake, after placeholders, <code>wildcards</code>&hellip; were replaced by their actual values. It is identical to what appears on your screen when you run Snakemake.</p>
+</details>
+<h3 id="visualising-the-workflow-dag">Visualising the workflow DAG</h3>
+<p>You have now implemented and run the main steps of the workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake&rsquo;s has a built-in workflow visualisation feature to do this: the <code>--dag</code> parameter, which shows a dependency graph of all the jobs (rules appear once per wildcard value and wildcard value are displayed).</p>
+<p><strong>Exercise:</strong> Visualise the entire workflow’s Directed Acyclic Graph using <code>--dag</code>. Remember that Snakemake prints a DAG in text format, so you need to pipe its results into the <code>dot</code> command to transform it into a picture with <code>| dot -Tpng &gt; &lt;image_path&gt;.png</code>. Do you need to specify a target to the <code>snakemake</code> command?</p>
+<details class="tip">
+<summary>Creating a DAG</summary>
 <ul>
-<li><code>--dag</code>: dependency graph of all the jobs</li>
-<li><code>--filegraph</code>: dependency graph of rules with inputs and outputs (rule appears once, with wildcards)</li>
-<li><code>--rulegraph</code>: dependency graph of rules (rule appears once)</li>
+<li>Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the <code>images/</code> subfolder<ul>
+<li><code>images/</code> is not automatically created by Snakemake because it isn&rsquo;t handled as part of an actual run, so you need to create it beforehand. You did this when you set up the <a href="#downloading-data-and-setting-up-folder-structure">workflow structure</a></li>
 </ul>
-<h3 id="designing-a-snakemake-workflow-and-debugging-it">Designing a Snakemake workflow&hellip; and debugging it!</h3>
-<h4 id="designing-a-workflow">Designing a workflow</h4>
-<p>There are many ways to design a new workflow, but these few pieces of advice will be useful in most cases:</p>
+</li>
+<li>If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add <code>-F/--forceall</code> to the snakemake command to force the execution of all jobs<ul>
+<li>You can also use <code>-f &lt;target&gt;</code> to show fewer jobs</li>
+</ul>
+</li>
+</ul>
+</details>
+<details class="tip">
+<summary>The <code>dot</code> command</summary>
 <ul>
-<li>Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!<ul>
-<li>Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first</li>
-<li>Determine which rules (if any) aggregate or split inputs and create input functions accordingly (we will see how these functions work in session 4)</li>
+<li><a href="https://graphviz.org/docs/layouts/dot/"><code>dot</code></a> is a part of the <a href="https://graphviz.org/">graphviz package</a> and is used to draw hierarchical or layered drawings of directed graphs, <em>i.e.</em> graphs in which edges (arrows) have a direction</li>
+<li><code>-T</code>: choose image format. Available formats are listed <a href="https://graphviz.org/docs/outputs/">here</a></li>
 </ul>
-</li>
-<li>Make sure your input and output directives are right before worrying about anything else, especially the shell sections.<ul>
-<li>Remember that Snakemake builds the DAG before running the shell commands, so you can use the <code>--dryrun</code> option to test the workflow before running it. You can even do that without writing all the shell commands!</li>
+</details>
+<details class="success">
+<summary>Answer</summary>
+<p>To run the command without target, you can use:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>--dag<span class="w"> </span>-F<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>&gt;<span class="w"> </span>images/dag.png
+</code></pre></div>
+We added the <code>-F</code> parameter to force Snakemake to compute the entire DAG and ensure all jobs are shown. However, you will get a <code>WorkflowError: Target rules may not contain wildcards.</code> error. This makes sense, because if you don&rsquo;t give a target to Snakemake, it can&rsquo;t compute the wildcard values. To run the command using the same sample as before (<code>highCO2_sample1</code>), you can target one of the final outputs of the workflow:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>--dag<span class="w"> </span>-F<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>&gt;<span class="w"> </span>images/dag.png
+</code></pre></div></p>
+<p>You should get the following DAG:
+<figure markdown align="center">
+  <img alt="backbone_rulegraph" src="../../../assets/images/backbone_rulegraph.png" />
+  <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
+</figure></p>
+<p><strong>An important thing to remember:</strong> <code>--dag</code> implicitly activates <code>--dry-run/--dryrun/-n</code>, which means that no jobs are executed during DAG computation.</p>
+</details>
+<p>Snakemake can also create two other graphs:</p>
+<ul>
+<li>A rulegraph, created with the <code>--rulegraph</code> parameter: dependency graph of all the rules (rules appear only once)
+    <div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>--rulegraph<span class="w"> </span>-F<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpdf<span class="w"> </span>&gt;<span class="w"> </span>images/rulegraph.pdf
+</code></pre></div></li>
+<li>A filegraph, created with the <code>--filegraph</code> parameter: dependency graph of all the rules with inputs and outputs (rule appears once, <code>wildcards</code> are shown but not replaced)
+    <div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>--filegraph<span class="w"> </span>-F<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tjpg<span class="w"> </span>&gt;<span class="w"> </span>images/filegraph.jpg
+</code></pre></div></li>
 </ul>
-</li>
-<li>List any parameters or settings that might need to be adjusted</li>
-<li>Choose meaningful and easy-to-understand names for your inputs, outputs, parameters, wildcards&hellip; to make your Snakefile as readable as possible. This is true for every script, piece of code, variable etc&hellip; and Snakemake is no exception! Have a look at <a href="https://peps.python.org/pep-0020/">The Zen of Python</a> for more information</li>
-</ul>
-<h4 id="debugging-a-workflow">Debugging a workflow</h4>
-<p>It is very likely you will see bugs and errors the first time you try to run a new Snakefile: don’t be discouraged, this is normal!</p>
-<p><strong>Order of operations in Snakemake</strong></p>
-<p>The topic was tackled when DAGs were mentioned, but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command <code>snakemake --cores 1 &lt;target&gt;</code>. There are 3 main phases:</p>
-<ol>
-<li>Prepare to run:<ol>
-<li>Read all the rule definitions from the Snakefile</li>
-</ol>
-</li>
-<li>Resolve the DAG (when Snakemake says ‘Building DAG of jobs’):<ol>
-<li>Check what output(s) are required</li>
-<li>Look for a matching rule by looking at the outputs of all the rules</li>
-<li>Fill in the wildcards to determine the input of the matching rule</li>
-<li>Check whether this input is available; if not, repeat Step 2 until everything is resolved</li>
-</ol>
-</li>
-<li>Run:<ol>
-<li>If needed, create the folder for the output(s)</li>
-<li>If needed, remove the outdated output(s)</li>
-<li>Run the shell command with the placeholders replaced</li>
-<li>Check that the command ran without errors and produced the expected output(s)</li>
-</ol>
-</li>
-</ol>
-<p><strong>Debugging advice</strong></p>
-<p>Sometimes, Snakemake will give you a precise error report, but other times less so. Try to identify which phase of execution failed (see previous paragraph on order of operations) and double-check the most common error causes for that phase:</p>
-<ol>
-<li>Parsing phase failures (phase 1):<ul>
-<li>Syntax errors, among which (but not limited to):<ul>
-<li><em>This errors can be easily solved using a text editor with Python/Snakemake text colouring</em></li>
-<li>Missing commas/colons/semicolons</li>
-<li>Unbalanced quotes/brackets/parenthesis</li>
-<li>Wrong indentation</li>
-</ul>
-</li>
-<li>Failure to evaluate expressions<ul>
-<li>Problems in functions (<code>expand()</code>, input functions&hellip;) in input/output directives</li>
-<li>Python logic added outside of rules</li>
-</ul>
-</li>
-<li>Other problems with rule definition<ul>
-<li>Invalid rule names/directives</li>
-<li>Invalid wildcard names</li>
-<li>Mismatched wildcards</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>DAG building failures (phase 2, before Snakemake tries to run any job):<ul>
-<li>Failure to determine the target</li>
-<li>Ambiguous rules making the same output(s)</li>
-<li>On the contrary, no rule making the required output(s)</li>
-<li>Circular dependency (violating the &lsquo;Acyclic&rsquo; property of a D<strong>A</strong>G).</li>
-<li>Write-protected output(s)</li>
-</ul>
-</li>
-<li>DAG running failures (phase 3, <code>--dry-run</code> works and builds the DAG, but the real execution fails):<ul>
-<li><em>When a job fails, Snakemake reports an error, deletes all output file(s) for that job (potential corruption), and stops</em></li>
-<li>Shell command returning non-zero status</li>
-<li>Missing output file(s) after the commands have run</li>
-<li>Reference to a <code>$shell_variable</code> before it was set</li>
-<li>Use of a wrong/unknown placeholder inside <code>{ }</code></li>
-</ul>
-</li>
-</ol>
+<p>Here is a comparison of the different workflow graphs:</p>
+<figure align="center">
+<p><img alt="backbone_rulegraph" src="../../../assets/images/backbone_all.png" />
+  </p>
+<figcaption>Workflow DAG, rulegraph and filegraph</figcaption>
+</figure>
 
 
 
@@ -1698,7 +1759,7 @@ snakemake --cores 1 --dag -F results/highCO2_sample1/highCO2_sample1_genes_read_
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+      Copyright &copy; 2021-2024 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
 
     </div>
   

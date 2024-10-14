@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#workshop-goal" class="md-skip">
+        <a href="#course-goal" class="md-skip">
           Skip to content
         </a>
       
@@ -517,9 +517,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#workshop-goal" class="md-nav__link">
+  <a href="#course-goal" class="md-nav__link">
     <span class="md-ellipsis">
-      Workshop goal
+      Course goal
     </span>
   </a>
   
@@ -535,9 +535,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#website-colour-code-explanation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Website colour code explanation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercises" class="md-nav__link">
     <span class="md-ellipsis">
       Exercises
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Answers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#computing-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computing environment
     </span>
   </a>
   
@@ -601,7 +628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4_decorating_workflow/" class="md-nav__link">
+      <a href="../4_optimising_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -627,6 +654,27 @@
   
   <span class="md-ellipsis">
     Being reproducible with Snakemake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_debugging_snakemake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
   </span>
   
 
@@ -668,9 +716,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#workshop-goal" class="md-nav__link">
+  <a href="#course-goal" class="md-nav__link">
     <span class="md-ellipsis">
-      Workshop goal
+      Course goal
     </span>
   </a>
   
@@ -686,9 +734,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#website-colour-code-explanation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Website colour code explanation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#exercises" class="md-nav__link">
     <span class="md-ellipsis">
       Exercises
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Answers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#computing-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computing environment
     </span>
   </a>
   
@@ -714,8 +789,8 @@
 
   <h1>General guidelines</h1>
 
-<h2 id="workshop-goal">Workshop goal</h2>
-<p>Over the course of the workshop, you will implement and improve a workflow to trim bulk RNAseq reads, align them to a genome, perform some quality checks (QC), count mapped reads, and identify Differentially Expressed Genes (DEG). The goal of the workshop is that after the last series of exercises, you will have implemented a simple workflow with commonly used Snakemake features. You will be able to use this workflow as a reference to implement your own workflows in the future.</p>
+<h2 id="course-goal">Course goal</h2>
+<p>Throughout the course, you will implement and improve a workflow to trim bulk RNAseq reads, align them to a genome, perform some quality checks (QC), count mapped reads, and identify Differentially Expressed Genes (DEG). After the last series of exercises, you will have implemented a simple workflow with commonly used Snakemake features. You will be able to use this workflow as a reference to implement your own workflows in the future.</p>
 <h2 id="software">Software</h2>
 <p>All the software needed in this workflow is either:</p>
 <ul>
@@ -723,9 +798,55 @@
 <li>Already installed in a Docker container</li>
 <li>Will be installed via a conda environment during today&rsquo;s exercises</li>
 </ul>
-<p>All information of this course is based on the <a href="https://snakemake.readthedocs.io/en/v7.32.3/">official documentation</a> for Snakemake version <code>7.32.3</code>. </p>
+<p>All information of this course is based on the <a href="https://snakemake.readthedocs.io/en/v8.20.5/">official documentation</a> for Snakemake version <code>8.20.5</code>.</p>
+<h2 id="website-colour-code-explanation">Website colour code explanation</h2>
+<p>We tried to use a colour code throughout the website to make the different pieces of information easily distinguishable. Here&rsquo;s a quick summary about the colour blocks you will encounter:</p>
+<div class="admonition info">
+<p class="admonition-title">This is a supplementary piece of information</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">This is a tip to help you solve an exercise</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title">This is the answer to an exercise</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">This is a warning about a potential problem</p>
+</div>
+<div class="admonition bug">
+<p class="admonition-title">This is an explanation about a common bug/error</p>
+</div>
 <h2 id="exercises">Exercises</h2>
-<p>Each series of exercises is divided into multiple questions. We first provide a general explanation on the context behind each question; we then explicitly describe the task and provide details when they are required. We also provide hints that should help you with the most challenging parts of some questions. You should first try to solve the problems without using these hints! Do not hesitate to modify and overwrite your code from previous questions when specified in an exercise, as the solutions for each series of exercises are provided. If something is not clear at any point, please call us and we will do our best to answer your questions. You can also check the <a href="https://snakemake.readthedocs.io/en/stable/index.html">official Snakemake documentation</a> for more information.</p>
+<p>Each series of exercises is divided into multiple questions. Each question provides a background explanation, a description of the task at hand and additional details when required.</p>
+<div class="admonition tip">
+<p class="admonition-title">Hints for challenging questions</p>
+<p>For the most challenging questions, hints will be provided. However, you should first try to solve the problem without them!</p>
+</div>
+<h2 id="answers">Answers</h2>
+<p>Do not hesitate to modify and overwrite your code from previous answers as difficulty is incremental. The questions are designed to incite you to build your answers upon the previous ones.</p>
+<div class="admonition info">
+<p class="admonition-title">Restarting from a clean Snakefile</p>
+<ul>
+<li>If you feel that you drifted too far apart from the solution, you can always restart from files provided in the <a href="https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/">solutions folder</a> of the course repository</li>
+<li>At the start of sessions 3 and 4, you will also find a short note with a command to download the complete Snakefile from the previous session</li>
+</ul>
+</div>
+<p>If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the <a href="https://snakemake.readthedocs.io/en/stable/index.html">official Snakemake documentation</a> for more information.</p>
+<h2 id="computing-environment">Computing environment</h2>
+<div class="admonition warning">
+<p class="admonition-title">Development and computation</p>
+<p>You can develop and write your scripts in a distant folder (using an <code>ssh</code> connection via VS code) or locally (if you do so, you will need to copy them on the server (with <code>scp</code>) before running them), but <strong>remember that all the computations should be performed on the server, so don&rsquo;t forget to log in with <code>ssh -i key_username.pem username@18.195.170.182</code></strong>.</p>
+</div>
+<div class="admonition bug">
+<p class="admonition-title"><code>Error: Command not found</code></p>
+<p>If you try to run a command and get an error such as <code>Command 'snakemake' not found</code>, you are probably in the wrong conda environment:</p>
+<ul>
+<li>To list available conda environments, use <code>conda env list</code></li>
+<li>To activate an environment, use <code>conda activate &lt;env_name&gt;</code></li>
+<li>To deactivate an environment, use <code>conda deactivate</code></li>
+<li>To list packages installed in an environment, activate it and use <code>conda list</code>. The computing environment on the server is called <strong><code>snake_course</code>.</strong></li>
+</ul>
+</div>
 
 
 
@@ -757,7 +878,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+      Copyright &copy; 2021-2024 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
 
     </div>
   

@@ -584,18 +584,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#executing-a-workflow-with-a-precise-output" class="md-nav__link">
+  <a href="#executing-a-workflow-with-a-specific-output" class="md-nav__link">
     <span class="md-ellipsis">
-      Executing a workflow with a precise output
+      Executing a workflow with a specific output
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#adding-an-input-directive" class="md-nav__link">
+  <a href="#understanding-the-input-directive" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding an input directive
+      Understanding the input directive
     </span>
   </a>
   
@@ -605,6 +605,16 @@
   <a href="#creating-a-workflow-with-several-rules" class="md-nav__link">
     <span class="md-ellipsis">
       Creating a workflow with several rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a workflow with several rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-order-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule order matters!
     </span>
   </a>
   
@@ -620,28 +630,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#important-notes-on-rules-dependency" class="md-nav__link">
+  <a href="#rule-dependencies-can-be-easier-to-write" class="md-nav__link">
     <span class="md-ellipsis">
-      Important notes on rules dependency
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Important notes on rules dependency">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#rules-must-produce-unique-outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rules must produce unique outputs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rules-dependency-can-be-written-more-easily" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rules dependency can be written more easily
+      Rule dependencies can be easier to write
     </span>
   </a>
   
@@ -694,7 +685,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4_decorating_workflow/" class="md-nav__link">
+      <a href="../4_optimising_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -720,6 +711,27 @@
   
   <span class="md-ellipsis">
     Being reproducible with Snakemake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_debugging_snakemake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
   </span>
   
 
@@ -807,18 +819,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#executing-a-workflow-with-a-precise-output" class="md-nav__link">
+  <a href="#executing-a-workflow-with-a-specific-output" class="md-nav__link">
     <span class="md-ellipsis">
-      Executing a workflow with a precise output
+      Executing a workflow with a specific output
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#adding-an-input-directive" class="md-nav__link">
+  <a href="#understanding-the-input-directive" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding an input directive
+      Understanding the input directive
     </span>
   </a>
   
@@ -828,6 +840,16 @@
   <a href="#creating-a-workflow-with-several-rules" class="md-nav__link">
     <span class="md-ellipsis">
       Creating a workflow with several rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a workflow with several rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-order-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule order matters!
     </span>
   </a>
   
@@ -843,28 +865,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#important-notes-on-rules-dependency" class="md-nav__link">
+  <a href="#rule-dependencies-can-be-easier-to-write" class="md-nav__link">
     <span class="md-ellipsis">
-      Important notes on rules dependency
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Important notes on rules dependency">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#rules-must-produce-unique-outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rules must produce unique outputs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rules-dependency-can-be-written-more-easily" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rules dependency can be written more easily
+      Rule dependencies can be easier to write
     </span>
   </a>
   
@@ -909,173 +912,226 @@
 <li>Run a Snakemake workflow</li>
 </ul>
 <h2 id="material">Material</h2>
-<p><a class="md-button" href="../../../assets/pdf/day2/1_introduction_snakemake.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<p><a class="md-button" href="../../../assets/pdf/day2/2_introduction_snakemake.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
 <h2 id="structuring-a-workflow">Structuring a workflow</h2>
-<p>It is advised to implement your code in a directory called <code>workflow</code> (more information about this in the next series of exercises). You are free to choose the names and location of files for the different steps of your workflow, but, for now, we recommend that you at least group all outputs from the workflow in a <code>results</code> folder within the <code>workflow</code> directory.</p>
-<div class="admonition warning">
-<p class="admonition-title">Development and computation</p>
-<p>You can develop and write your scripts in a distant folder (using an ssh connection via VS code) or locally (if you do so, you will need to copy them on the server (with <code>scp</code>) before running them), but <strong>remember that all the computations should be performed on the server, so don&rsquo;t forget to log in with <code>ssh -i key_username.pem username@18.195.170.182</code></strong></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">A small reminder about conda environment</p>
-<p>If you try to run a command and get an error such as <code>Command 'snakemake' not found</code>, you are probably not in the right conda environment. To list them, use <code>conda env list</code>. Then activate the right environment with <code>conda activate &lt;env_name&gt;</code>. You can deactivate an environment with <code>conda deactivate</code>. To list the packages installed in an environment, activate it and use <code>conda list</code>. <strong>The computing environment on the server is called <code>snake_course</code>.</strong></p>
-</div>
+<p>It is advised to implement your code in a directory called <code>workflow</code> (you will learn more about workflow structure in the <a href="../3_generalising_snakemake/#downloading-data-and-setting-up-folder-structure">next series of exercises</a>). Filenames and locations are up to you, but we recommend that you at least group all workflow outputs in a <code>results</code> folder.</p>
 <h2 id="exercises">Exercises</h2>
-<p>This series of exercises will bear no biological meaning, on purpose: it is designed to show you the fundamentals of Snakemake.</p>
+<p>This series of exercises will bear no biological meaning, on purpose: it is designed to explain the fundamentals of Snakemake.</p>
 <h3 id="creating-a-basic-rule">Creating a basic rule</h3>
-<p>Rules are the basic blocks of a Snakemake workflow. A <strong>rule</strong> is like a recipe indicating how to produce a specific <strong>output</strong> . The actual application of a rule to create an output is called a <strong>job</strong>. A rule is defined in a Snakefile with the <em>keyword</em> <code>rule</code> and contains <em>directives</em> which indicate the rule&rsquo;s properties.</p>
-<p>To create the simplest rule possible, we need at least two <em>directives</em>:</p>
+<p>A <strong>rule</strong> is the smallest block of code with which you can build a <strong>workflow</strong>. It is a <strong>set of instructions</strong> to create one or more <strong>output(s)</strong> from zero or more <strong>input(s)</strong>. When a rule is <strong>executed</strong> (in other words, applied to specific input/output file(s)), it is called a <strong>job</strong>. The definition of a rule always starts with the <strong>keyword</strong> <code>rule</code>. Similarly to Python classes and their attributes, rules have <strong>directives</strong>, which contain information about their <strong>properties</strong>.</p>
+<p>To create the simplest rule possible, you need at least two <em>directives</em>:</p>
 <ul>
-<li><code>output</code>: path of the output file for this rule</li>
-<li><code>shell</code>: shell commands to execute in order to generate the output</li>
+<li><code>output</code>: path of the output file</li>
+<li><code>shell</code>: shell commands that will create the output when they are executed</li>
 </ul>
-<p>We will see other directives later in the course.</p>
+<p>Other directives will be explained throughout the course.</p>
 <p><strong>Exercise:</strong> The following example shows the minimal syntax to implement a rule. What do you think it does? Does it create a file? If so, how is it called?</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">hello_world</span><span class="p">:</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
+        <span class="s1">&#39;results/hello.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
-</code></pre></div>
-<details class="done">
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/hello.txt&#39;</span>
+</code></pre></div></td></tr></table></div>
+<details class="success">
 <summary>Answer</summary>
-<p>This rule uses the <code>echo</code> shell command to print the line <code>Hello world!</code> in an output file called <code>first_step.txt</code>, located in the <code>results</code> folder.</p>
+<p>This rule uses the <code>echo</code> shell command to print <code>Hello world!</code> in an <strong>output file</strong> called <code>hello.txt</code>, located in the <code>results</code> folder.</p>
 </details>
-<p>Rules are defined and written in a file called <strong>Snakefile</strong> (note the capital <code>S</code> and the absence of extension in the filename). This file should be located at the root of the workflow directory (here, <code>workflow/Snakefile</code>).</p>
-<p><strong>Exercise:</strong> Create a Snakefile and copy the previous rule in it. Because the Snakemake language is built on top of Python, spaces and indents are essential, so <em>do not forget to keep the indentation as is and use space characters in the indents instead of tabs.</em></p>
-<h3 id="executing-a-workflow-with-a-precise-output">Executing a workflow with a precise output</h3>
-<p>It is now time to execute your first worklow! To do this, you need to tell Snakemake what is your target, <em>i.e.</em> what is the output that you want to generate.</p>
-<p><strong>Exercise:</strong> Execute the workflow with <code>snakemake --cores 1 &lt;target&gt;</code>. What value should you use for <code>&lt;target&gt;</code>? Once Snakemake execution is finished, can you locate the output file?</p>
-<details class="done">
-<summary>Answer</summary>
+<p>Rules are defined and written in a file called <strong>Snakefile</strong> (note the capital <code>S</code> and the absence of extension in the filename). This file should be located at the workflow root directory (here, <code>workflow/Snakefile</code>).</p>
+<h3 id="executing-a-workflow-with-a-specific-output">Executing a workflow with a specific output</h3>
+<p>It is now time to execute your first workflow! To do this, you need to tell Snakemake what is your <strong>target</strong>, <em>i.e.</em> what is the <strong>specific output</strong> that you want to generate. A target can be any output from any rule in the workflow.</p>
+<p><strong>Exercise:</strong> Create a Snakefile and copy the previous rule in it. Then, execute the workflow with <code>snakemake -c 1 &lt;target&gt;</code>. What value should you use for <code>&lt;target&gt;</code>? Once Snakemake execution is finished, can you locate the output file?</p>
+<details class="info">
+<summary>What does <code>-c/--cores</code> do?</summary>
+<p>The <code>-c/--cores N</code> parameter controls the maximum number of CPU cores used in parallel. If N is omitted or &lsquo;all&rsquo;, Snakemake will use all available CPU cores, which is useful but can also be dangerous on a cluster or a local machine. In case of cluster/cloud execution, this argument sets the maximum number of cores requested from the cluster or cloud scheduler.</p>
+</details>
+<details class="warning">
+<summary>Code indentation in Snakemake</summary>
+<p>As Snakemake is built on top of Python, proper <strong>code indentation is crucial</strong>. Wrong indentation often results in cryptic errors. We recommend using <strong>indents of 4 spaces</strong>, but here are two rules that should be followed at all times:</p>
 <ul>
-<li>Execute the workflow: <code>snakemake --cores 1 results/first_step.txt</code></li>
-<li>Visualise the content of the <code>results</code> folder: <code>ls -alh results/</code></li>
-<li>Check the output content: <code>cat results/first_step.txt</code></li>
+<li>Do not mix space and tab indents in a file</li>
+<li>Always use the same indent length</li>
 </ul>
 </details>
-<p>Note that during the execution of the workflow, Snakemake automatically created the <strong>missing folder</strong> (<code>results/</code>) in the output path. If several folders are missing (for example, <code>test1/test2/test3/first_step.txt</code>), Snakemake will create <strong>all of them</strong>.</p>
+<details class="success">
+<summary>Answer</summary>
+<ul>
+<li>The target value is the file you want to generate, here <code>results/hello.txt</code>. The command to execute the workflow is:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>results/hello.txt
+</code></pre></div></li>
+<li>The output is located in the <code>results</code> folder. You can check the folder content with <code>ls -alh results/</code></li>
+<li>You can check the output content with <code>cat results/hello.txt</code></li>
+</ul>
+</details>
+<p>During the workflow execution, Snakemake automatically created the <strong>missing folder</strong> of the output path, <code>results/</code>. If several nested folders are missing (for example, <code>test1/test2/test3/hello.txt</code>), Snakemake will create the <strong>entire folder structure</strong> (<code>test1/test2/test3/</code>).</p>
 <p><strong>Exercise:</strong> Re-run the exact same command. What happens?</p>
-<details class="done">
+<details class="success">
 <summary>Answer</summary>
-<p>Nothing! We get a message saying that Snakemake did not run anything:</p>
-<div class="highlight"><pre><span></span><code>Building DAG of jobs...
-Nothing to be done (all requested files are present and up to date).
+<p>Nothing! You get a message saying that Snakemake did not run anything:</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">Building</span> <span class="n">DAG</span> <span class="n">of</span> <span class="n">jobs</span><span class="o">...</span>
+<span class="n">Nothing</span> <span class="n">to</span> <span class="n">be</span> <span class="n">done</span> <span class="p">(</span><span class="nb">all</span> <span class="n">requested</span> <span class="n">files</span> <span class="n">are</span> <span class="n">present</span> <span class="ow">and</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span><span class="o">.</span>
 </code></pre></div>
-<p>By default, Snakemake only runs a job if:</p>
-<ul>
-<li>A target file explicitly requested in the <code>snakemake</code> command is missing</li>
-<li>An intermediate file is missing and is required to produce a target file</li>
-<li>It detects when input files that have been modified more recently than output files, based on their modification dates. In this case, Snakemake will generate again the existing outputs.</li>
-</ul>
-<p>We can change this behaviour and force the re-run of a specific target by using the <code>-f</code> option: <code>snakemake --cores 1 -f results/first_step.txt</code> or force recreate ALL the outputs of the workflow using the <code>-F</code> option: <code>snakemake --cores 1 -F</code>. In practice, we can also alter Snakemake (re-)run policy, but we will not cover this topic in the course (see <a href="https://snakemake.readthedocs.io/en/stable/executing/cli.html">&ndash;rerun-triggers option</a> in Snakemake&rsquo;s CLI help and <a href="https://github.com/snakemake/snakemake/issues/1694">this git issue</a> for more information).</p>
+This is normal, because the desired output is already present and accounted for!</p>
 </details>
-<p>In the previous example, the values of the two rule directives are <strong>strings</strong>. For the <code>shell</code> directive (we will see other types of directive values later in the course), long string can be written on multiple lines for clarity, simply using a set of quotes for each line:</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+<details class="info">
+<summary>Snakemake re-run policy</summary>
+<p>By default, Snakemake runs a job if:</p>
+<ul>
+<li>A target file explicitly requested in the <code>snakemake</code> command is missing or an intermediate file is missing and is required to produce a target file</li>
+<li>It detects input files that have been modified more recently than output files, based on their modification dates. In this case, Snakemake will re-generate existing outputs</li>
+<li>Code (including <code>params</code> directive, see <a href="../4_optimising_snakemake/#non-file-parameters">here</a> for more information) has changed since last workflow execution</li>
+<li>Computing environment has changed since last workflow execution</li>
+</ul>
+<p>Snakemake re-runs can be forced:</p>
+<ul>
+<li>For a specific rule using the <code>-R/--forcerun</code> parameter: <code>snakemake -c 1 -R &lt;rule_name&gt;</code></li>
+<li>For a specific target using the <code>-f/--force</code> parameter: <code>snakemake -c 1 -f &lt;target&gt;</code></li>
+<li>For <strong>all workflow outputs</strong> using the <code>-F/--forceall</code> parameter: <code>snakemake -c 1 -F</code></li>
+</ul>
+<p>In practice, Snakemake re-run policy can be altered, but we will not cover this topic in the course (see <a href="https://snakemake.readthedocs.io/en/v8.20.5/executing/cli.html">&ndash;rerun-triggers parameter</a> in Snakemake CLI help and <a href="https://github.com/snakemake/snakemake/issues/1694">this git issue</a> for more information).</p>
+</details>
+<p>In the previous rule, the values of the two directives are <strong>strings</strong>. In the <code>shell</code> directive (other types of values will be seen later in the course), long strings (which includes software commands) can be written on multiple lines for clarity by encasing each line in quotes:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">long_message</span><span class="p">:</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
+        <span class="s1">&#39;results/long_message.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo &quot;I want to print a very very very very very very &#39;</span>
-        <span class="s1">&#39;very very very very long string in my output&quot; &gt; results/first_step.txt&#39;</span>
-</code></pre></div>
-<p>Here, Snakemake will simply concatenate the two lines (paste each line one after the other) and execute the resulting command.</p>
-<h3 id="adding-an-input-directive">Adding an input directive</h3>
-<p>The next directive used by most rules is <code>input</code>. It indicates the path to a file that is required by the rule to generate the output. In the following example, we modified the previous rule to use the file previously created <code>results/first_step.tsv</code> as an input, and copy this file to <code>results/second_step.txt</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
+        <span class="s1">&#39;echo &quot;I want to print a very very very very very &#39;</span>
+        <span class="s1">&#39;very very very long string in my output&quot; &gt; results/long_message.txt&#39;</span>
+</code></pre></div></td></tr></table></div>
+<p>Here, Snakemake will concatenate the two lines (<em>i.e.</em> paste the two lines together) and execute the resulting command:
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;I want to print a very very very very very very very very very very long string in my output&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>results/long_message.txt
+</code></pre></div></p>
+<h3 id="understanding-the-input-directive">Understanding the input directive</h3>
+<p>Another directive used by most rules is <code>input</code>. It usually indicates a path to a file required by the rule to create the output. In the following example, we wrote a rule that uses the file <code>results/hello.txt</code> as an input, and copies its content to <code>results/copied_file.txt</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">copy_file</span><span class="p">:</span>
     <span class="nb">input</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
+        <span class="s1">&#39;results/hello.txt&#39;</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/second_step.txt&#39;</span>
+        <span class="s1">&#39;results/copied_file.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
-</code></pre></div>
-<p>Note that with this rule definition, Snakemake <strong>will not run</strong> if <code>results/first_step.txt</code> does not exist!</p>
-<p><strong>Exercise:</strong> Modify your first rule to add an <code>input</code> directive and execute the workflow. Check that the output was created and that the files are identical. If you get a <code>Missing input files for rule &lt;rule_name&gt;</code> error, that means that the input file is missing and cannot be created. How can you solve this problem?</p>
-<details class="done">
-<summary>Answer</summary>
-<ul>
-<li>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code></li>
-<li>Visualise the content of the <code>results</code> folder: <code>ls -alh results/</code></li>
-<li>Check that the files are identical: <code>diff results/first_step.txt results/second_step.txt</code></li>
-<li>If the input file is missing, you can create it with <code>echo "Hello world!" &gt; results/first_step.txt</code> and then execute the workflow. We will see later why this happened and how to avoid it!</li>
-</ul>
-</details>
+        <span class="s1">&#39;cp results/hello.txt results/copied_file.txt&#39;</span>
+</code></pre></div></td></tr></table></div>
+<p>You will use the <code>input</code> directive in the next exercises.</p>
 <h3 id="creating-a-workflow-with-several-rules">Creating a workflow with several rules</h3>
-<p>Creating one Snakefile per rule does not seem like a good solution, so let&rsquo;s try to improve this.</p>
-<p><strong>Exercise:</strong> Delete the <code>results/</code> folder, copy the two previous rules (<code>first_step</code> and <code>second_step</code>) in the same Snakefile (place the <code>first_step</code> rule first) and try to run the workflow <strong>without specifying an output</strong>. What happens?</p>
-<details class="done">
-<summary>Answer</summary>
-<ul>
-<li>Delete the <code>results</code> folder: using the graphic interface or <code>rm -rf results/</code></li>
-<li>Execute the workflow without output: <code>snakemake --cores 1</code></li>
-</ul>
-<p>Only the first output, <code>results/first_step.txt</code>, is created. During its execution, Snakemake tries to generate a specific output called <strong>target</strong> and resolve all dependencies based on this target. A target can be any output that can be generated by any rule in the workflow. When you do not specify a target, the default one is the output of the first rule in the Snakefile, here <code>results/first_step.txt</code> of <code>rule first_step</code>.</p>
-</details>
-<p><strong>Exercise:</strong> With this in mind, instead of one target, use a space-separated list of targets in your command, to generate multiple targets. Use the <code>-F</code> to force the re-run of the whole workflow or delete your <code>results/</code> folder beforehand.</p>
-<details class="done">
-<summary>Answer</summary>
-<ul>
-<li>Delete the <code>results</code> folder: using the graphic interface or <code>rm -rf results/</code></li>
-<li>Execute the workflow with multiple targets: <code>snakemake --cores 1 results/first_step.txt results/second_step.txt</code></li>
-</ul>
-<p>We should now see Snakemake execute the 2 rules and produce both targets/outputs.</p>
-</details>
-<h3 id="chaining-rules">Chaining rules</h3>
-<p>Once again, writing all the outputs in the <code>snakemake</code> command does not look like a good solution: it is very time-consuming, error-prone (and annoying)! Imagine what happens when your workflow generate tens of outputs?! Fortunately, there is a way to simplify this, which relies on rules dependency.</p>
-<p>The core principle of Snakemake&rsquo;s execution is to compute a Directed Acyclic Graph (DAG) that summarizes dependencies between all the inputs and outputs required to generate the final desired outputs. For each job, starting from the jobs generating the final outputs, Snakemake checks if the required inputs exist. If they do not, the software looks for a rule that generates these inputs. This process is repeated until all dependencies are resolved. This is why Snakemake is said to have a &lsquo;bottom-up&rsquo; approach: it starts from the last outputs and go back to the first inputs.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>Your Snakefile should look like this:</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
+<p>As you may have guessed from the previous rule, the <code>input</code> and <code>output</code> directives allow us to create links (also called <strong>dependencies</strong>) between rules and files. Here, the <code>input</code> of rule <code>copy_file</code> requires the <code>output</code> of rule <code>hello_world</code>. In other terms, this is&hellip; <strong>a workflow</strong>! Let&rsquo;s build one with two rules and run it!</p>
+<h4 id="rule-order-matters">Rule order matters!</h4>
+<p><strong>Exercise:</strong> Add the rule <code>copy_file</code> to your Snakefile, <strong>after</strong> rule <code>hello_world</code>. Then, run the workflow <strong>without specifying an output</strong> with <code>snakemake -c 1</code>. What happens?</p>
+<details class="tip">
+<summary>Your Snakefile should look like this</summary>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">hello_world</span><span class="p">:</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
+        <span class="s1">&#39;results/hello.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/hello.txt&#39;</span>
 
-<span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
+<span class="n">rule</span> <span class="n">copy_file</span><span class="p">:</span>
     <span class="nb">input</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
+        <span class="s1">&#39;results/hello.txt&#39;</span>
     <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/second_step.txt&#39;</span>
+        <span class="s1">&#39;results/copied_file.txt&#39;</span>
     <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
+        <span class="s1">&#39;cp results/hello.txt results/copied_file.txt&#39;</span>
+</code></pre></div></td></tr></table></div>
+</details>
+<details class="success">
+<summary>Answer</summary>
+<p>Nothing! You get the same message as before, saying that Snakemake did not run anything:</p>
+<div class="highlight"><pre><span></span><code>Building<span class="w"> </span>DAG<span class="w"> </span>of<span class="w"> </span>jobs...
+Nothing<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="o">(</span>all<span class="w"> </span>requested<span class="w"> </span>files<span class="w"> </span>are<span class="w"> </span>present<span class="w"> </span>and<span class="w"> </span>up<span class="w"> </span>to<span class="w"> </span>date<span class="o">)</span>.
 </code></pre></div>
-</div>
-<p><strong>Exercise:</strong> Delete the <code>results/</code> folder, identify your final output(s) and execute the workflow <strong>specifying only this(these) output(s)</strong> in the command.</p>
-<details class="done">
+<p>When you do not specify a target, the one selected by <strong>default</strong> is the <strong>output of the first rule in the Snakefile</strong>, here <code>results/hello.txt</code> of rule <code>hello_world</code>. While this behaviour may seem weird, it will prove very useful later! In this case, <code>results/hello.txt</code> already exists from your previous runs, so Snakemake doesn&rsquo;t recompute anything.</p>
+</details>
+<p>Let&rsquo;s try to better understand how rule dependencies work in Snakemake.</p>
+<h4 id="chaining-rules">Chaining rules</h4>
+<p>The execution principle behind Snakemake is to create a <strong>Directed Acyclic Graph (DAG)</strong> that defines <strong>dependencies between all inputs and outputs</strong> of the workflow. Starting from jobs generating the final desired outputs, Snakemake checks whether required inputs exist. If they do not, it looks for a rule that can generate these inputs and so on until all dependencies are resolved. This is why Snakemake is said to have a &lsquo;bottom-up&rsquo; approach: it starts from last outputs and go back to first inputs.</p>
+<details class="bug">
+<summary><code>MissingInputException</code></summary>
+<p><code>MissingInputException</code> is a common error in Snakemake. It means that Snakemake couldn&rsquo;t find a way to generate targets during DAG computation because an input file is missing. This is a case of <strong>broken dependency</strong> between rules. This error is often caused by typos in input or output paths (for example, output of rule <code>hello_world</code> not matching input of rule <code>copy_file</code>), so make sure to double-check them!</p>
+</details>
+<p><strong>Exercise:</strong> With this in mind, identify the target you need to use to trigger the execution of rule <code>copy_file</code>. Add the <code>-F</code> parameter to the <code>snakemake</code> command and execute the workflow. What do you see?</p>
+<details class="info">
+<summary>What do we use <code>-F/--forceall</code> here?</summary>
+<p>The <code>-F/--forceall</code> parameter forces the re-creation of <strong>all workflow outputs</strong>. It is used here to avoid manually removing files, but it should be used carefully, especially with large workflows which contains a lot of outputs.</p>
+</details>
+<details class="success">
 <summary>Answer</summary>
 <ul>
-<li>Delete the <code>results</code> folder: using the graphic interface or <code>rm -rf results/</code></li>
-<li>Execute the workflow: <code>snakemake --cores 1 results/second_step.txt</code></li>
-<li>Visualise the content of the <code>results</code> folder: <code>ls -alh results/</code></li>
+<li>To trigger the execution of the second rule, you need to use <code>results/copied_file.txt</code> as target. The command is:
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>results/copied_file.txt
+</code></pre></div></li>
+<li>You should now see Snakemake execute two rules and produce both targets/outputs: to generate output <code>results/copied_file.txt</code>, Snakemake requires input <code>results/hello.txt</code>. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates <code>results/hello.txt</code>, here rule <code>hello_world</code>. The process is then repeated for <code>hello_world</code>. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG</li>
 </ul>
-<p>You should now see Snakemake executing the two rules and producing both outputs. To generate the output <code>results/second_step.txt</code>, Snakemake requires the input <code>results/first_step.txt</code>. Before the workflow is executed, this file does not exist, therefore, Snakemake looks for a rule that generates <code>results/first_step.txt</code>, in this case the rule <code>first_step</code>. The process is then repeated for <code>first_step</code>. In this case, the rule does not require any input, so all dependencies are resolved, and Snakemake can generate the DAG.</p>
 </details>
-<h3 id="important-notes-on-rules-dependency">Important notes on rules dependency</h3>
-<h4 id="rules-must-produce-unique-outputs">Rules must produce unique outputs</h4>
-<p>Because of the rules dependency process, by default, an output can only be generated by a single rule. Otherwise, Snakemake cannot decide which rule to use to generate this output, and the rules are considered <strong>ambiguous</strong>. In practice, there are ways to deal with ambiguous rules, but they should be avoided as much as possible and we will not cover them in this course (see <a href="https://snakemake.readthedocs.io/en/v7.32.3/snakefiles/rules.html#handling-ambiguous-rules">the relevant section in the official documentation</a> for more information).</p>
-<h4 id="rules-dependency-can-be-written-more-easily">Rules dependency can be written more easily</h4>
-<p>It is possible to refer to the output of a rule directly in another rule with the syntax <code>rules.&lt;rule_name&gt;.output</code>. Note that you don&rsquo;t need quotes around this statement, because it is a Snakemake object. The following example implements this syntax for the two rule defined above:</p>
-<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">first_step</span><span class="p">:</span>
-    <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/first_step.txt&#39;</span>
-    <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/first_step.txt&#39;</span>
-
-<span class="n">rule</span> <span class="n">second_step</span><span class="p">:</span>
-    <span class="nb">input</span><span class="p">:</span>
-        <span class="n">rules</span><span class="o">.</span><span class="n">first_step</span><span class="o">.</span><span class="n">output</span>
-    <span class="n">output</span><span class="p">:</span>
-        <span class="s1">&#39;results/second_step.txt&#39;</span>
-    <span class="n">shell</span><span class="p">:</span>
-        <span class="s1">&#39;cp results/first_step.txt results/second_step.txt&#39;</span>
-</code></pre></div>
-<p>This method has several advantages, among which:</p>
+<p>While it is possible to pass a space-separated list of targets in a Snakemake command, writing all the intermediary outputs does not look like a good idea: it is very time-consuming, error-prone&hellip; and annoying! Imagine what would happen with a workflow generating hundreds of files?! Using rule dependencies effectively solve this problem: you only need to ask Snakemake for the final outputs, and it will create the necessary intermediary outputs by itself!</p>
+<h4 id="rule-dependencies-can-be-easier-to-write">Rule dependencies can be easier to write</h4>
+<p>Creating rule dependencies using long file paths can be cumbersome, especially when you are dealing with a large number of files/rules. But there is a dedicated Snakemake syntax that makes this process easier to set-up: it is possible (and recommended!) to refer to the output of a rule in another rule with the following syntax: <code>rules.&lt;rule_name&gt;.output</code>. It has several advantages, among which:</p>
 <ul>
-<li>It limits the risk of error because we do not have to write the same filename at several locations</li>
-<li>A change in output name will be automatically propagated to rules that depend on it, <em>i.e.</em> the name only has to be changed once</li>
-<li>This makes the code much clearer and easier to understand: with this syntax, we instantly know the object type (<code>rule</code>), how/where it is created (<code>first_step</code>), and what it is (<code>output</code>)</li>
+<li>It limits the risk of error because you do not have to write filenames in several locations</li>
+<li>Changes in the output name are automatically propagated to rules that use it, which means that you only need to change the name once, in the rule that defines it</li>
+<li>It makes the code much clearer and easier to understand: with this syntax, you instantly know the object type (a <code>rule</code>), how/where it is created (<code>hello_world</code>), and what it is (an <code>output</code>)</li>
 </ul>
+<details class="warning">
+<summary>Rules must produce unique outputs</summary>
+<p>Because of rule dependency, it is <strong>mandatory</strong> that an output be generated by a <strong>single rule</strong>. Rules generating the same output are called <strong>ambiguous</strong>. When Snakemake encounters ambiguous rules, it is not able to decide -at least by itself- which rule to use to generate this output, so it stops the execution. In reality, there are solutions to deal with ambiguous rules, but they should be avoided as much as possible, so we will not cover them in this course. See the <a href="https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#handling-ambiguous-rules">official documentation</a> for more information).</p>
+</details>
+<details class="info">
+<summary>To quote or not to quote?</summary>
+<p>As opposed to strings, like <code>'results/hello.txt'</code>, quotes are not required around <code>rules.&lt;rule_name&gt;.output</code> statements, because they are Snakemake objects.</p>
+</details>
+<p>The following example implements this syntax for the two rules defined above:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">hello_world</span><span class="p">:</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/hello.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;echo &quot;Hello world!&quot; &gt; results/hello.txt&#39;</span>
+
+<span class="n">rule</span> <span class="n">copy_file</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+<span class="hll">        <span class="n">rules</span><span class="o">.</span><span class="n">hello_world</span><span class="o">.</span><span class="n">output</span>  <span class="c1"># Dependency syntax</span>
+</span>    <span class="n">output</span><span class="p">:</span>
+        <span class="s1">&#39;results/copied_file.txt&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s1">&#39;cp results/hello.txt results/copied_file.txt&#39;</span>
+</code></pre></div></td></tr></table></div>
+<p>Try to use this syntax as much as possible in the next series of exercises!</p>
 
 
 
@@ -1107,7 +1163,7 @@ Nothing to be done (all requested files are present and up to date).
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+      Copyright &copy; 2021-2024 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
 
     </div>
   

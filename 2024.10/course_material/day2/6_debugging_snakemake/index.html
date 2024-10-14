@@ -9,22 +9,20 @@
       
       
       
-        <link rel="prev" href="../precourse/">
+        <link rel="prev" href="../5_reproducibility_snakemake/">
       
       
-        <link rel="next" href="../course_material/day1/introduction_containers/">
       
-      
-      <link rel="icon" href="../assets/images/SIB_logo.svg">
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.33">
     
     
       
-        <title>Course schedule - Introduction to Containers and Snakemake</title>
+        <title>Additional concepts and workflow design/debugging - Introduction to Containers and Snakemake</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.3cba04c6.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3cba04c6.min.css">
       
       
 
@@ -43,9 +41,9 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -85,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#day-1-containers" class="md-skip">
+        <a href="#additional-advanced-concepts" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +98,7 @@
             <div class="md-banner__inner md-grid md-typeset">
               
   You're not viewing the latest version.
-  <a href="../.."> 
+  <a href="../../../.."> 
     <strong>Click here to go to latest.</strong>
   </a>
 
@@ -117,9 +115,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
       
-  <img src="../assets/images/SIB_logo.svg" alt="logo">
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -136,7 +134,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Course schedule
+              Additional concepts and workflow design/debugging
             
           </span>
         </div>
@@ -223,9 +221,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
       
-  <img src="../assets/images/SIB_logo.svg" alt="logo">
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
 
     </a>
     Introduction to Containers and Snakemake
@@ -252,7 +250,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -272,7 +270,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../precourse/" class="md-nav__link">
+      <a href="../../../precourse/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -289,28 +287,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Course schedule
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../course_schedule/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -319,42 +299,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#day-1-containers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Day 1 - Containers
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#day-2-snakemake" class="md-nav__link">
-    <span class="md-ellipsis">
-      Day 2 - Snakemake
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -401,7 +345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day1/introduction_containers/" class="md-nav__link">
+      <a href="../../day1/introduction_containers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -422,7 +366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day1/managing_docker/" class="md-nav__link">
+      <a href="../../day1/managing_docker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -443,7 +387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day1/dockerfiles/" class="md-nav__link">
+      <a href="../../day1/dockerfiles/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -464,7 +408,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day1/apptainer/" class="md-nav__link">
+      <a href="../../day1/apptainer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -489,17 +433,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -513,7 +459,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Day 2 - Snakemake
@@ -527,7 +473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day2/1_guidelines/" class="md-nav__link">
+      <a href="../1_guidelines/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -548,7 +494,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day2/2_introduction_snakemake/" class="md-nav__link">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -569,7 +515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day2/3_generalising_snakemake/" class="md-nav__link">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -590,7 +536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day2/4_optimising_snakemake/" class="md-nav__link">
+      <a href="../4_optimising_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -611,7 +557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../course_material/day2/5_reproducibility_snakemake/" class="md-nav__link">
+      <a href="../5_reproducibility_snakemake/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -629,10 +575,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../course_material/day2/6_debugging_snakemake/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -641,6 +605,75 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#additional-advanced-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional advanced concepts
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designing-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designing a workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging a workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging a workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#order-of-operations-in-snakemake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order of operations in Snakemake
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-advice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging advice
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -678,20 +711,53 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#day-1-containers" class="md-nav__link">
+  <a href="#additional-advanced-concepts" class="md-nav__link">
     <span class="md-ellipsis">
-      Day 1 - Containers
+      Additional advanced concepts
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#day-2-snakemake" class="md-nav__link">
+  <a href="#designing-a-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Day 2 - Snakemake
+      Designing a workflow
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging a workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging a workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#order-of-operations-in-snakemake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order of operations in Snakemake
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-advice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging advice
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -713,124 +779,90 @@
   
 
 
-  <h1>Course schedule</h1>
+  <h1>Additional concepts and workflow design/debugging</h1>
 
-<h2 id="day-1-containers">Day 1 - Containers</h2>
-<table>
-<thead>
-<tr>
-<th>Block</th>
-<th>Start</th>
-<th>End</th>
-<th>subject</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Block 1</td>
-<td>9:15 AM</td>
-<td>10:45 AM</td>
-<td>Introduction to containers</td>
-</tr>
-<tr>
-<td></td>
-<td>10:45 AM</td>
-<td>11:15 AM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 2</td>
-<td>11:15 AM</td>
-<td>12:45 PM</td>
-<td>Managing containers and images</td>
-</tr>
-<tr>
-<td></td>
-<td>12:45 PM</td>
-<td>1:45 PM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 3</td>
-<td>1:45 PM</td>
-<td>3:15 PM</td>
-<td>Working with <code>dockerfiles</code></td>
-</tr>
-<tr>
-<td></td>
-<td>3:15 PM</td>
-<td>3:45 PM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 4</td>
-<td>3:45 PM</td>
-<td>5:15 PM</td>
-<td>Running containers with apptainer</td>
-</tr>
-</tbody>
-</table>
-<h2 id="day-2-snakemake">Day 2 - Snakemake</h2>
-<table>
-<thead>
-<tr>
-<th>Block</th>
-<th>Start</th>
-<th>End</th>
-<th>subject</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Block 1</td>
-<td>9:15 AM</td>
-<td>10:45 AM</td>
-<td>Introduction to Snakemake</td>
-</tr>
-<tr>
-<td></td>
-<td>10:45 AM</td>
-<td>11:15 AM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 2</td>
-<td>11:15 AM</td>
-<td>12:45 PM</td>
-<td>Generalising a Snakemake workflow</td>
-</tr>
-<tr>
-<td></td>
-<td>12:45 PM</td>
-<td>1:45 PM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 3</td>
-<td>1:45 PM</td>
-<td>3:15 PM</td>
-<td>Decorating a Snakemake workflow</td>
-</tr>
-<tr>
-<td></td>
-<td>3:15 PM</td>
-<td>3:45 PM</td>
-<td>BREAK</td>
-</tr>
-<tr>
-<td>Block 4</td>
-<td>3:45 PM</td>
-<td>5:00 PM</td>
-<td>Snakemake, package managers and containers</td>
-</tr>
-<tr>
-<td></td>
-<td>5:00 PM</td>
-<td>5:15 PM</td>
-<td>Wrap-up &amp; Open Q&amp;A</td>
-</tr>
-</tbody>
-</table>
+<h2 id="additional-advanced-concepts">Additional advanced concepts</h2>
+<p><a class="md-button" href="../../../assets/pdf/day2/6_additional_concepts.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<h2 id="designing-a-workflow">Designing a workflow</h2>
+<p>There are many ways to design a new workflow, but these few pieces of advice will be useful in most cases:</p>
+<ul>
+<li>Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!<ul>
+<li>Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first</li>
+<li>Determine which rules (if any) aggregate or split inputs and create input functions accordingly (the topic is tackled in <a href="../5_reproducibility_snakemake/">this</a> series of exercises)</li>
+</ul>
+</li>
+<li>Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!<ul>
+<li>Remember that Snakemake builds the DAG before running the shell commands, so you can use the <code>-n/--dry-run/--dryrun</code> parameter to test the workflow before running it. You can even do that without writing all the shell commands!</li>
+</ul>
+</li>
+<li>List any parameters or settings that might need to be adjusted later</li>
+<li>Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, <code>wildcards</code>&hellip; to make your Snakefile as readable as possible. This is true for every script, piece of code, variable&hellip; and Snakemake is no exception! Have a look at <a href="https://peps.python.org/pep-0020/">The Zen of Python</a> for more information</li>
+</ul>
+<h2 id="debugging-a-workflow">Debugging a workflow</h2>
+<p>It is very likely you will see bugs and errors the first time you try to run a new Snakefile: don’t be discouraged, this is normal!</p>
+<h3 id="order-of-operations-in-snakemake">Order of operations in Snakemake</h3>
+<p>The topic was approached when we discussed <a href="../2_introduction_snakemake/#chaining-rules">DAGs</a>, but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command <code>snakemake -c 1 &lt;target&gt;</code>. There are 3 main phases:</p>
+<ol>
+<li>Prepare to run:<ol>
+<li>Read all the rule definitions from the Snakefile</li>
+</ol>
+</li>
+<li>Resolve the DAG (happens when Snakemake says &lsquo;Building DAG of jobs&rsquo;):<ol>
+<li>Check what output(s) are required</li>
+<li>Look for matching input(s) by looking at the outputs of all the rules</li>
+<li>Fill in the <code>wildcards</code> to determine the exact input(s) of the matching rule(s)</li>
+<li>Check whether this(these) input(s) is(are) available; if not, repeat Step 2 until everything is resolved</li>
+</ol>
+</li>
+<li>Run:<ol>
+<li>If needed, create the output(s) folder path</li>
+<li>If needed, remove the outdated output(s)</li>
+<li>Fill in the placeholders and run the shell commands</li>
+<li>Check that the commands ran without errors and produced the expected output(s)</li>
+</ol>
+</li>
+</ol>
+<h3 id="debugging-advice">Debugging advice</h3>
+<p>Sometimes, Snakemake will give you a precise error report, but other times&hellip; less so. Try to identify which phase of execution failed (see previous paragraph on <a href="./#order-of-operations-in-snakemake">order of operations</a>) and double-check the most common error causes for that phase:</p>
+<ol>
+<li>Parsing phase failures (phase 1):<ul>
+<li>Syntax errors, among which (but not limited to):<ul>
+<li>Missing commas/colons/semicolons</li>
+<li>Unbalanced quotes/brackets/parenthesis</li>
+<li>Wrong indentation</li>
+<li><em>These errors can be easily solved using a text editor with Python/Snakemake text colouring</em></li>
+</ul>
+</li>
+<li>Failure to evaluate expressions<ul>
+<li>Problems in functions (<code>expand()</code>, input functions&hellip;) in input/output directives</li>
+<li>Python logic added outside of rules</li>
+</ul>
+</li>
+<li>Other problems with rule definition<ul>
+<li>Invalid rule names/directives</li>
+<li>Invalid wildcard names</li>
+<li>Mismatched <code>wildcards</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DAG building failures (phase 2, before Snakemake tries to run any job):<ul>
+<li>Failure to determine the target</li>
+<li>Ambiguous rules making the same output(s)</li>
+<li>On the contrary, no rule making the required output(s)</li>
+<li>Circular dependency (violating the <strong>&lsquo;Acyclic&rsquo;</strong> property of a D<strong>A</strong>G).</li>
+<li>Write-protected output(s)</li>
+</ul>
+</li>
+<li>DAG running failures (phase 3, <code>--dry-run</code> works and builds the DAG, but the jobs execution fails):<ul>
+<li>Shell command returning non-zero status</li>
+<li>Missing output file(s) after the commands have run</li>
+<li>Reference to a <code>$shell_variable</code> before it was set</li>
+<li>Use of a wrong/unknown placeholder inside <code>{ }</code></li>
+<li><em>When a job fails, Snakemake reports an error, deletes all output file(s) for that job (because of potential corruption), and stops</em></li>
+</ul>
+</li>
+</ol>
 
 
 
@@ -884,10 +916,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.code.copy"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.af256bd8.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.af256bd8.min.js"></script>
       
     
   </body>
