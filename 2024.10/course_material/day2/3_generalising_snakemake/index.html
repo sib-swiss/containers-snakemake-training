@@ -1062,13 +1062,11 @@
         └── script2.R
 </code></pre></div></p>
 <p>For now, the main thing to remember is that <strong>code</strong> should go into the <strong><code>workflow</code> subfolder</strong>  and the <strong>rest</strong> is mostly <strong>input/output files</strong>. The only exception is the <strong><code>config</code> subfolder</strong>, but it will be <a href="../4_optimising_snakemake/#config-files">explained later</a>. All <strong>output files</strong> generated in the workflow should be stored under <strong><code>results/</code></strong>.</p>
-<p>Let&rsquo;s download the data, uncompress them and build the first part of the directory structure.</p>
+<p>Let&rsquo;s download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VS code terminal:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>~/.ssh/key_username.pem<span class="w"> </span>username@18.195.170.182<span class="w">  </span><span class="c1"># Connect to server; don&#39;t forget to change key_username and username</span>
-wget<span class="w"> </span>https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Download data</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>wget<span class="w"> </span>https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Download data</span>
 tar<span class="w"> </span>-xvf<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Uncompress archive</span>
 rm<span class="w"> </span>snakemake_rnaseq.tar.gz<span class="w">  </span><span class="c1"># Delete archive</span>
 <span class="nb">cd</span><span class="w"> </span>snakemake_rnaseq/<span class="w">  </span><span class="c1"># Start developing in new folder</span>
