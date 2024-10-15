@@ -6,15 +6,10 @@ sudo add-apt-repository -y ppa:apptainer/ppa
 sudo apt update
 sudo apt install -y apptainer
 
-# install conda in /opt/miniconda3
-
-# install mamba as root:
-sudo su - 
-conda install -n base -c conda-forge mamba
+# install miniforge in /opt/miniforge3
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
 
 # install snake_course environment
-mamba env create -f conda/snakemake_course.yaml
+mamba env create -f snakemake_course.yaml
 
-# install snakemake
-conda activate snake_course
-mamba install -c conda-forge -c bioconda snakemake
