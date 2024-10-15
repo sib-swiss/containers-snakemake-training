@@ -44,10 +44,11 @@ To reach the learning outcomes we will use lectures, exercises, polls and group 
 
 Each block has practical work involved. Some more than others. The practicals are subdivided into chapters, and we'll have a (short) discussion after each chapter. All answers to the practicals are incorporated, but they are hidden. Do the exercise first by yourself, before checking out the answer. If your answer is different from the answer in the practicals, try to figure out why they are different.
 
-### Asking questions
+### Asking questions (online only)
+
 During lectures, you are encouraged to raise your hand if you have questions.
 
-A main source of communication will be our [slack channel](https://www.slack.com). Ask background questions that interest you personally at **#background**. During the exercises, e.g. if you are stuck or don't understand what is going on, use the slack channel **#q-and-a**.  This channel is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question, use the "reply in thread" option:
+If the course is online, a main source of communication will be our [slack channel](https://www.slack.com). Ask background questions that interest you personally at **#background**. During the exercises, e.g. if you are stuck or don't understand what is going on, use the slack channel **#q-and-a**.  This channel is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question, use the "reply in thread" option:
 
 <figure>
   <img src="assets/images/reply_in_thread.png" width="350"/>
