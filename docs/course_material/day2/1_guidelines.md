@@ -46,7 +46,7 @@ If something is not clear at any point, please call us and we will do our best t
 ## Computing environment
 
 !!! warning "Development and computation"
-    You can develop and write your scripts in a distant folder (using an `ssh` connection via VS code) or locally (if you do so, you will need to copy them on the server (with `scp`) before running them), but **remember that all the computations should be performed on the server, so don't forget to log in with `ssh -i key_username.pem username@18.195.170.182`**.
+    You can develop and write your scripts in a distant folder (using an `ssh` connection via VS code, **recommended**) or locally (if you do so, you will need to copy them on the server with `scp` before running them), but remember that **all computation should be performed on the server, so don't forget to log in!**.
 
 !!! bug "`Error: Command not found`"
     If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably in the wrong conda environment:

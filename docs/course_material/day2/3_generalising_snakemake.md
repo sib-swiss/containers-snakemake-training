@@ -110,10 +110,9 @@ In this part, you will download the data and start building the directory struct
 
 For now, the main thing to remember is that **code** should go into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**. The only exception is the **`config` subfolder**, but it will be [explained later](4_optimising_snakemake.md#config-files). All **output files** generated in the workflow should be stored under **`results/`**.
 
-Let's download the data, uncompress them and build the first part of the directory structure.
+Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VS code terminal:
 
 ```sh linenums="1"
-ssh -i ~/.ssh/key_username.pem username@18.195.170.182  # Connect to server; don't forget to change key_username and username
 wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download data
 tar -xvf snakemake_rnaseq.tar.gz  # Uncompress archive
 rm snakemake_rnaseq.tar.gz  # Delete archive
