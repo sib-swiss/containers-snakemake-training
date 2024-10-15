@@ -4,7 +4,7 @@ Merge gene counts from all samples of an assembly into a single table.
 
 
 import os
-import pandas as pd  # Non-native package
+import pandas as pd  # Non built-in package
 import sys
 
 

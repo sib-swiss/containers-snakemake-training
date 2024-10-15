@@ -11,13 +11,14 @@
 
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/5_reproducibility_snakemake.pdf){: .md-button }
 
-## Snakefile from previous session
+## Workflow from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading, memory usage control implemented in all rules. You can download the files [here](https://github.com/sib-swiss/containers-snakemake-training/tree/2024_update/docs/solutions_day2/session3) or copy them locally if you cloned the course repository (they are located in `containers-snakemake-training/docs/solutions_day2/session3`):
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading, memory usage control implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/session3) or copy them after clonining the course repository locally:
 
 ```sh
-# Go to repository root, containers-snakemake-training, then copy folder with:
-cp -r docs/solutions_day2/session3 <destination_path>
+git clone https://github.com/sib-swiss/containers-snakemake-training.git  # Clone repository
+cd containers-snakemake-training/  # Go in repository
+cp -r docs/solutions_day2/session3 destination_path  # Copy folder where needed; adapt destination_path to required path
 ```
 
 ## Exercises
@@ -125,7 +126,7 @@ This function will loop over the list of samples in the config file and replace 
         The dictionary keys will be used as input names and the dictionary values will be used as input values, providing a list of named inputs
 
 ??? warning "Input functions and output directory"
-    Input functions are evaluated **before** the workflow is executed, so they cannot be used to list the content of an output directory, since it does not exist before the workflow is executed. Instead, you can use a [checkpoint](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
+    Input functions are evaluated **before** the workflow is executed, so they cannot be used to list the content of an output directory, since it does not exist before the workflow is executed. Instead, you can use a [checkpoint](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
 
 **Exercise:** Insert the function `get_gene_counts()` in `workflow/rules/analysis.smk` and adapt the input value of `count_table` accordingly. Do you need to insert the function in a specific location?
 
@@ -186,7 +187,7 @@ Or you can copy it from here:
 
 
     import os
-    import pandas as pd  # Non-native package
+    import pandas as pd  # Non built-in package
     import sys
 
 
@@ -274,7 +275,7 @@ If you remember the presentation, there are two directives that you can use to r
 
         Another way to put this is: does the script need a special environment to work? If so, then we **have to** use the `script` directive, as it is the only one to accommodate for conda environments or containers. This means that this criteria takes precedence over the previous one: if we need to run a short script within a dedicated environment, `script` is the only way to do it.
 
-        Here, there are several `import` statements at the top of the script, including `import pandas as pd  # Non-native package`. [`pandas`](https://pandas.pydata.org/docs/index.html) is a great package, but it is not part of the default packages natively shipped with Python. This means that the script needs a dedicated environment to run and confirm that we need the `script` directive.
+        Here, there are several `import` statements at the top of the script, including `import pandas as pd  # Non built-in package`. [`pandas`](https://pandas.pydata.org/docs/index.html) is a great package, but it is not part of the built-in packages shipped with Python. This means that the script needs a dedicated environment to run and confirm that we need the `script` directive.
 
     With this in mind, the rule will be:
     ```python linenums="1" hl_lines="18 19"
@@ -469,7 +470,7 @@ As mentioned above, we don't need an input function because the input of rule `d
 
 ##### Downloading the script
 
-The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/count_table.R) or with the command:
+The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/DESeq2.R) or with the command:
 
 ```sh
 wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/DESeq2.R

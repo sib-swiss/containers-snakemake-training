@@ -41,7 +41,7 @@ Do not hesitate to modify and overwrite your code from previous answers as diffi
     * If you feel that you drifted too far apart from the solution, you can always restart from files provided in the [solutions folder](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/) of the course repository
     * At the start of sessions 3 and 4, you will also find a short note with a command to download the complete Snakefile from the previous session
 
-If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/index.html) for more information.
+If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/v8.20.5/index.html) for more information.
 
 ## Computing environment
 

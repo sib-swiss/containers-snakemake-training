@@ -4,7 +4,7 @@
 
 # Introduction to containers and Snakemake course website
 
-* Website is hosted at [https://sib-swiss.github.io/containers-snakemake-training/](https://sib-swiss.github.io/containers-snakemake-training/).
+* Website is hosted at [https://sib-swiss.github.io/containers-snakemake-training/latest/](https://sib-swiss.github.io/containers-snakemake-training/latest/).
 
 * Please refer to [issues](https://github.com/sib-swiss/containers-snakemake-training/issues) for improvements/bugs for course material or the website.
 

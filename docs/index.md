@@ -13,7 +13,7 @@
 
 ## Attribution
 
-This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/), the [official Snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) and the [Introduction to Snakemake workshop from SIB-Days 2022](https://github.com/RomainFeron/workshop-snakemake-sibdays2022).
+This course is partly inspired by the [Carpentries Docker course](https://carpentries-incubator.github.io/docker-introduction/), the [official Snakemake tutorial](https://snakemake.readthedocs.io/en/v8.20.5/tutorial/tutorial.html) and the [Introduction to Snakemake workshop from SIB-Days 2022](https://github.com/RomainFeron/workshop-snakemake-sibdays2022).
 
 ## Material
 
@@ -34,7 +34,7 @@ After this course, you will be able to:
 
 ### Learning outcomes explained
 
-To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/day1/introduction_containers.md)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
+To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/day1/introduction_containers.md#learning-outcomes)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
 
 ## Learning experiences
 

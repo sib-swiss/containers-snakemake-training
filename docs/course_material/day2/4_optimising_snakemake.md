@@ -15,10 +15,10 @@
 
 ## Snakefile from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules. You can download it [here](https://github.com/sib-swiss/containers-snakemake-training/blob/2024_update/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
 
 ```sh
-wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/refs/heads/2024_update/docs/solutions_day2/session2/workflow/Snakefile
+wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile
 ```
 
 ## Exercises
@@ -597,7 +597,7 @@ Controlling memory usage and runtime in Snakemake is easier than multithreading:
 * Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
 
 ??? info "What are the other columns?"
-    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
+    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
 
 Here are some suggested values for the current workflow:
 
