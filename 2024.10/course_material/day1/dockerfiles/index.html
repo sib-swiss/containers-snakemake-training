@@ -487,51 +487,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -816,51 +771,6 @@
   <a href="#build-an-image-for-your-own-script" class="md-nav__link">
     <span class="md-ellipsis">
       Build an image for your own script
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-get-information-on-your-image-with-docker-inspect_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Get information on your image with docker inspect
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-adding-metadata-to-your-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Adding metadata to your image
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#extra-building-an-image-with-a-browser-interface_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extra: Building an image with a browser interface
     </span>
   </a>
   
@@ -1296,7 +1206,7 @@ ls
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
 </code></pre></div>
 </details>
-<h3 id="extra-get-information-on-your-image-with-docker-inspect">Extra: Get information on your image with <code>docker inspect</code></h3>
+<p><h3> Extra: Get information on your image with <code>docker inspect</code> </h3></p>
 <p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Config&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
 <span class="w">    </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
@@ -1387,7 +1297,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">    </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 </details>
-<h3 id="extra-building-an-image-with-a-browser-interface">Extra: Building an image with a browser interface</h3>
+<p><h3> Extra: Building an image with a browser interface </h3></p>
 <p>In this exercise, we will use a different base image (<code>rocker/rstudio:4</code>), and we&rsquo;ll install the same packages. <a href="https://posit.co/download/rstudio-server/">Rstudio server</a> is a nice browser interface that you can use for a.o. programming in R. With the image we are creating we will be able to run Rstudio server inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">rocker/rstudio:4</span>
 
@@ -1595,7 +1505,7 @@ ls
 docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/daterange:v1
 </code></pre></div>
 </details>
-<h3 id="extra-get-information-on-your-image-with-docker-inspect_1">Extra: Get information on your image with <code>docker inspect</code></h3>
+<p><h3> Extra: Get information on your image with <code>docker inspect</code> </h3></p>
 <p>We have used <code>docker inspect</code> already in the previous chapter to find the default <code>Cmd</code> of the ubuntu image. However we can get more info on the image: e.g. the entrypoint, environmental variables, cmd, workingdir etc., you can use the <code>Config</code> record from the output of <code>docker inspect</code>. For our image this looks like:</p>
 <div class="highlight"><pre><span></span><code><span class="s">&quot;Config&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span>
 <span class="w">        </span><span class="s">&quot;Hostname&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
@@ -1631,7 +1541,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">        </span><span class="s">&quot;Labels&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">null</span>
 <span class="w">    </span><span class="p p-Indicator">}</span><span class="err">,</span>
 </code></pre></div>
-<h3 id="extra-adding-metadata-to-your-image">Extra: Adding metadata to your image</h3>
+<p><h3> Extra: Adding metadata to your image </h3></p>
 <p>You can annotate your <code>Dockerfile</code> and the image by using the instruction <code>LABEL</code>. You can give it any key and value with <code>&lt;key&gt;=&lt;value&gt;</code>. However, it is recommended to use the <a href="https://github.com/opencontainers/image-spec/blob/v1.0.1/annotations.md">Open Container Initiative (OCI) keys</a>.</p>
 <p><strong>Exercise</strong>: Annotate our <code>Dockerfile</code> with the OCI keys on the creation date, author and description. After that, check whether this has been passed to the actual image with <code>docker inspect</code>. </p>
 <div class="admonition note">
@@ -1673,7 +1583,7 @@ docker<span class="w"> </span>push<span class="w"> </span><span class="o">[</spa
 <span class="w">        </span><span class="p p-Indicator">}</span>
 </code></pre></div>
 </details>
-<h3 id="extra-building-an-image-with-a-browser-interface_1">Extra: Building an image with a browser interface</h3>
+<p><h3> Extra: Building an image with a browser interface </h3></p>
 <p>In this exercise, we will use a different base image from the <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html">jupyter docker image stack</a>. <a href="https://jupyter.org/">JupyterLab</a> is a nice browser interface that you can use for a.o. programming in python. With the image we are creating we will be able to run jupyter lab inside a container.  Check out the <code>Dockerfile</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">jupyter/base-notebook:python-3.9</span>
 
