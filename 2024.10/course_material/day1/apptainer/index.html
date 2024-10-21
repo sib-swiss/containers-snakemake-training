@@ -993,17 +993,17 @@ ___) | (_) | | | | | |  __/ |_| | | | | | | | (_| | |  __/ \__ \  __/
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">R</label><label for="__tabbed_3_2">Python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>Pulling the <code>search_biomart_datasets</code> image:</p>
-<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/search_biomart_datasets:v1
+<p>Pulling the <code>deseq2</code> image:</p>
+<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span>pull<span class="w"> </span>docker://<span class="o">[</span>USER<span class="w"> </span>NAME<span class="o">]</span>/deseq2:v1
 </code></pre></div>
 <p>Running it without command:</p>
-<div class="highlight"><pre><span></span><code>./search_biomart_datasets_v1.sif
+<div class="highlight"><pre><span></span><code>./deseq2.sif
 </code></pre></div>
 <p>Running with a command:</p>
-<div class="highlight"><pre><span></span><code>./search_biomart_datasets_v1.sif<span class="w"> </span>--pattern<span class="w"> </span>sapiens
+<div class="highlight"><pre><span></span><code>./deseq2.sif<span class="w"> </span>--pattern<span class="w"> </span>sapiens
 </code></pre></div>
 <p>To overwrite both entrypoint and the command:</p>
-<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>search_biomart_datasets_v1.sif<span class="w"> </span>search_biomart_datasets.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(R|r)at&quot;</span>
+<div class="highlight"><pre><span></span><code>apptainer<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deseq2.sif<span class="w"> </span>deseq2.R<span class="w"> </span>--pattern<span class="w"> </span><span class="s2">&quot;(R|r)at&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
