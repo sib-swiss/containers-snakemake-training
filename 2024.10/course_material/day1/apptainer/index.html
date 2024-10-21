@@ -881,7 +881,7 @@
 <div class="admonition note">
 <p class="admonition-title">If not working with VScode</p>
 <p>If you are not working with VScode, you can login to the remote server with the following command:</p>
-<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem
+<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>key_username.pem<span class="w"> </span>username@123.456.789.123
 </code></pre></div>
 <p>If you want to edit files directly on the server, you can mount a directory with <code>sshfs</code>. </p>
 </div>
@@ -908,7 +908,7 @@ mv<span class="w"> </span>key_username.pem<span class="w"> </span>~/.ssh
 </div>
 </div>
 </div>
-<p>Open VScode and click on the green or blue button in the bottom left corner. Select <code>Connect to Host...</code>, and then on <code>Configure SSH Host...</code>. Specify a the location for the config file. Use the same directory as where your keys are stored (so <code>~/.ssh</code>). A skeleton config file will be provided. Edit it, so it looks like this (replace <code>username</code> with your username, and specify the correct IP at <code>HostName</code>):</p>
+<p>Open VScode and click on the green or blue button in the bottom left corner. Select <code>Connect to Host...</code>, and then on <code>Configure SSH Host...</code>. Specify a the location for the config file. Use the same directory as where your keys are stored (so <code>~/.ssh/config</code>). A skeleton config file will be provided. Edit it, so it looks like this (replace <code>username</code> with your username, and specify the correct IP at <code>HostName</code>):</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Windows</label><label for="__tabbed_2_2">MacOS/Linux</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
