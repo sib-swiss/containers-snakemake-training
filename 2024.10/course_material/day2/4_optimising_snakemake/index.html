@@ -1457,7 +1457,7 @@ This entirely removes the need to write output paths, even though it might be le
 <details class="success">
 <summary>Answer</summary>
 <p>You can run the workflow by removing <code>-F</code> and <code>-n</code> from the dry-run command, which makes a very simple command:
-<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>-p<span class="w"> </span>--sdm<span class="o">=</span>apptainer
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>-p<span class="w"> </span>--sdm<span class="w"> </span>apptainer
 </code></pre></div></p>
 <p>To generate the DAG, you can use:
 <div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-F<span class="w"> </span>-p<span class="w"> </span>--dag<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>&gt;<span class="w"> </span>images/all_samples_dag.png
@@ -1739,7 +1739,7 @@ You probably noticed that these two figures have an extra rule, <code>fastq_qc_s
 <details class="success">
 <summary>Answer</summary>
 <p>You need to provide additional cores to Snakemake with the parameter <code>-c 4</code>. Using the same sample as before (<code>highCO2_sample1</code>), the workflow can be run with:
-<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>-F<span class="w"> </span>-p<span class="w"> </span>--sdm<span class="o">=</span>apptainer<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+<div class="highlight"><pre><span></span><code>snakemake<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>-F<span class="w"> </span>-p<span class="w"> </span>results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv<span class="w"> </span>--sdm<span class="w"> </span>apptainer
 </code></pre></div></p>
 <p>The number of threads allocated to all jobs running at a given time cannot exceed the value specified with <code>--cores</code>, so if you use <code>-c 1</code>, Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with <code>--cores</code>, Snakemake will cap rule threads at <code>--cores</code> to avoid requesting too many. Another benefit of increasing <code>--cores</code> is to allow Snakemake to run multiple jobs in parallel (for example, here, running two jobs using two threads each).</p>
 </details>

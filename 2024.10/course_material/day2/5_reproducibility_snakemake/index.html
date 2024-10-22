@@ -1633,9 +1633,9 @@ The dictionary keys will be used as input names and the dictionary values will b
 <span class="hll">        <span class="n">rules</span><span class="o">.</span><span class="n">count_table</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">table</span>  <span class="c1"># New input matching output of rule `count_table`</span>
 </span></code></pre></div></td></tr></table></div></p>
 <p>Finally, run the workflow with:
-<div class="highlight"><pre><span></span><code>snakemake -c 4 -p --sdm=conda
+<div class="highlight"><pre><span></span><code>snakemake -c 4 -p --sdm conda
 </code></pre></div>
-Do not forget to add <code>--sdm=conda</code>, otherwise Snakemake will not use the environment you provided.</p>
+Do not forget to add <code>--sdm conda</code>, otherwise Snakemake will not use the environment you provided.</p>
 </details>
 <p>You should see the rule <code>count_table</code> executed with 6 files as input. You can also check the log of rule <code>count_table</code> to see if the script worked as intended.</p>
 <h3 id="creating-a-rule-to-detect-differentially-expressed-genes-deg">Creating a rule to detect Differentially Expressed Genes (DEG)</h3>
@@ -1856,7 +1856,7 @@ Remember that we don&rsquo;t need to add both outputs of rule <code>differential
 <details class="success">
 <summary>Answer</summary>
 <p>You can run the workflow with:
-<div class="highlight"><pre><span></span><code>snakemake -c 4 -p --sdm=apptainer
+<div class="highlight"><pre><span></span><code>snakemake -c 4 -p --sdm apptainer
 </code></pre></div>
 Do not forget to add <code>--sdm apptainer</code>, otherwise Snakemake will not pull the image and the script will be executed in the default environment (which will most likely lead to a crash).</p>
 <p>During the run, you should see log messages about Snakemake managing the Docker image:
@@ -1876,7 +1876,7 @@ Activating<span class="w"> </span>singularity<span class="w"> </span>image<span 
 <details class="success">
 <summary>Answer</summary>
 <p>You can re-run the whole workflow with:
-<div class="highlight"><pre><span></span><code>snakemake -c 4 -p -F --sdm=conda --sdm=apptainer
+<div class="highlight"><pre><span></span><code>snakemake -c 4 -p -F --sdm conda apptainer
 </code></pre></div></p>
 <ul>
 <li><code>-F</code> forces the execution of the entire workflow</li>
