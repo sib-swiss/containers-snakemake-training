@@ -44,7 +44,7 @@ rule count_table:
     input:
         ?
     output:
-        count_table = 'results/total_count_table.tsv'
+        table = 'results/total_count_table.tsv'
     log:
         'logs/total_count_table.log'
     benchmark:
@@ -150,7 +150,7 @@ This function will loop over the list of samples in the config file and replace 
         input:
             get_gene_counts  # Add input function to rule
         output:
-            count_table = 'results/total_count_table.tsv'
+            table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
         benchmark:
@@ -286,7 +286,7 @@ If you remember the presentation, there are two directives that you can use to r
         input:
             get_gene_counts
         output:
-            count_table = 'results/total_count_table.tsv'
+            table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
         benchmark:
