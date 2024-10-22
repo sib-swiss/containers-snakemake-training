@@ -350,7 +350,7 @@ Given the presence of a non-default package in the script, we need to find a sol
             input:
                 get_gene_counts
             output:
-                count_table = 'results/total_count_table.tsv'
+                table = 'results/total_count_table.tsv'
             log:
                 'logs/total_count_table.log'
             benchmark:
