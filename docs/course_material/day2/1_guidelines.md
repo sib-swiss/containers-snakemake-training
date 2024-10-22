@@ -6,9 +6,9 @@ Throughout the course, you will implement and improve a workflow to trim bulk RN
 
 All the software needed in this workflow is either:
 
-* Already installed in the `snake_course` conda environment
+* Already installed in the `snakemake` conda environment
 * Already installed in a Docker container
-* Will be installed via a conda environment during today's exercises
+* Will be installed via conda environments/containers during today's exercises
 
 All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/) for Snakemake version `8.20.5`.
 
@@ -54,4 +54,4 @@ If something is not clear at any point, please call us and we will do our best t
     * To list available conda environments, use `conda env list`
     * To activate an environment, use `conda activate <env_name>`
     * To deactivate an environment, use `conda deactivate`
-    * To list packages installed in an environment, activate it and use `conda list`. The computing environment on the server is called **`snake_course`.**
+    * To list packages installed in an environment, activate it and use `conda list`. The computing environment on the server is called **`snakemake`.**

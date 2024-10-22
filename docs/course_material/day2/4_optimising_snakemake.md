@@ -390,7 +390,7 @@ But there is an even better solution! At the moment, samples are defined as a li
 ??? success "Answer"
     You can run the workflow by removing `-F` and `-n` from the dry-run command, which makes a very simple command:
     ```sh
-    snakemake -c 4 -p --sdm=apptainer
+    snakemake -c 4 -p --sdm apptainer
     ```
 
     To generate the DAG, you can use:
@@ -568,7 +568,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 ??? success "Answer"
     You need to provide additional cores to Snakemake with the parameter `-c 4`. Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
     ```sh
-    snakemake -c 4 -F -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv
+    snakemake -c 4 -F -p results/highCO2_sample1/highCO2_sample1_genes_read_quantification.tsv --sdm apptainer
     ```
 
     The number of threads allocated to all jobs running at a given time cannot exceed the value specified with `--cores`, so if you use `-c 1`, Snakemake will not be able to use multiple threads. Conversely, if you ask for more threads in a rule than what was provided with `--cores`, Snakemake will cap rule threads at `--cores` to avoid requesting too many. Another benefit of increasing `--cores` is to allow Snakemake to run multiple jobs in parallel (for example, here, running two jobs using two threads each).

@@ -398,9 +398,9 @@ All that is left is running the rule to create the table.
 
     Finally, run the workflow with:
     ```
-    snakemake -c 4 -p --sdm=conda
+    snakemake -c 4 -p --sdm conda
     ```
-    Do not forget to add `--sdm=conda`, otherwise Snakemake will not use the environment you provided.
+    Do not forget to add `--sdm conda`, otherwise Snakemake will not use the environment you provided.
 
 You should see the rule `count_table` executed with 6 files as input. You can also check the log of rule `count_table` to see if the script worked as intended.
 
@@ -560,7 +560,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 ??? success "Answer"
     You can run the workflow with:
     ```
-    snakemake -c 4 -p --sdm=apptainer
+    snakemake -c 4 -p --sdm apptainer
     ```
     Do not forget to add `--sdm apptainer`, otherwise Snakemake will not pull the image and the script will be executed in the default environment (which will most likely lead to a crash).
 
@@ -584,7 +584,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 ??? success "Answer"
     You can re-run the whole workflow with:
     ```
-    snakemake -c 4 -p -F --sdm=conda --sdm=apptainer
+    snakemake -c 4 -p -F --sdm conda apptainer
     ```
 
     * `-F` forces the execution of the entire workflow
