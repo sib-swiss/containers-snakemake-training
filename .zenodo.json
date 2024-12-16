@@ -1,33 +1,35 @@
 {
-    "title": " Introduction to Containers and Snakemake for Reproducible Research",
-    "keywords": [
-      "Docker",
-      "Singularity",
-      "apptainer",
-      "Containers",
-      "Reproducibility",
-      "Snakemake",
-      "Workflows",
-      "Workflow management",
-      "Pipeline",
-      "course",
-      "training"
-    ],
-    "creators": [
-      {
-        "name": "Geert van Geest",
-        "affiliation": "SIB Swiss Institute of Bioinformatics",
-        "orcid": "0000-0002-1561-078X"
-      },
-      {
-        "name": " Antonin Thiébaut",
-        "affiliation": "University of Lausanne",
-        "orcid": "0000-0002-7587-5587"
-      },
-      {
-        "name": "Patricia Palagi",
-        "affiliation": "SIB Swiss Institute of Bioinformatics",
-        "orcid": "0000-0001-9062-6303"
-      }
-    ]
-  }
+  "upload_type": "lesson",
+  "license": "cc-by-4.0",
+  "title": " Introduction to Containers and Snakemake for Reproducible Research",
+  "keywords": [
+    "Docker",
+    "Singularity",
+    "apptainer",
+    "Containers",
+    "Reproducibility",
+    "Snakemake",
+    "Workflows",
+    "Workflow management",
+    "Pipeline",
+    "course",
+    "training"
+  ],
+  "creators": [
+    {
+      "name": "Geert van Geest",
+      "affiliation": "SIB Swiss Institute of Bioinformatics",
+      "orcid": "0000-0002-1561-078X"
+    },
+    {
+      "name": " Antonin Thiébaut",
+      "affiliation": "University of Lausanne",
+      "orcid": "0000-0002-7587-5587"
+    },
+    {
+      "name": "Patricia Palagi",
+      "affiliation": "SIB Swiss Institute of Bioinformatics",
+      "orcid": "0000-0001-9062-6303"
+    }
+  ]
+}
