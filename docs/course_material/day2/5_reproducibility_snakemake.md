@@ -47,8 +47,6 @@ rule count_table:
         table = 'results/total_count_table.tsv'
     log:
         'logs/total_count_table.log'
-    benchmark:
-        'benchmarks/total_count_table.txt'
     resources:
         mem_mb = 500
     threads: 1
@@ -153,8 +151,6 @@ This function will loop over the list of samples in the config file and replace 
             table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
-        benchmark:
-            'benchmarks/total_count_table.txt'
         resources:
             mem_mb = 500
         threads: 1
@@ -289,8 +285,6 @@ If you remember the presentation, there are two directives that you can use to r
             table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
-        benchmark:
-            'benchmarks/total_count_table.txt'
         resources:
             mem_mb = 500
         threads: 1
@@ -353,8 +347,6 @@ Given the presence of a non-default package in the script, we need to find a sol
                 table = 'results/total_count_table.tsv'
             log:
                 'logs/total_count_table.log'
-            benchmark:
-                'benchmarks/total_count_table.txt'
             resources:
                 mem_mb = 500
             threads: 1
@@ -424,8 +416,6 @@ rule differential_expression:
         pdf = 'results/deg_plots.pdf'
     log:
         'logs/differential_expression.log'
-    benchmark:
-        'benchmarks/differential_expression.txt'
     resources:
         mem_gb = 1
     threads: 2
@@ -511,8 +501,6 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 pdf = 'results/deg_plots.pdf'
             log:
                 'logs/differential_expression.log'
-            benchmark:
-                'benchmarks/differential_expression.txt'
             resources:
                 mem_gb = 1
             threads: 2
@@ -537,8 +525,6 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 pdf = 'results/deg_plots.pdf'
             log:
                 'logs/differential_expression.log'
-            benchmark:
-                'benchmarks/differential_expression.txt'
             resources:
                 mem_gb = 1
             threads: 2
@@ -602,5 +588,3 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     <figure align="center">
       <img src="../../../assets/images/total_dag.png" width="100%"/>
     </figure>
-
-Congratulations, you made it to the end! You are now able to create a Snakemake workflow and make it reproducible thanks to Conda and Docker/Apptainer! To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!

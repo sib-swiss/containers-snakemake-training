@@ -56,7 +56,7 @@ At the end of this series of exercises, your workflow should look like this:
 
 ### Downloading data and setting up folder structure
 
-In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). You already starting doing so in the previous series of exercises and at the end of the course, it should resemble this:
+In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). You already started doing so in the previous series of exercises and at the end of the course, it should resemble this:
 ```
 │── .gitignore
 │── README.md
@@ -454,16 +454,16 @@ rule reads_quantification_genes:
 ??? success "Answer"
     The `mv` command can be used to move or rename a file. Here, it does the latter. featureCounts outputs a second, separate file (in tsv format) containing summary statistics about read counting, with the name `<output_name>.summary`. For example, if the output is `test.tsv`, summary will be printed in `test.tsv.summary`. However, there is no parameter available to choose the filename, so if we need this file as an output, we have to manually rename it.
 
-It would be interesting to know what is happening when featureCounts runs. This is where the `log` and `benchmark` directives come into play!
+It would be interesting to know what is happening when featureCounts runs. This is where the `log` directive comes into play!
 
-**(Optional) Exercise:** If you have time, add the `log` and `benchmark` directives to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 29-35 of the presentation (available [here](#material)) for information on those directives.
+**(Optional) Exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 29-35 of the presentation (available [here](#material)) for information on those directives.
 
-??? tip "Logs and benchmarks"
-    * `log` and `benchmark` directives must contain the same `wildcards` as the `output` directive, here `sample`
+??? tip "Logs"
+    * The `log` directive must contain the same `wildcards` as the `output` directive, here `sample`
     * Logs need to be handled manually, so you need to redirect what is produced by featureCounts to the log file. You can redirect both `stdout` and `stderr` streams with `&> {log}` at the end of the command
 
 ??? success "Answer"
-    ```python linenums="1" hl_lines="11-14"
+    ```python linenums="1" hl_lines="11-12"
     rule reads_quantification_genes:
         """
         This rule quantifies the reads of a bam file mapping on genes and produces
@@ -476,8 +476,6 @@ It would be interesting to know what is happening when featureCounts runs. This 
             gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
         log:  # log directive
             'logs/{sample}/{sample}_genes_read_quantification.log'  # Path of log file
-        benchmark:  # benchmark directive
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'  # Path of benchmark file
         container:
             'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
         shell:
@@ -567,7 +565,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
 
 ### Visualising the workflow DAG
 
-You have now implemented and run the main steps of the workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake's has a built-in workflow visualisation feature to do this: the `--dag` parameter, which shows a dependency graph of all the jobs (rules appear once per wildcard value and wildcard value are displayed).
+You have now implemented and run the main steps of the workflow. It is always a good idea to visualise the whole process to check for errors and inconsistencies. Snakemake has a built-in workflow visualisation feature to do this: the `--dag` parameter, which shows a dependency graph of all the jobs (rules appear once per wildcard value and wildcard value are displayed).
 
 **Exercise:** Visualise the entire workflow’s Directed Acyclic Graph using `--dag`. Remember that Snakemake prints a DAG in text format, so you need to pipe its results into the `dot` command to transform it into a picture with `| dot -Tpng > <image_path>.png`. Do you need to specify a target to the `snakemake` command?
 

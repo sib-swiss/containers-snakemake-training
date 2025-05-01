@@ -4,12 +4,14 @@
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+- Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
 
 ## Authors
 
 - Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
 - Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
+- Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
 
 ## Attribution
 
@@ -26,11 +28,10 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 
 After this course, you will be able to:
 
-* Understand the basic concepts and terminology associated with virtualization with containers
-* Customise, store, manage and share containerised environments with Docker
-* Use Apptainer to run containers on a shared computer environment (e.g. a HPC cluster)
-* Understand the basic concepts and terminology associated with workflow management systems
-* Create a computational workflow that uses containers and package managers with Snakemake
+* Understand the basic principles and advantages of workflow management systems.
+* Create data analysis pipelines with Snakemake.
+* Combine Snakemake with containers to build reproducible computational pipelines.
+* Run Snakemake pipelines locally and in HPC environments.
 
 ### Learning outcomes explained
 

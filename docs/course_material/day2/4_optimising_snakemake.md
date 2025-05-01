@@ -15,7 +15,7 @@
 
 ## Snakefile from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages and benchmarks implemented in all rules. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages implemented in all rules. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
 
 ```sh
 wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile
@@ -383,7 +383,7 @@ But there is an even better solution! At the moment, samples are defined as a li
     ```python
     expand(rules.reads_quantification_genes.output.gene_level, sample=config['samples'])
     ```
-    This entirely removes the need to write output paths, even though it might be less easy to understand at first sigh.
+    This entirely removes the need to write output paths, even though it might be less easy to understand at first sight.
 
 **Exercise:** Run the workflow on the other samples and generate the workflow DAG and filegraph. If you implemented parallelisation and multithreading in all the rules, the execution should take less than 10 min in total to process all the samples, otherwise it will be a few minutes longer.
 
@@ -410,9 +410,9 @@ But there is an even better solution! At the moment, samples are defined as a li
     </p>
     You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is the rule implemented in the supplementary exercise below.
 
-### Extra: optimising resource usage in a workflow
+### Optimising resource usage in a workflow
 
-This part is an extra-exercise about resource usage in Snakemake. It is quite long, so do it only if you finished all the other exercises.
+This part is about resource usage in Snakemake. It is quite long, so do it only if you finished all the other exercises.
 
 #### Multithreading
 
@@ -446,7 +446,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 ??? success "Answer"
     We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="18 25 45 52 72 78 80 101 109"
+    ```python linenums="1" hl_lines="16 23 41 48 66 72 74 93 101"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -462,8 +462,6 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
         log:
             'logs/{sample}/{sample}_atropos_trimming.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
         threads: 2  # Add directive
         container:
             'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
@@ -489,8 +487,6 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             report = 'results/{sample}/{sample}_mapping_report.txt'
         log:
             'logs/{sample}/{sample}_mapping.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping.txt'
         threads: 4  # Add directive
         container:
             'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
@@ -516,8 +512,6 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
         log:
             'logs/{sample}/{sample}_mapping_sam_to_bam.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
         threads: 2  # Add directive
         container:
             'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
@@ -545,8 +539,6 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
         log:
             'logs/{sample}/{sample}_genes_read_quantification.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
         threads: 2  # Add directive
         container:
             'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
@@ -579,171 +571,6 @@ If you run the workflow from scratch with multithreading in all rules, it should
     * On-screen output from parallel jobs will be mixed, so save any output to log files instead
     * Parallel jobs use more RAM. If you run out then either your OS will swap data to disk (which slows data access), or a process will die (which can crash Snakemake)
     * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop).
-
-#### Controlling memory usage and runtime
-
-Another way to optimise resource usage in a workflow is to control the amount of memory and runtime of each job. This ensures your instance (computer, cluster...) won't run out of memory during computation (which could interrupt jobs or even crash the instance) and that your jobs will run in a reasonable amount of time (a job taking more time to run than usual might be a sign that something is going on).
-
-??? info "Resource usage and schedulers"
-    Optimising resource usage is especially important when submitting jobs to a scheduler (for instance on a cluster), as it allows a better and more precise definition of your job priority: jobs with low threads/memory/runtime requirements often have a higher priority than heavy jobs, which means they will often start first.
-
-Controlling memory usage and runtime in Snakemake is easier than multithreading: you only need to need to use the `resources` directive with the `memory` or `runtime` keywords and in most software, you don't even need to specify the amount of memory available to the software via a parameter. Determining how much memory and runtime to use is also easier... **after the first run** of your workflow. Do you remember the benchmark files you (may have) obtained at the end of the previous series of exercises? Now is the time to take a look at them:
-
-|  **s**  | **h: m: s** | **max_rss** | **max_vms** | **max_uss** | **max_pss** | **io_in** | **io_out** | **mean_load** | **cpu_time** |
-|:-------:|:---------:|:-----------:|:-----------:|:-----------:|:-----------:|:---------:|:----------:|:-------------:|:------------:|
-| 31.3048 |  0:00:31  |    763.04   |    904.29   |    757.89   |    758.37   |    1.81   |   230.18   |     37.09     |     11.78    |
-
-* `s` and `h:m:s` give the job wall clock time (in seconds and hours-minutes-seconds, respectively), which is the actual time taken from the start of a software to its end. You can use these results to infer a safe value for the `runtime` keyword
-* Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
-
-??? info "What are the other columns?"
-    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
-
-Here are some suggested values for the current workflow:
-
-* `fastq_trim`: 500 MB
-* `read_mapping`: 2 GB
-* `sam_to_bam`: 250 MB
-* `reads_quantification_genes`: 500 MB
-
-**Exercise:** Implement memory usage limit in a rule of your choice.
-
-??? tip "Two ways to declare memory values "
-    There are two ways to declare memory values in `resources`:
-
-    1. `mem_<unit> = n`
-    1. `mem = 'n<unit>'`: in this case, you must pass a **string**, so you have to enclose `n<unit>` with quotes `''`
-
-    `<unit>` is a unit in [B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB] and `n` is a **float**.
-
-??? success "Answer"
-    We implemented memory usage control in all the rules so that you can check everything. Rules `fastq_trim` and `read_mapping` have the first format while rules `sam_to_bam` and `reads_quantification_genes` have the second one. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="18 19 47 48 76 77 107 108"
-    rule fastq_trim:
-        '''
-        This rule trims paired-end reads to improve their quality. Specifically, it removes:
-        - Low quality bases
-        - A stretches longer than 20 bases
-        - N stretches
-        '''
-        input:
-            reads1 = 'data/{sample}_1.fastq',
-            reads2 = 'data/{sample}_2.fastq',
-        output:
-            trim1 = 'results/{sample}/{sample}_atropos_trimmed_1.fastq',
-            trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
-        log:
-            'logs/{sample}/{sample}_atropos_trimming.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-        resources:  # Add directive
-            mem_mb = 500  # Add keyword and value with format 1
-        threads: 2
-        container:
-            'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
-        shell:
-            '''
-            echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
-            atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
-            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
-            -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
-            echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
-            echo "Trimming report saved in <{log}>" >> {log}
-            '''
-
-    rule read_mapping:
-        '''
-        This rule maps trimmed reads of a fastq onto a reference assembly.
-        '''
-        input:
-            trim1 = rules.fastq_trim.output.trim1,
-            trim2 = rules.fastq_trim.output.trim2
-        output:
-            sam = 'results/{sample}/{sample}_mapped_reads.sam',
-            report = 'results/{sample}/{sample}_mapping_report.txt'
-        log:
-            'logs/{sample}/{sample}_mapping.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping.txt'
-        resources:  # Add directive
-            mem_gb = 2  # Add keyword and value with format 1
-        threads: 4
-        container:
-            'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
-        shell:
-            '''
-            echo "Mapping the reads" > {log}
-            hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
-            -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
-            echo "Mapped reads saved in <{output.sam}>" >> {log}
-            echo "Mapping report saved in <{output.report}>" >> {log}
-            '''
-
-    rule sam_to_bam:
-        '''
-        This rule converts a sam file to bam format, sorts it and indexes it.
-        '''
-        input:
-            sam = rules.read_mapping.output.sam
-        output:
-            bam = 'results/{sample}/{sample}_mapped_reads.bam',
-            bam_sorted = 'results/{sample}/{sample}_mapped_reads_sorted.bam',
-            index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
-        log:
-            'logs/{sample}/{sample}_mapping_sam_to_bam.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-        resources:  # Add directive
-            mem = '250MB'  # Add keyword and value with format 2
-        threads: 2
-        container:
-            'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
-        shell:
-            '''
-            echo "Converting <{input.sam}> to BAM format" > {log}
-            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}
-            echo "Sorting .bam file" >> {log}
-            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}
-            echo "Indexing sorted .bam file" >> {log}
-            samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
-            echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
-            '''
-
-    rule reads_quantification_genes:
-        '''
-        This rule quantifies the reads of a bam file mapping on genes and produces
-        a count table for all genes of the assembly. The strandedness parameter
-        is determined by get_strandedness().
-        '''
-        input:
-            bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
-        output:
-            gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
-            gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-        log:
-            'logs/{sample}/{sample}_genes_read_quantification.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-        resources:  # Add directive
-            mem = '500MB'  # Add keyword and value with format 2
-        threads: 2
-        container:
-            'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
-        shell:
-            '''
-            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
-            featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
-            -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
-            echo "Renaming output files" >> {log}
-            mv {output.gene_level}.summary {output.gene_summary}
-            echo "Results saved in <{output.gene_level}>" >> {log}
-            echo "Report saved in <{output.gene_summary}>" >> {log}
-            '''
-    ```
-
-Finally, contrary to multithreading, note that you don't need to change the `snakemake` command to launch the workflow!
 
 ### Extra: using non-conventional outputs
 
@@ -874,10 +701,6 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
                 after_trim = directory('results/{sample}/fastqc_reports/after_trim/')
             log:
                 'logs/{sample}/{sample}_fastqc.log'
-            benchmark:
-                'benchmarks/{sample}/{sample}_atropos_fastqc.txt'
-            resources:
-                mem_gb = 1
             threads: 2
             container:
                 'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
@@ -947,10 +770,6 @@ fastqc --format fastq --threads {threads} --outdir {folder_path} --dir {folder_p
                 zipfile2_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_2_fastqc.zip'# Default FastQC output name for reverse-read report in ZIP format after trimming
             log:
                 'logs/{sample}/{sample}_fastqc.log'
-            benchmark:
-                'benchmarks/{sample}/{sample}_atropos_fastqc.txt'
-            resources:
-                mem_gb = 1
             threads: 2
             container:
                 'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
@@ -1005,10 +824,6 @@ Three interesting things are happening in both versions of this rule:
             index = 'resources/genome_indices/Scerevisiae_index'
         log:
             'logs/{sample}/{sample}_mapping.log'
-        benchmark:
-            'benchmarks/{sample}/{sample}_mapping.txt'
-        resources:
-            mem_gb = 2
         threads: 4
         container:
             'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'

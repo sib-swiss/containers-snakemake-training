@@ -1,4 +1,4 @@
-site_name: Introduction to Containers and Snakemake
+site_name: Reproducible and Scalable Research with Snakemake and Software Containers
 nav:
     - Home: index.md
     - Precourse preparations: precourse.md
@@ -14,6 +14,7 @@ nav:
       - Making a more general-purpose Snakemake workflow: course_material/day2/3_generalising_snakemake.md
       - Decorating and optimising a Snakemake workflow: course_material/day2/4_optimising_snakemake.md
       - Being reproducible with Snakemake: course_material/day2/5_reproducibility_snakemake.md
+      - Running Snakemake in an HPC environment: course_material/day2/7_hpc_snakemake.md
       - Additional concepts and workflow design/debugging: course_material/day2/6_debugging_snakemake.md
 
 theme:
