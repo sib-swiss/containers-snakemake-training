@@ -18,10 +18,6 @@ rule fastq_trim:
         trim2 = 'results/{sample}/{sample}_atropos_trimmed_2.fastq'
     log:
         'logs/{sample}/{sample}_atropos_trimming.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_atropos_trimming.txt'
-    resources:
-        mem_mb = 500
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
@@ -49,10 +45,6 @@ rule fastq_trim:
 #         after_trim = directory('results/{sample}/fastqc_reports/after_trim/')
 #     log:
 #         'logs/{sample}/{sample}_fastqc.log'
-#     benchmark:
-#         'benchmarks/{sample}/{sample}_atropos_fastqc.txt'
-#     resources:
-#         mem_gb = 1
 #     threads: 2
 #     container:
 #         'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
@@ -104,10 +96,6 @@ rule fastq_qc_sol4:
         zipfile2_after = 'results/{sample}/fastqc_reports/{sample}_atropos_trimmed_2_fastqc.zip'# Default FastQC output name for reverse-read report in ZIP format after trimming
     log:
         'logs/{sample}/{sample}_fastqc.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_atropos_fastqc.txt'
-    resources:
-        mem_gb = 1
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
@@ -150,10 +138,6 @@ rule read_mapping:
         index = config['index']
     log:
         'logs/{sample}/{sample}_mapping.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_mapping.txt'
-    resources:
-        mem_gb = 2
     threads: 4
     container:
         'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
@@ -179,10 +163,6 @@ rule sam_to_bam:
         index = 'results/{sample}/{sample}_mapped_reads_sorted.bam.bai'
     log:
         'logs/{sample}/{sample}_mapping_sam_to_bam.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
-    resources:
-        mem_mb = 250
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
@@ -211,10 +191,6 @@ rule reads_quantification_genes:
         annotations = config['annotations']
     log:
         'logs/{sample}/{sample}_genes_read_quantification.log'
-    benchmark:
-        'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
-    resources:
-        mem_mb = 500
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'

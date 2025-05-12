@@ -47,8 +47,6 @@ rule count_table:
         table = 'results/total_count_table.tsv'
     log:
         'logs/total_count_table.log'
-    resources:
-        mem_mb = 500
     threads: 1
     ?:
         ?
@@ -151,8 +149,6 @@ This function will loop over the list of samples in the config file and replace 
             table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
-        resources:
-            mem_mb = 500
         threads: 1
         ?:
             ?
@@ -285,8 +281,6 @@ If you remember the presentation, there are two directives that you can use to r
             table = 'results/total_count_table.tsv'
         log:
             'logs/total_count_table.log'
-        resources:
-            mem_mb = 500
         threads: 1
         ?:
             ?
@@ -347,8 +341,6 @@ Given the presence of a non-default package in the script, we need to find a sol
                 table = 'results/total_count_table.tsv'
             log:
                 'logs/total_count_table.log'
-            resources:
-                mem_mb = 500
             threads: 1
             conda:  # Add conda directive
                 '../envs/py.yaml'  # Add config file location relative to rule file

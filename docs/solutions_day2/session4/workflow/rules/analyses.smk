@@ -23,10 +23,6 @@ rule count_table:
         table = 'results/total_count_table.tsv'
     log:
         'logs/total_count_table.log'
-    benchmark:
-        'benchmarks/total_count_table.txt'
-    resources:
-        mem_mb = 500
     threads: 1
     conda:
         '../envs/py.yaml'
@@ -45,10 +41,6 @@ rule differential_expression:
         pdf = 'results/deg_plots.pdf'
     log:
         'logs/differential_expression.log'
-    benchmark:
-        'benchmarks/differential_expression.txt'
-    resources:
-        mem_gb = 1
     threads: 2
     container:
         'docker://geertvangeest/deseq2:v1'
