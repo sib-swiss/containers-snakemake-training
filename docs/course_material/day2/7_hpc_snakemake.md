@@ -27,7 +27,7 @@ cp -r docs/solutions_day2/session4 destination_path  # Copy folder where needed;
 
 ## Exercises
 
-In the following exercises you will learn how to get a better idea of the resources used by your workflow, optimising the workflow resources usage, and the necessary command-line arguments, files and rule directives to be able to run your workflow on an HPC environment using SLURM. You will learn how to set up configuration profiles and further develop the Snakefile to define rule-specific settings. 
+In the following exercises you will learn how to get a better idea of the resources used by your workflow, optimising the workflow resources usage, and the necessary command-line arguments, files and rule directives to be able to run your workflow on an HPC environment using SLURM. In addition, you will learn how to set up configuration profiles and further develop the Snakefile to define rule-specific settings. 
 
 ### Workflow benchmarking
 
@@ -49,29 +49,37 @@ Knowing how many resources are being used by each job can be very useful to opti
     `benchmark` directives must contain the same `wildcards` as the `output` directive, here `sample`
 
 ??? success "Answer"
+    The code snippet below shows the answer for the `reads_quantification_genes` rule. You can apply the same to the rest of the rules.
     ```python linenums="1" hl_lines="13-14"
     rule reads_quantification_genes:
-        """
-        This rule quantifies the reads of a bam file mapping on genes and produces
-        a count table for all genes of the assembly.
-        """
+    '''
+    This rule quantifies the reads of a bam file mapping on genes and produces
+    a count table for all genes of the assembly
+    '''
         input:
             bam_once_sorted = rules.sam_to_bam.output.bam_sorted,
         output:
             gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
             gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
-        log:  
-            'logs/{sample}/{sample}_genes_read_quantification.log'  # Path of log file
-        benchmark:  # benchmark directive
-            'benchmarks/{sample}/{sample}_genes_read_quantification.txt'  # Path of benchmark file
+        params:
+            annotations = config['annotations']
+        log:
+            'logs/{sample}/{sample}_genes_read_quantification.log'
+        benchmark: 
+            'benchmarks/{sample}/{sample}_genes_read_quantification.txt' # Path to the benchmark file
+        threads: 2
         container:
             'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
         shell:
             '''
+            echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
             -B -C --largestOverlap --verbose -F GTF \
             -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
+            echo "Results saved in <{output.gene_level}>" >> {log}
+            echo "Report saved in <{output.gene_summary}>" >> {log}
             '''
     ```
 
@@ -240,6 +248,7 @@ Running jobs remotely on an HPC environment commonly requires interaction with j
 In this tutorial, you will use the `cluster-generic` plugin and use it to configure how to send jobs through SLURM. While there is also a `slurm` plugin, we will focus on the `cluster-generic` one because it can be used with any other scheduler. 
 
 Among others, the `cluster-generic` plugin can take the following settings, which can be passed in different ways:
+
 - `--cluster-generic-submit-cmd`: this takes the command that will be used to submit each job to the cluster. Since we are using SLURM, the command is `sbatch`. This string can contain any valid `sbatch` arguments and use values from the `Snakefile` (i.e. using `threads` specified in the Snakefile as a value for the `--cpus-per-task` argument). 
 - `--cluster-generic-cancel-cmd`: the command to use to cancel jobs. This is important if you want to stop your workflow while jobs are running.
 
@@ -296,25 +305,25 @@ The `config.yaml` file inside the `slurm_profile` directory can contain multiple
 
 ```yaml
 executor: cluster-generic
-cluster-generic-submit-cmd: 'sbatch --job-name={rule} --cpus-per-task={threads}'
+cluster-generic-submit-cmd: 'sbatch --job-name={rule}_{wildcards} --cpus-per-task={threads}'
 jobs: 2
 ```
 
-**What do `--job-name={rule}` and `--cpus-per-task={threads}` do?**
+**What do `--job-name={rule}_{wildcards}` and `--cpus-per-task={threads}` do?**
 
 ??? success "Answer"
     These settings allow binding information defined in the workflow to SLURM arguments such as `--job-name` or `--cpus-per-task`. For example, a rule where `threads: 2`, `--cpus-per-task={threads}` will become `--cpus-per-task=2`, indicating slurm that the job should have 2 cpus available. 
 
 **Exercise:** add the required SLURM argument to:
 
-- Log the run of each job to a file in `slurm_logs/{rule}/{rule}_{wildcards}.log`
+- Log the SLURM output of each job to a file in `slurm_logs/{rule}/{rule}_{wildcards}.log`
 - Use the memory specified in each job.
 - Use the `scancel` command to cancel running jobs.
 
 **Hint:** you can find the SLURM argument to use by running `sbatch -h` or by checking this [SLURM cheatsheet](https://slurm.schedmd.com/pdfs/summary.pdf).
 
 ??? warning "Important!"
-    In older SLURM versions, the directory `logs` needs to exist before running the workflow! In order to be able to save the logs into a directory, you will need to have created it before running Snakemake. Two ways to go about this are:
+    In older SLURM versions, the directory `slurm_logs` needs to exist before running the workflow! In order to be able to save the logs into a directory, you will need to have created it before running Snakemake. Two ways to go about this are:
 
     * Creating it before running the workflow.
     * Adding the directory creation command in `cluster-generic-submit-cmd`. This option ensures that no problems arise if you are running the workflow for the very first time.
@@ -352,7 +361,7 @@ rule myrule:
 
 This will ensure that jobs from rule `myrule` never use more than 100 MB of RAM. Note that the jobs will crash if they surpass this limit, so try to account for some wiggle room when you set resources. 
 
-**Exercise:** update the configuration profile to define the amount of memory per job using the values specified in each rule through the `resources` directive. Note that some rules use `mem_mb` while some others use `mem_gb`, so change them all first to `mem_mb`. 
+**Exercise:** update the configuration profile to define the amount of memory per job using the values specified in each rule through the `resources` directive. To simplify things, make sure all rule memory requirements are set in megabytes.
 
 ??? success "Answer"
 
@@ -363,7 +372,7 @@ This will ensure that jobs from rule `myrule` never use more than 100 MB of RAM.
         sbatch
             --job-name={rule}_{wildcards}
             --cpus-per-task={threads}
-            --output=slurm_logs/{rule}/{rule}-{wildcards}.log
+            --output=slurm_logs/{rule}/{rule}_{wildcards}.log
             --mem={resources.mem_mb}
     cluster-generic-cancel-cmd: scancel
     ```
@@ -375,10 +384,10 @@ executor: cluster-generic
 cluster-generic-submit-cmd: 
   mkdir -p slurm_logs/{rule} &&
   sbatch
-    --cpus-per-task={threads}
-    --mem={resources.mem_mb}
     --job-name={rule}-{wildcards}
-    --output=slurm_logs/{rule}/{rule}-{wildcards}.log
+    --cpus-per-task={threads}
+    --output=slurm_logs/{rule}/{rule}_{wildcards}.log
+    --mem={resources.mem_mb}
 cluster-generic-cancel-cmd: scancel
 jobs: 2
 software-deployment-method: 
