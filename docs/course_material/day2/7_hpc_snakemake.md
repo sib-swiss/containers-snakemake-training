@@ -1,7 +1,5 @@
 ## TODOs
 
-- Benchmark, resources
-- Create and add slides
 - Sync solutions
 
 ## Learning outcomes
@@ -12,7 +10,6 @@
 - Optimise resource usage in your workflow using the `resources` directive.
 - Run your Snakemake workflow in an HPC environment using SLURM.
 - Set up workflow-specific configuration profiles.
-- Define rule-specific resource settings in the Snakefile.
 
 ## Material
 
