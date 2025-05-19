@@ -446,7 +446,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
 
 ??? success "Answer"
     We implemented multithreading in all the rules so that you can check everything. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="16 23 41 48 66 72 74 93 101"
+    ```python linenums="1" hl_lines="16 23 43 50 68 74 76 95 105"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -469,7 +469,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             '''
             echo "Trimming reads in <{input.reads1}> and <{input.reads2}>" > {log}
             atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 \
-            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \  # Add multithreading to software
+            --no-cache-adapters -a "A{{20}}" -A "A{{20}}" --threads {threads} \
             -pe1 {input.reads1} -pe2 {input.reads2} -o {output.trim1} -p {output.trim2} &>> {log}
             echo "Trimmed files saved in <{output.trim1}> and <{output.trim2}> respectively" >> {log}
             echo "Trimming report saved in <{log}>" >> {log}
@@ -487,6 +487,8 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             report = 'results/{sample}/{sample}_mapping_report.txt'
         log:
             'logs/{sample}/{sample}_mapping.log'
+        params:
+            index = config['index']
         threads: 4  # Add directive
         container:
             'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
@@ -494,7 +496,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             '''
             echo "Mapping the reads" > {log}
             hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \  # Add multithreading to software
+            -x {params.index} --threads {threads} \
             -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}
@@ -518,9 +520,9 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
         shell:
             '''
             echo "Converting <{input.sam}> to BAM format" > {log}
-            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  # Add multithreading to software
+            samtools view {input.sam} --threads {threads} -b -o {output.bam} 2>> {log}  
             echo "Sorting .bam file" >> {log}
-            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  # Add multithreading to software
+            samtools sort {output.bam} --threads {threads} -O bam -o {output.bam_sorted} 2>> {log}  
             echo "Indexing sorted .bam file" >> {log}
             samtools index -b {output.bam_sorted} -o {output.index} 2>> {log}
             echo "Sorted file saved in <{output.bam_sorted}>" >> {log}
@@ -540,6 +542,8 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
         log:
             'logs/{sample}/{sample}_genes_read_quantification.log'
         threads: 2  # Add directive
+        params:
+            annotations = config['annotations']
         container:
             'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'
         shell:
@@ -547,7 +551,7 @@ Unfortunately, there is no easy way to find the optimal number of threads for a 
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
             -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}  # Add multithreading to software
+            -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log} 
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
             echo "Results saved in <{output.gene_level}>" >> {log}
