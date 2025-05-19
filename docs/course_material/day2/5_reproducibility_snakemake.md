@@ -59,7 +59,7 @@ Here, there is no `wildcards` in the rule: only one file will be created, and it
 ??? tip "Explicit is better than implicit"
     Even if a software cannot multithread, it is useful to add `threads: 1` to keep the syntax consistent between rules and clearly state that the software works with a single thread.
 
-**Exercise:** Given that this rule and the next one will be quite different from the previous ones, it is a good idea to implement them in a new snakefile. Create a new file `workflow/rules/analysis.smk` and copy the previous rule structure in it. Do you need to change anything else to use this rule in your workflow?
+**Exercise:** Given that this rule and the next one will be quite different from the previous ones, it is a good idea to implement them in a new snakefile. Create a new file `workflow/rules/analyses.smk` and copy the previous rule structure in it. Do you need to change anything else to use this rule in your workflow?
 
 ??? success "Answer"
     To actually use this rule, Snakemake needs to be aware that it exists: this is done with the `include` statement. We need to add the following lines to the main Snakefile (`workflow/Snakefile`):
