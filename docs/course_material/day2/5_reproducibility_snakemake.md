@@ -408,8 +408,6 @@ rule differential_expression:
         pdf = 'results/deg_plots.pdf'
     log:
         'logs/differential_expression.log'
-    resources:
-        mem_gb = 1
     threads: 2
     ?:
         ?
@@ -493,8 +491,6 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 pdf = 'results/deg_plots.pdf'
             log:
                 'logs/differential_expression.log'
-            resources:
-                mem_gb = 1
             threads: 2
             ?:
                 ?
@@ -517,8 +513,6 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 pdf = 'results/deg_plots.pdf'
             log:
                 'logs/differential_expression.log'
-            resources:
-                mem_gb = 1
             threads: 2
             container:  # Add container directive
                 'docker://geertvangeest/deseq2:v1'  # Try with your own image; if it doesn't work, use Geert's

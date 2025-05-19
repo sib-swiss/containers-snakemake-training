@@ -50,7 +50,7 @@ Knowing how many resources are being used by each job can be very useful to opti
 
 ??? success "Answer"
     The code snippet below shows the answer for the `reads_quantification_genes` rule. You can apply the same to the rest of the rules.
-    ```python linenums="1" hl_lines="13-14"
+    ```python linenums="1" hl_lines="15-16"
     rule reads_quantification_genes:
     '''
     This rule quantifies the reads of a bam file mapping on genes and produces
@@ -75,7 +75,7 @@ Knowing how many resources are being used by each job can be very useful to opti
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
             -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            -a {params.annotations} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
             echo "Results saved in <{output.gene_level}>" >> {log}
@@ -111,7 +111,7 @@ Here are some suggested values for the current workflow:
 
 ??? success "Answer"
     We implemented memory usage control in all the rules so that you can check everything. We implemented all the memory usage definitions using `mem_mb`. Feel free to copy this in your Snakefile:
-    ```python linenums="1" hl_lines="18 19 47 48 76 77 107 108"
+    ```python linenums="1" hl_lines="18 19 49 50 78 79 111 112"
     rule fastq_trim:
         '''
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -154,6 +154,8 @@ Here are some suggested values for the current workflow:
         output:
             sam = 'results/{sample}/{sample}_mapped_reads.sam',
             report = 'results/{sample}/{sample}_mapping_report.txt'
+        params:
+            index = config['index']
         log:
             'logs/{sample}/{sample}_mapping.log'
         benchmark:
@@ -167,7 +169,7 @@ Here are some suggested values for the current workflow:
             '''
             echo "Mapping the reads" > {log}
             hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
-            -x resources/genome_indices/Scerevisiae_index --threads {threads} \
+            -x {params.index} --threads {threads} \
             -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
             echo "Mapped reads saved in <{output.sam}>" >> {log}
             echo "Mapping report saved in <{output.report}>" >> {log}
@@ -188,7 +190,7 @@ Here are some suggested values for the current workflow:
         benchmark:
             'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
         resources:  # Add directive
-            mem_mb = 250  # Add keyword and value with format 2
+            mem_mb = 250 
         threads: 2
         container:
             'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
@@ -214,6 +216,8 @@ Here are some suggested values for the current workflow:
         output:
             gene_level = 'results/{sample}/{sample}_genes_read_quantification.tsv',
             gene_summary = 'results/{sample}/{sample}_genes_read_quantification.summary'
+        params:
+            annotations = config['annotations']
         log:
             'logs/{sample}/{sample}_genes_read_quantification.log'
         benchmark:
@@ -228,7 +232,7 @@ Here are some suggested values for the current workflow:
             echo "Counting reads mapping on genes in <{input.bam_once_sorted}>" > {log}
             featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
             -B -C --largestOverlap --verbose -F GTF \
-            -a resources/Scerevisiae.gtf -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
+            -a {params.annotations} -T {threads} -o {output.gene_level} {input.bam_once_sorted} &>> {log}
             echo "Renaming output files" >> {log}
             mv {output.gene_level}.summary {output.gene_summary}
             echo "Results saved in <{output.gene_level}>" >> {log}
@@ -333,11 +337,11 @@ jobs: 2
     ```yaml
     executor: cluster-generic
     cluster-generic-submit-cmd: 
-        mkdir -p slurm_logs/{rule} &&
+        "mkdir -p slurm_logs/{rule} &&
         sbatch 
             --job-name={rule}_{wildcards}
             --cpus-per-task={threads}
-            --output=slurm_logs/{rule}/{rule}_{wildcards}.log
+            --output=slurm_logs/{rule}/{rule}_{wildcards}.log"
     cluster-generic-cancel-cmd: scancel
     ```
 
@@ -368,12 +372,12 @@ This will ensure that jobs from rule `myrule` never use more than 100 MB of RAM.
     ```yaml
     executor: cluster-generic
     cluster-generic-submit-cmd: 
-        mkdir -p logs/{rule} &&
+        "mkdir -p logs/{rule} &&
         sbatch
             --job-name={rule}_{wildcards}
             --cpus-per-task={threads}
             --output=slurm_logs/{rule}/{rule}_{wildcards}.log
-            --mem={resources.mem_mb}
+            --mem={resources.mem_mb}"
     cluster-generic-cancel-cmd: scancel
     ```
 
@@ -382,12 +386,12 @@ In addition to remote execution parameters, a configuration profile allows us to
 ```yaml linenums="1" hl_lines="10-13"
 executor: cluster-generic
 cluster-generic-submit-cmd: 
-  mkdir -p slurm_logs/{rule} &&
+  "mkdir -p slurm_logs/{rule} &&
   sbatch
     --job-name={rule}-{wildcards}
     --cpus-per-task={threads}
     --output=slurm_logs/{rule}/{rule}_{wildcards}.log
-    --mem={resources.mem_mb}
+    --mem={resources.mem_mb}"
 cluster-generic-cancel-cmd: scancel
 jobs: 2
 software-deployment-method: 
@@ -416,6 +420,19 @@ To conclude, we will run our workflow in the HPC environment with the following 
 ```sh
 snakemake --profile slurm_profile
 ```
+
+You can then see what jobs are being run by using the `squeue` command in combination with `watch` to check the status of your workflow on regular intervals:
+
+```sh
+watch -n 10 squeue -u <your_user_name>
+```
+
+This will give you information such as the job id, the status of the job, the time it has been running, and the reason if the status is `PD` (pending).
+
+|  **JOBID**  | **PARTITION** | **NAME** | **USER** | **ST** | **TIME** | **NODES** | **NODELIST(REASON)** |
+|:-------:|:---------:|:-----------:|:-----------:|:-----------:|:-----------:|:---------:|:----------:|
+| 91 |  local  |    read_map   |    user1   |    PD   |    0:00   |    1   |   (Resources)   |
+| 90 |  local  |    read_map   |    user1   |    R   |    0:30   |    1   |   localhost   |
 
 Congratulations, you made it to the end! You are now able to create a Snakemake workflow, make it reproducible thanks to Conda and Docker/Apptainer and even run it in an HPC! This is a great time to get yourself a coffee/tea and celebrate! :coffee: :tea:
 
