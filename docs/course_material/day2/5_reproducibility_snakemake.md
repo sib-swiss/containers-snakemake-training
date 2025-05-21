@@ -2,7 +2,7 @@
 
 **After having completed this chapter you will be able to:**
 
-* Use an input function to work with an unknown number of files
+* Use an input function to work with an unknown number of inputs
 * Run scripts from other languages (Python and R)
 * Deploy a rule-specific conda environment
 * Deploy a rule-specific Docker/Apptainer container
@@ -13,7 +13,7 @@
 
 ## Workflow from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading, memory usage control implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/session3) or copy them after clonining the course repository locally:
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/session3) or copy them after cloning the course repository locally:
 
 ```sh
 git clone https://github.com/sib-swiss/containers-snakemake-training.git  # Clone repository
@@ -291,11 +291,11 @@ If you remember the presentation, there are two directives that you can use to r
 ??? info "Using the same Python script in and out of Snakemake"
     To avoid code redundancy, it would be ideal to have a script that can be called by Snakemake but also work with standard Python (and be used outside Snakemake). The two main ways to do this are:
 
-    * Implement the script as a module/package and use this module in Snakemake, for example with a command-line interface in `shell`
+    * Implement the script as a module/package and use this module in Snakemake, for example with a command line interface in `shell`
     * Test whether the `snakemake` object exists in the script:
         * If so, the script can process the Snakemake values
             * When the script is launched by Snakemake, there is an object called `snakemake` that provides access to the same objects that are available in the `run` and `shell` directives (`input`, `output`, `params`, `wildcards`, `log`, `threads`, `resources`, config). For instance, you can use `snakemake.input[0]` to access the first input file of a rule, or `snakemake.input.input_name` to access a named input
-        * If not, the script can use other parameters, for example those coming from command-line parsing
+        * If not, the script can use other parameters, for example those coming from command line parsing
 
 ##### Providing a rule-specific conda environment
 
@@ -314,11 +314,11 @@ Given the presence of a non-default package in the script, we need to find a sol
     The config file, created in `workflow/envs/py.yaml` should look like this:
     ```yaml linenums="1"
     # Environment file to perform data processing with Python
-    name : py3.12
-    channels :
+    name: py3.12
+    channels:
         - conda-forge
         - bioconda
-    dependencies :
+    dependencies:
         - python >= 3.12
         - pandas == 2.2.3
     ```

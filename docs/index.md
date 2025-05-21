@@ -20,7 +20,7 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 ## Material
 
 * This website
-* Google doc (through mail)
+* Shared document (through email)
 
 ## Learning outcomes
 
@@ -28,10 +28,10 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 
 After this course, you will be able to:
 
-* Understand the basic principles and advantages of workflow management systems.
-* Create data analysis pipelines with Snakemake.
-* Combine Snakemake with containers to build reproducible computational pipelines.
-* Run Snakemake pipelines locally and in HPC environments.
+* Understand the basic principles and advantages of Workflow Management Systems
+* Create data analysis workflows with Snakemake
+* Combine Snakemake with containers and conda environments to build reproducible computational workflows
+* Run Snakemake workflows locally and in HPC environments
 
 ### Learning outcomes explained
 

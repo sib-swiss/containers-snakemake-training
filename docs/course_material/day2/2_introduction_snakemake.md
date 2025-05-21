@@ -52,7 +52,7 @@ It is now time to execute your first workflow! To do this, you need to tell Snak
 **Exercise:** Create a Snakefile and copy the previous rule in it. Then, execute the workflow with `snakemake -c 1 <target>`. What value should you use for `<target>`? Once Snakemake execution is finished, can you locate the output file?
 
 ??? info "What does `-c/--cores` do?"
-    The `-c/--cores N` parameter controls the maximum number of CPU cores used in parallel. If N is omitted or 'all', Snakemake will use all available CPU cores, which is useful but can also be dangerous on a cluster or a local machine. In case of cluster/cloud execution, this argument sets the maximum number of cores requested from the cluster or cloud scheduler.
+    The `-c/--cores N` parameter controls the maximum number of CPU cores used in parallel. If N is omitted or 'all', Snakemake will use all available CPU cores, which is useful but can also be dangerous on a High Performance Computing (HPC) cluster or a local machine. In case of cluster/cloud execution, this argument sets the maximum number of cores requested from the cluster or cloud scheduler.
 
 ??? warning "Code indentation in Snakemake"
     As Snakemake is built on top of Python, proper **code indentation is crucial**. Wrong indentation often results in cryptic errors. We recommend using **indents of 4 spaces**, but here are two rules that should be followed at all times:

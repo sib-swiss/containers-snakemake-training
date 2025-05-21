@@ -1,4 +1,13 @@
-## Additional advanced concepts
+## Learning outcomes
+
+**After having completed this chapter you will be able to:**
+
+* Understand the inner workings and order of operations in Snakemake
+* Efficiently Design and debug a Snakemake workflow
+* Use flags to delete or protect outputs
+* Use flags to consider a directory as output
+
+## Material
 
 [:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/6_additional_concepts.pdf){: .md-button }
 
@@ -67,7 +76,7 @@ Sometimes, Snakemake will give you a precise error report, but other times... le
 
 ## Using non-conventional outputs
 
-_This part is an extra-exercise about non-conventional Snakemake outputs. It is quite long, so do it only if you finished all the other exercises._
+_This part is an extra-exercise about non-conventional Snakemake outputs. It is quite long, so do it only if you finished the rest of the course beforehand._
 
 Snakemake has several built-in utilities to assign properties to outputs that are deemed 'special'. These properties are listed in the table below:
 

@@ -3,11 +3,10 @@
 **After having completed this chapter you will be able to:**
 
 * Use non-file parameters and config files in rules
-* Make a workflow process list of inputs rather than one at a time
 * Modularise a workflow
-* Aggregate final outputs in a target rule
-* (Optimise resource usage in a workflow)
-* (Create rules with non-conventional outputs)
+* Make a workflow process list of inputs instead of one input at a time
+* Aggregate outputs in a target rule
+* (Optimise CPU usage)
 
 ## Material
 
@@ -410,11 +409,9 @@ But there is an even better solution! At the moment, samples are defined as a li
     </p>
     You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is the rule implemented in the supplementary exercise below.
 
-### Optimising resource usage in a workflow
+### Optimising resource usage in a workflow by multithreading
 
-This part is about resource usage in Snakemake. It is quite long, so do it only if you finished all the other exercises.
-
-#### Multithreading
+!!! warning "This part is about CPU usage in Snakemake. It is quite long, so do it only if you finished all the other exercises."
 
 When working with real, larger, datasets, some processes can take a long time to run. Fortunately, computation time can be decreased by running jobs in parallel and using several [threads](https://en.wikipedia.org/wiki/Thread_(computing)) or [cores](https://en.wikipedia.org/wiki/Multi-core_processor) for a single job.
 
@@ -574,4 +571,4 @@ If you run the workflow from scratch with multithreading in all rules, it should
 ??? warning "Things to keep in mind when using parallel execution"
     * On-screen output from parallel jobs will be mixed, so save any output to log files instead
     * Parallel jobs use more RAM. If you run out then either your OS will swap data to disk (which slows data access), or a process will die (which can crash Snakemake)
-    * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop).
+    * Parallelising is not without consequences and has a cost. This is a topic too wide for this course, but just know that using too many cores on a dataset that is too small can slow down computation, as explained [here](https://stackoverflow.com/questions/45256953/why-is-multiprocess-pool-slower-than-a-for-loop)

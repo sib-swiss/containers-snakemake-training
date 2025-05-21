@@ -179,7 +179,7 @@ atropos trim -q 20,20 --minimum-length 25 --trim-n --preserve-order --max-n 10 -
     * `--max-n 10`: discard reads with more than 10 Ns
     * `--no-cache-adapters`: do not cache adapters list as '.adapters' in the working directory
     * `-a "A{{20}}" -A "A{{20}}"`: remove series of 20 As in adapter sequences (`-a` for first read of the pair, `-A` for the second one)
-        * The usual command-line syntax is `-a "A{20}"`. Here, brackets were doubled to prevent Snakemake from interpreting `{20}` as a wildcard
+        * The usual command line syntax is `-a "A{20}"`. Here, brackets were doubled to prevent Snakemake from interpreting `{20}` as a wildcard
 
 Now, a few questions might come to mind when you need to use specific software in a workflow:
 
