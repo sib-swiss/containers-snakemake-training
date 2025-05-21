@@ -3,13 +3,13 @@
 **After having completed this chapter you will be able to:**
 
 * Understand the inner workings and order of operations in Snakemake
-* Efficiently Design and debug a Snakemake workflow
+* Efficiently design and debug a Snakemake workflow
 * Use flags to delete or protect outputs
 * Use flags to consider a directory as output
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/6_additional_concepts.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/7_additional_concepts.pdf){: .md-button }
 
 ## Designing a workflow
 

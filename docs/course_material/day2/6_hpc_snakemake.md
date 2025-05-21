@@ -13,7 +13,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/7_snakemake_in_hpc.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/6_hpc_snakemake.pdf){: .md-button }
 
 ## Workflow from previous session
 
