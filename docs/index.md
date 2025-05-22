@@ -2,15 +2,15 @@
 
 ## Teachers 
 
-- Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
-- Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
+* Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+* Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
 
 ## Authors
 
-- Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
-- Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
-- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
-- Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
+* Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
+* Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
+* Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+* Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 
 ## Attribution
 
@@ -44,11 +44,13 @@ To reach the learning outcomes we will use lectures, exercises, polls and group 
 
 Each block has practical work involved. Some more than others. The practicals are subdivided into chapters, and we'll have a (short) discussion after each chapter. All answers to the practicals are incorporated, but they are hidden. Do the exercise first by yourself, before checking out the answer. If your answer is different from the answer in the practicals, try to figure out why they are different.
 
-### Asking questions (online only)
+### Asking questions
 
-During lectures, you are encouraged to raise your hand if you have questions.
+During lectures, you are encouraged to raise your hand if you have questions. Feel free to speak up!
 
-If the course is online, a main source of communication will be our [slack channel](https://www.slack.com). Ask background questions that interest you personally at **#background**. During the exercises, e.g. if you are stuck or don't understand what is going on, use the slack channel **#q-and-a**.  This channel is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question, use the "reply in thread" option:
+**Asking questions online:**
+
+If the course is online, a main source of communication will be our [Slack channel](https://www.slack.com). Ask background questions that interest you personally at **#background**. During the exercises, _e.g_. if you are stuck or don't understand what is going on, use the Slack channel **#q-and-a**.  This channel is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question, use the "reply in thread" option:
 
 <figure>
   <img src="assets/images/reply_in_thread.png" width="350"/>
@@ -59,5 +61,5 @@ The teachers will review the answers, and add/modify if necessary. If you are re
 **To summarise:**
 
 * During lectures: raise hand
-* Personal interest questions: **#background** on slack
-* During exercises: raise hand/**\#q-and-a** on slack
+* Personal interest questions: **#background** on Slack
+* During exercises: raise hand/**\#q-and-a** on Slack
