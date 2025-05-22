@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# you can add this script as init for AWS server
+# This script installs singularity and the necessary packages for the
+# Snakemake course
+# Note: can be added as init for AWS server
 
 sudo apt-get update && sudo apt-get install -y \
     build-essential \
