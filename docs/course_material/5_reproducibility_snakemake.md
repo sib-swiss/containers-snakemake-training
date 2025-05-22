@@ -9,16 +9,15 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/5_reproducibility_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/5_reproducibility_snakemake.pdf){: .md-button }
 
 ## Workflow from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/session3) or copy them after cloning the course repository locally:
-
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from fully commented snakefiles, with a supplementary .fastq files quality check rule and multithreading implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions/session3) or copy them after cloning the course repository locally:
 ```sh
 git clone https://github.com/sib-swiss/containers-snakemake-training.git  # Clone repository
 cd containers-snakemake-training/  # Go in repository
-cp -r docs/solutions_day2/session3 destination_path  # Copy folder where needed; adapt destination_path to required path
+cp -r docs/solutions/session3 destination_path  # Copy folder where needed; adapt destination_path to required path
 ```
 
 ## Exercises
@@ -35,7 +34,6 @@ To perform a Differential Expression Analysis (DEA), it is easier to have a sing
 #### Building the general rule structure
 
 We already wrote the common elements of the rule so that you can focus on the most interesting parts (the missing `input` and the missing elements at the end):
-
 ```python linenums="1"
 rule count_table:
     '''
@@ -164,9 +162,8 @@ Now that the rule inputs are defined, we need to set-up the script to process th
 ##### Getting the script
 
 The counts will be concatenated thanks to a script called `count_table.py`. It was written in [Python](https://www.python.org/), takes a list of files as input, and produces one output, a tab-separated table containing read counts of the different samples for each gene. You can download it with:
-
 ```sh
-wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/count_table.py
+wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions/session4/workflow/scripts/count_table.py
 ```
 
 Or you can copy it from here:
@@ -301,7 +298,7 @@ If you remember the presentation, there are two directives that you can use to r
 
 Given the presence of a non-default package in the script, we need to find a solution to make it accessible inside the rule. The easiest way to do that is to create a rule-specific conda environment. In Snakemake, you can do this by providing an environment config file (in YAML format) to the rule with the `conda` directive.
 
-**(Optional) Exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how an environment file look, you can check out slide 19 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
+**(Optional) Exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how environment files look and work, you can check out slides 4-10 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
 
 ??? tip "Environment features"
     * Environment `name` is `py3.12`
@@ -395,7 +392,6 @@ The final rule that you will create in this course will use an R script to proce
 #### Building the general rule structure (again)
 
 We also wrote the common elements of the rule so that you can focus on the most interesting parts (the missing elements at the end):
-
 ```python linenums="1"
 rule differential_expression:
     '''
@@ -450,10 +446,9 @@ As mentioned above, we don't need an input function because the input of rule `d
 
 ##### Downloading the script
 
-The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/DESeq2.R) or with the command:
-
+The DE analyses will be performed thanks to a script called `DESeq2.R`. It was written in [R](https://www.r-project.org/), takes a read count table as input, and produces two outputs, a tab-separated table containing DEG (and statistical results) and a .pdf file containing control plots of the analysis. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions/session4/workflow/scripts/DESeq2.R) or with the command:
 ```sh
-wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session4/workflow/scripts/DESeq2.R
+wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions/session4/workflow/scripts/DESeq2.R
 ```
 
 **Exercise:** Download the script and place it the right folder.
@@ -471,7 +466,8 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
     * The directive you need to run the script
     * The location/path of the script
     * Check whether the script need a special environment
-        * If so, remember a _certain Docker image_ you created yesterday
+        * If so, and if you attended the [SIB course on Containers](https://www.sib.swiss/training/course/20250527_DOCK), remember a _certain Docker image_ you created during the course
+        * If not, use the following container: `docker://geertvangeest/deseq2:v1`
 
 ??? success "Answer"
     Like with the Python script, there are two problems to solve to run the R script:
@@ -500,7 +496,8 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
 
     1. Does it use external packages and need a specific environment?
 
-        If you look at the top of the script, you will see several (11 to be exact!) `library()` calls. Each of them imports an external package. All of these could be gathered in a conda environment, however when numerous libraries are involved, it is sometimes easier to use a container. During Day 1 - Session 3 ([Working with Dockerfiles](../day1/dockerfiles.md)), you built your own Docker image, called `deseq2`. This image actually contains everything required by the script:
+        If you look at the top of the script, you will see several (11 to be exact!) `library()` calls. Each of them imports an external package. All of these could be gathered in a conda environment, however when numerous libraries are involved, it is sometimes easier to use a container. During Session 3 of the Containers course ([Working with Dockerfiles](https://sib-swiss.github.io/containers-introduction-training/latest/course_material/day1/dockerfiles/#build-an-image-for-your-own-script)), you built your own Docker image, called `deseq2`. This image actually contains everything required by the script:
+
         ```python linenums="1" hl_lines="17 18"
         rule differential_expression:
             '''

@@ -1,7 +1,3 @@
-## TODOs
-
-- Sync solutions
-
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
@@ -13,16 +9,15 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/6_hpc_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/6_hpc_snakemake.pdf){: .md-button }
 
 ## Workflow from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented workflow with a supplementary .fastq files quality check rule and multithreading implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions_day2/session4) or copy them after cloning the course repository locally:
-
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented workflow with a supplementary .fastq files quality check rule and multithreading implemented in all rules. You can download all the files (workflow and config) [here](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions/session4) or copy them after cloning the course repository locally:
 ```sh
 git clone https://github.com/sib-swiss/containers-snakemake-training.git  # Clone repository
 cd containers-snakemake-training/  # Go in repository
-cp -r docs/solutions_day2/session4 destination_path  # Copy folder where needed; adapt destination_path to required path
+cp -r docs/solutions/session4 destination_path  # Copy folder where needed; adapt destination_path to required path
 ```
 
 ## Exercises
@@ -260,7 +255,6 @@ Among others, the `cluster-generic` plugin can take the following settings, whic
 * `--cluster-generic-cancel-cmd`: command to use to cancel jobs. This is important if you want to stop your workflow while jobs are running while also cancel the running jobs
 
 Then, you will need to tell Snakemake to run the workflow through SLURM. An important parameter when doing so is `--jobs`, which will tell Snakemake how many jobs it can submit concurrently. In addition, you will also need to specify which executor plugin to use and the required settings:
-
 ```sh
 snakemake \
     --executor cluster-generic \
@@ -309,7 +303,6 @@ Configuration profiles allow you to specify settings regarding the execution of 
     ```
 
 The `config.yaml` file inside the `slurm_profile` directory can contain multiple settings related to the execution of the workflow. Below you can find an example of configuration file:
-
 ```yaml
 executor: cluster-generic
 cluster-generic-submit-cmd: 'sbatch --job-name={rule}_{wildcards} --cpus-per-task={threads}'
@@ -330,7 +323,7 @@ jobs: 2
 ??? tip "SLURM arguments"
     You can find the SLURM argument to use by running `sbatch -h` or by checking this [SLURM cheatsheet](https://slurm.schedmd.com/pdfs/summary.pdf).
 
-??? warning "Important!"
+??? warning "Make sure `slurm_logs` exists!"
     In older SLURM versions, the directory `slurm_logs` needed to exist before running the workflow! Therefore, in order to be able to save the logs into a directory, you need to have created the folder before running Snakemake. There are two ways to go about this:
 
     * Manually create the folder before running the workflow
@@ -359,7 +352,6 @@ jobs: 2
 ### Passing rule-specific resources to the job scheduler
 
 As shown [before](#controlling-memory-usage-and-runtime), it is possible to specify rule-specific memory usage to have better control over how the workflow uses the available resources with the `resources` directive:
-
 ```python linenums="1" hl_lines="6 7"
 rule myrule:
     input:
@@ -395,7 +387,6 @@ This will ensure that jobs spawn from rule `myrule` never use more than 100 MB o
     ```
 
 In addition to remote execution parameters, a configuration profile allows to set anything that can be passed through the command line. This can significantly simplify launching a workflow if there are a lot of arguments to pass when to run it. For example, the extra lines below indicate that we should run a maximum of 2 jobs at a time and to use conda and singularity:
-
 ```yaml linenums="1" hl_lines="10-13"
 executor: cluster-generic
 cluster-generic-submit-cmd:
@@ -417,7 +408,6 @@ software-deployment-method:
 ### Adapting the workflow to the available resources
 
 Before launching a workflow, it is very important to quantify the resources available in the machine supposed to run it. This information is typically provided by the HPC user guide. In our case, you can use the following commands to know the total number of cores and the amount of memory available in the server:
-
 ```sh
 nproc --all    # Number of cores
 free -g        # Amount of memory in GB in row "Mem" and column "total"
@@ -434,13 +424,11 @@ free -g        # Amount of memory in GB in row "Mem" and column "total"
 ### Final exercise
 
 **Exercise:** To conclude, run the workflow in the HPC environment with the following command:
-
 ```sh
 snakemake --profile slurm_profile
 ```
 
 You can then see what jobs are being run by using the `squeue` command in combination with `watch` to check the status of your workflow on regular intervals (here, 10s):
-
 ```sh
 watch -n 10 squeue -u <username>
 ```
@@ -454,4 +442,4 @@ This will give you information such as the job id, the job status, how long is h
 
 Congratulations, you made it to the end! You are now able to create a Snakemake workflow, make it reproducible thanks to Conda and Docker/Apptainer and even run it in an HPC! This is a great time to get yourself a coffee/tea and celebrate! :coffee: :tea:
 
-To make things even better, have a look at [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html) and some [additional concepts](6_debugging_snakemake.md#using-non-conventional-outputs)!
+To make things even better, have a look at some [additional concepts](7_debugging_snakemake.md#using-non-conventional-outputs) and [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!

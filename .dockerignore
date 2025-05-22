@@ -1,5 +1,4 @@
 **/.classpath
-**/.dockerignore
 **/.env
 **/.git
 **/.gitignore
@@ -15,7 +14,6 @@
 **/charts
 **/docker-compose*
 **/compose*
-**/Dockerfile*
 **/node_modules
 **/npm-debug.log
 **/obj

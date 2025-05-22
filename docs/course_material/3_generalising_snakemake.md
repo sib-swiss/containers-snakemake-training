@@ -9,7 +9,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/3_generalising_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/3_generalising_snakemake.pdf){: .md-button }
 
 ## Advice and reminders
 
@@ -46,11 +46,11 @@ In this series of exercises, you will create the workflow 'backbone', _i.e._ rul
 * A rule to count reads mapping on each gene
 
 ??? tip "Designing and debugging a workflow"
-    If you have problems designing your Snakemake workflow or debugging it, you can find some help [here](6_debugging_snakemake.md#designing-a-workflow).
+    If you have problems designing your Snakemake workflow or debugging it, you can find some help [here](7_debugging_snakemake.md#designing-a-workflow).
 
 At the end of this series of exercises, your workflow should look like this:
 <figure markdown align="center">
-  ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
+  ![backbone_rulegraph](../assets/images/backbone_rulegraph.png)
   <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
 </figure>
 
@@ -110,8 +110,7 @@ In this part, you will download the data and start building the directory struct
 
 For now, the main thing to remember is that **code** should go into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**. The only exception is the **`config` subfolder**, but it will be [explained later](4_optimising_snakemake.md#config-files). All **output files** generated in the workflow should be stored under **`results/`**.
 
-Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VS code terminal:
-
+Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VScode terminal:
 ```sh linenums="1"
 wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download data
 tar -xvf snakemake_rnaseq.tar.gz  # Uncompress archive
@@ -125,7 +124,6 @@ In ` snakemake_rnaseq/`, you should see two subfolders:
 * `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow
 
 We also need to create the other missing subfolders and the Snakefile:
-
 ```sh linenums="1"
 mkdir -p config/ images/ workflow/envs workflow/rules workflow/scripts  # Create subfolder structure
 touch workflow/Snakefile  # Create empty Snakefile
@@ -150,7 +148,7 @@ touch workflow/Snakefile  # Create empty Snakefile
     * If you execute Snakemake in `snakemake_rnaseq/`, the relative path to the input files in the rule is `data/<sample>.fastq`
     * If you execute Snakemake in `snakemake_rnaseq/workflow/`, the relative path to the input files in the rule is `../data/<sample>.fastq`
 
-If you followed the [advice](#advice-and-reminders) at the top of this page, Snakemake should create all the other missing folders by itself, so it is time to create the rules mentioned [earlier](#exercises). If needed, you can check [here](6_debugging_snakemake.md#designing-a-workflow) for a few pieces of advice on workflow design.
+If you followed the [advice](#advice-and-reminders) at the top of this page, Snakemake should create all the other missing folders by itself, so it is time to create the rules mentioned [earlier](#exercises). If needed, you can check [here](7_debugging_snakemake.md#designing-a-workflow) for a few pieces of advice on workflow design.
 
 ??? info "'bottom-up' or 'top-down' development?"
     Even if it is often easier to start from final outputs and work backwards to first inputs, the next exercises are presented in the opposite direction (first inputs to last outputs) to make the session easier to understand.
@@ -338,7 +336,6 @@ HISAT2 only outputs mapped reads in [SAM format](https://en.wikipedia.org/wiki/S
     More information on alignment formats can be found on [samtools github repository](https://github.com/samtools/hts-specs).
 
 We wrote a **single rule** performing all these operations for you:
-
 ```python linenums="1"
 rule sam_to_bam:
     """
@@ -391,7 +388,7 @@ rule sam_to_bam:
     When Snakemake has a problem and crashes, it removes the current rule outputs to avoid further computation with corrupted files. This means that if the first two commands complete but the last one (here, `samtools index`) fails and doesn't produce the expected output, Snakemake will remove **all the outputs**, including those that were created without error (here, `{output.bam}` and `{output.bam_sorted}`), causing a waste of time and money
 
 
-Using the same sample as before (`highCO2_sample1`), the workflow can be run with
+Using the same sample as before (`highCO2_sample1`), the workflow can be run with:
 ```sh
 snakemake -c 1 -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_mapped_reads_sorted.bam
 ```
@@ -409,7 +406,6 @@ Most of analyses happening downstream the alignment step, including Differential
     If you are working with genome sequences and annotations from different sources, remember that they **must** contain matching chromosome names, otherwise counting will not work, as the counting software will not be able to read counts to match exon/gene locations.
 
 We already wrote a rule to count reads mapping on each gene of the _S. cerevisiae_ genome using [featureCounts](https://academic.oup.com/bioinformatics/article/30/7/923/232889):
-
 ```python linenums="1" hl_lines="18"
 rule reads_quantification_genes:
     """
@@ -456,7 +452,7 @@ rule reads_quantification_genes:
 
 It would be interesting to know what is happening when featureCounts runs. This is where the `log` directive comes into play!
 
-**(Optional) Exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 29-35 of the presentation (available [here](#material)) for information on those directives.
+**(Optional) Exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 27-30 of the presentation (available [here](#material)) for information on this directive.
 
 ??? tip "Logs"
     * The `log` directive must contain the same `wildcards` as the `output` directive, here `sample`
@@ -591,7 +587,7 @@ You have now implemented and run the main steps of the workflow. It is always a 
 
     You should get the following DAG:
     <figure markdown align="center">
-      ![backbone_rulegraph](../../../assets/images/backbone_rulegraph.png)
+      ![backbone_rulegraph](../assets/images/backbone_rulegraph.png)
       <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
     </figure>
 
@@ -610,6 +606,6 @@ Snakemake can also create two other graphs:
 
 Here is a comparison of the different workflow graphs:
 <figure markdown align="center">
-  ![backbone_rulegraph](../../../assets/images/backbone_all.png)
+  ![backbone_rulegraph](../assets/images/backbone_all.png)
   <figcaption>Workflow DAG, rulegraph and filegraph</figcaption>
 </figure>

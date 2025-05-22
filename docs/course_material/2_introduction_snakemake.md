@@ -9,7 +9,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/2_introduction_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/2_introduction_snakemake.pdf){: .md-button }
 
 ## Structuring a workflow
 
@@ -74,7 +74,6 @@ During the workflow execution, Snakemake automatically created the **missing fol
 
 ??? success "Answer"
     Nothing! You get a message saying that Snakemake did not run anything:
-
     ```python
     Building DAG of jobs...
     Nothing to be done (all requested files are present and up to date).
@@ -156,7 +155,6 @@ As you may have guessed from the previous rule, the `input` and `output` directi
 
 ??? success "Answer"
     Nothing! You get the same message as before, saying that Snakemake did not run anything:
-
     ```sh
     Building DAG of jobs...
     Nothing to be done (all requested files are present and up to date).
@@ -202,7 +200,6 @@ Creating rule dependencies using long file paths can be cumbersome, especially w
     As opposed to strings, like `'results/hello.txt'`, quotes are not required around `rules.<rule_name>.output` statements, because they are Snakemake objects.
 
 The following example implements this syntax for the two rules defined above:
-
 ```python linenums="1" hl_lines="9"
 rule hello_world:
     output:

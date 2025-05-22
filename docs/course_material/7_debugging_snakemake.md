@@ -9,7 +9,7 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/7_additional_concepts.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/7_additional_concepts.pdf){: .md-button }
 
 ## Designing a workflow
 
@@ -46,7 +46,7 @@ The topic was approached when we discussed [DAGs](2_introduction_snakemake.md#ch
 
 ### Debugging advice
 
-Sometimes, Snakemake will give you a precise error report, but other times... less so. Try to identify which phase of execution failed (see previous paragraph on [order of operations](6_debugging_snakemake.md#order-of-operations-in-snakemake)) and double-check the most common error causes for that phase:
+Sometimes, Snakemake will give you a precise error report, but other times... less so. Try to identify which phase of execution failed (see previous paragraph on [order of operations](7_debugging_snakemake.md#order-of-operations-in-snakemake)) and double-check the most common error causes for that phase:
 
 1. Parsing phase failures (phase 1):
     * Syntax errors, among which (but not limited to):

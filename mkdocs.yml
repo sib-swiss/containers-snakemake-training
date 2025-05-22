@@ -3,19 +3,14 @@ nav:
     - Home: index.md
     - Precourse preparations: precourse.md
     - Course schedule: course_schedule.md
-    - Day 1 - Containers:
-      - Introduction to containers: course_material/day1/introduction_containers.md
-      - Managing containers and images: course_material/day1/managing_docker.md
-      - Working with dockerfiles: course_material/day1/dockerfiles.md
-      - Running containers with apptainer: course_material/day1/apptainer.md
-    - Day 2 - Snakemake:
-      - General guidelines: course_material/day2/1_guidelines.md
-      - Introduction to Snakemake: course_material/day2/2_introduction_snakemake.md
-      - Making a more general-purpose Snakemake workflow: course_material/day2/3_generalising_snakemake.md
-      - Decorating and optimising a Snakemake workflow: course_material/day2/4_optimising_snakemake.md
-      - Being reproducible with Snakemake: course_material/day2/5_reproducibility_snakemake.md
-      - Running Snakemake in an HPC environment: course_material/day2/6_hpc_snakemake.md
-      - Additional concepts and workflow design/debugging: course_material/day2/7_debugging_snakemake.md
+    - Course material:
+      - General guidelines: course_material/1_guidelines.md
+      - Introduction to Snakemake: course_material/2_introduction_snakemake.md
+      - Making a more general-purpose Snakemake workflow: course_material/3_generalising_snakemake.md
+      - Decorating and optimising a Snakemake workflow: course_material/4_optimising_snakemake.md
+      - Being reproducible with Snakemake: course_material/5_reproducibility_snakemake.md
+      - Running Snakemake in an HPC environment: course_material/6_hpc_snakemake.md
+      - Additional concepts and workflow design/debugging: course_material/7_debugging_snakemake.md
 
 theme:
   name: material
@@ -37,7 +32,7 @@ extra:
     site_id: 220
 
 copyright: >
-  Copyright &copy; 2021-2024 SIB Swiss institute of Bioinformatics -
+  Copyright &copy; 2021-2025 SIB Swiss institute of Bioinformatics -
   <a href="#__consent">Change cookie settings</a>
 
 # Repository

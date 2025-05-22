@@ -10,14 +10,13 @@
 
 ## Material
 
-[:fontawesome-solid-file-pdf: Download the presentation](../../assets/pdf/day2/4_optimising_snakemake.pdf){: .md-button }
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/4_optimising_snakemake.pdf){: .md-button }
 
 ## Snakefile from previous session
 
-If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages implemented in all rules. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile) or download it in your current directory with:
-
+If you didn't finish the previous part or didn't do the optional exercises, you can restart from a fully commented Snakefile, with log messages implemented in all rules. You can download it [here](https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions/session2/workflow/Snakefile) or download it in your current directory with:
 ```sh
-wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions_day2/session2/workflow/Snakefile
+wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/docs/solutions/session2/workflow/Snakefile
 ```
 
 ## Exercises
@@ -54,7 +53,6 @@ The `params` directive was (partly) designed to solve this problem: it contains 
     * Multiple parameters can be defined in a rule (do not forget the comma between each entry!) and they can also be named. While it isn't mandatory, un-named parameters are not explicit at all, so you should **always name your parameters**
 
 Here is an example of `params` utilisation:
-
 ```python linenums="1"
 rule get_header:
     input:
@@ -109,7 +107,6 @@ Config files are stored in the `config` subfolder and written in [JSON](https://
 Config files will be parsed by Snakemake when executing the workflow, and parameters and their values will be stored in a [Python dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) named `config`. The config file path can be specified in the Snakefile with `configfile: <path/to/file.yaml>` at the top of the file, or at runtime with the execution parameter `--configfile <path/to/file.yaml>`.
 
 The example below shows a parameter with a single value (`lines_number`), a parameter with multiple values (`samples`), and nested parameters (`resources`):
-
 ```yaml linenums="1"
 lines_number: 5  # Parameter with single value (string, int, float, bool ...)
 samples:  # Parameter with multiple values
@@ -121,7 +118,6 @@ resources:  # Nested parameters
 ```
 
 Then, each parameter can be accessed in Snakemake with:
-
 ```python linenums="1"
 config['lines_number']  # --> 5
 config['samples']  # --> ['sample1', 'sample2']  # A list of parameters becomes a list
@@ -185,7 +181,7 @@ If you develop a large workflow, you are bound to encounter some cluttering prob
 1. The final level of modularisation is modules
 
     ??? info "More on modules"
-        It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#snakefiles-modules) for more explanations
+        It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#modules) for more explanations
 
 In this course, you will only use the second level of modularisation. Briefly, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefile containing rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefile in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
 
@@ -225,7 +221,6 @@ If you have trouble visualising what an `include` statement does, you can imagin
 ### Using a target rule instead of a target file
 
 Modularisation also offers a great opportunity to facilitate workflows execution. By default, if no target is given in the command line, Snakemake executes the first rule in the Snakefile. So far, you have always executed the workflow with a target file to avoid this behaviour. But we can actually use this property to make execution easier by writing a pseudo-rule (also called target-rule and usually named rule `all`) which contains all the desired outputs files as inputs in the Snakefile. This rule will look like this:
-
 ```python linenums="1"
 rule all:
     input:

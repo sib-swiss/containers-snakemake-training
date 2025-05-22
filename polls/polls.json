@@ -312,13 +312,13 @@
     {
         "@type": "MultipleChoiceQuestion",
         "lowerCaseAlias": "",
-        "id": "1946726",  /*AT. Update?*/
+        "id": "1946726",
         "alias": "",
         "text": "What is reproducibility?",
         "image": null,
         "choices": [
             {
-                "id": "7525126",  /*AT. Update?*/
+                "id": "7525126",
                 "alias": null,
                 "text": "Collect new data, analyse it with the same methods as an existing study, and produce the same pattern of results to draw the same overall conclusions",
                 "isCorrectAnswer": false,
@@ -326,7 +326,7 @@
                 "image": null
             },
             {
-                "id": "7525127",  /*AT. Update?*/
+                "id": "7525127",
                 "alias": null,
                 "text": "Repeat experiments within a study by the same researchers, re-run the same analysis strategy, and produce the same conclusions",
                 "isCorrectAnswer": false,
@@ -334,7 +334,7 @@
                 "image": null
             },
             {
-                "id": "7525128",  /*AT. Update?*/
+                "id": "7525128",
                 "alias": null,
                 "text": "Take existing data, re-run the exact same analysis strategy, and produce the exact same statistical findings",
                 "isCorrectAnswer": false,
@@ -342,7 +342,7 @@
                 "image": null
             },
             {
-                "id": "7525129",  /*AT. Update?*/
+                "id": "7525129",
                 "alias": null,
                 "text": "All these definitions are equivalent",
                 "isCorrectAnswer": false,
@@ -361,13 +361,13 @@
     {
         "@type": "MultipleChoiceQuestion",
         "lowerCaseAlias": "",
-        "id": "1946726",  /*AT. Update?*/
+        "id": "1946726",
         "alias": "",
         "text": "Is there a reproducibility crisis?",
         "image": null,
         "choices": [
             {
-                "id": "7525126",  /*AT. Update?*/
+                "id": "7525126",
                 "alias": null,
                 "text": "Yes, a significant crisis",
                 "isCorrectAnswer": false,
@@ -375,7 +375,7 @@
                 "image": null
             },
             {
-                "id": "7525127",  /*AT. Update?*/
+                "id": "7525127",
                 "alias": null,
                 "text": "Yes, a slight crisis",
                 "isCorrectAnswer": false,
@@ -383,7 +383,7 @@
                 "image": null
             },
             {
-                "id": "7525128",  /*AT. Update?*/
+                "id": "7525128",
                 "alias": null,
                 "text": "No, there is no crisis",
                 "isCorrectAnswer": false,
@@ -391,7 +391,7 @@
                 "image": null
             },
             {
-                "id": "7525129",  /*AT. Update?*/
+                "id": "7525129",
                 "alias": null,
                 "text": "I don't know",
                 "isCorrectAnswer": false,
@@ -410,13 +410,13 @@
     {
         "@type": "MultipleChoiceQuestion",
         "lowerCaseAlias": "",
-        "id": "1946726",  /*AT. Update?*/
+        "id": "1946726",
         "alias": "",
         "text": "How experienced are you with snakemake/workflow management systems?",
         "image": null,
         "choices": [
             {
-                "id": "7525126",  /*AT. Update?*/
+                "id": "7525126",
                 "alias": null,
                 "text": "I have zero experience",
                 "isCorrectAnswer": false,
@@ -424,7 +424,7 @@
                 "image": null
             },
             {
-                "id": "7525127",  /*AT. Update?*/
+                "id": "7525127",
                 "alias": null,
                 "text": "I tried to run a workflow once or twice because I had to",
                 "isCorrectAnswer": false,
@@ -432,7 +432,7 @@
                 "image": null
             },
             {
-                "id": "7525128",  /*AT. Update?*/
+                "id": "7525128",
                 "alias": null,
                 "text": "I'm running workflows developed by others on a regular basis",
                 "isCorrectAnswer": false,
@@ -440,7 +440,7 @@
                 "image": null
             },
             {
-                "id": "7525129",  /*AT. Update?*/
+                "id": "7525129",
                 "alias": null,
                 "text": "I have already developed an entire (Snakemake) workflow",
                 "isCorrectAnswer": false,
@@ -459,13 +459,13 @@
     {
         "@type": "MultipleChoiceQuestion",
         "lowerCaseAlias": "",
-        "id": "1946726",  /*AT. Update?*/
+        "id": "1946726",
         "alias": "",
         "text": "How comfortable are you with python?",
         "image": null,
         "choices": [
             {
-                "id": "7525126",  /*AT. Update?*/
+                "id": "7525126",
                 "alias": null,
                 "text": "I have no python knowledge but I am ready to get started!",
                 "isCorrectAnswer": false,
@@ -473,7 +473,7 @@
                 "image": null
             },
             {
-                "id": "7525127",  /*AT. Update?*/
+                "id": "7525127",
                 "alias": null,
                 "text": "I analyzed some datasets for which I used this language",
                 "isCorrectAnswer": false,
@@ -481,7 +481,7 @@
                 "image": null
             },
             {
-                "id": "7525128",  /*AT. Update?*/
+                "id": "7525128",
                 "alias": null,
                 "text": "I regularly analyze datasets with this language",
                 "isCorrectAnswer": false,
@@ -489,7 +489,7 @@
                 "image": null
             },
             {
-                "id": "7525129",  /*AT. Update?*/
+                "id": "7525129",
                 "alias": null,
                 "text": "My coffee machine program is coded in Python",
                 "isCorrectAnswer": false,

@@ -2,16 +2,15 @@
 
 ## Teachers 
 
-- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
 - Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
 
 ## Authors
 
-- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
 - Antonin Thiébaut [:custom-orcid:](https://orcid.org/0000-0002-7587-5587)
-- Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 - Rafael Riudavets Puig [:custom-orcid:](https://orcid.org/0000-0002-2855-9952)
+- Geert van Geest [:custom-orcid:](https://orcid.org/0000-0002-1561-078X)
+- Patricia Palagi [:custom-orcid:](https://orcid.org/0000-0001-9062-6303)
 
 ## Attribution
 
@@ -35,7 +34,7 @@ After this course, you will be able to:
 
 ### Learning outcomes explained
 
-To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/day1/introduction_containers.md#learning-outcomes)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
+To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/2_introduction_snakemake.md#learning-outcomes)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
 
 ## Learning experiences
 
