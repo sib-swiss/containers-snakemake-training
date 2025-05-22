@@ -6,3 +6,8 @@ dependencies:
   - graphviz==11.0.0
   - python==3.12.3
   - snakemake==8.20.5
+  - snakemake-executor-plugin-cluster-generic=1.0.9
+  - snakemake-interface-common=1.17.4
+  - snakemake-interface-executor-plugins=9.3.2
+  - snakemake-interface-report-plugins=1.1.0
+  - snakemake-interface-storage-plugins=3.3.0
