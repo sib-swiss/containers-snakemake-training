@@ -1,0 +1,1404 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../4_decorating_workflow/">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.33">
+    
+    
+      
+        <title>Being reproducible with Snakemake - Introduction to Containers and Snakemake</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3cba04c6.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  <!-- Matomo -->
+<script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="https://matomo.sib.swiss/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '220']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../../.."> 
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-header__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction to Containers and Snakemake
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Being reproducible with Snakemake
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Introduction to Containers and Snakemake" class="md-nav__button md-logo" aria-label="Introduction to Containers and Snakemake" data-md-component="logo">
+      
+  <img src="../../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Introduction to Containers and Snakemake
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../precourse/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Precourse preparations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../course_schedule/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course schedule
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Day 1 - Containers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Day 1 - Containers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../day1/introduction_containers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to containers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../day1/managing_docker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Managing containers and images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../day1/dockerfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Working with dockerfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../day1/apptainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running containers with apptainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Day 2 - Snakemake
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Day 2 - Snakemake
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    General guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to Snakemake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Making a more general-purpose Snakemake workflow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_decorating_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Decorating and optimising a Snakemake workflow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Being reproducible with Snakemake
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Being reproducible with Snakemake
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-gather-read-count-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a rule to gather read count files
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a rule to gather read count files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-the-rule-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the rule structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-python-script-and-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the Python script and running it
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identifying-and-listing-the-input-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying and listing the input files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapting-the-snakefile-and-running-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adapting the Snakefile and running the rule
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-detect-differentially-expressed-genes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a rule to detect Differentially Expressed Genes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a rule to detect Differentially Expressed Genes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-the-rule-structure_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the rule structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-r-script-and-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the R script and running it
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapting-the-snakefile-and-running-the-rule_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adapting the Snakefile and running the rule
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-gather-read-count-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a rule to gather read count files
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a rule to gather read count files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-the-rule-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the rule structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-python-script-and-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the Python script and running it
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identifying-and-listing-the-input-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying and listing the input files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapting-the-snakefile-and-running-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adapting the Snakefile and running the rule
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-rule-to-detect-differentially-expressed-genes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a rule to detect Differentially Expressed Genes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a rule to detect Differentially Expressed Genes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-the-rule-structure_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the rule structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-r-script-and-running-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the R script and running it
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapting-the-snakefile-and-running-the-rule_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adapting the Snakefile and running the rule
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Being reproducible with Snakemake</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Create and use an input function</li>
+<li>Deploy a conda environment and run scripts within it</li>
+<li>Deploy a Docker/Singularity container and run scripts within it</li>
+</ul>
+<h2 id="material">Material</h2>
+<p><strong>Reproducibility in Snakemake:</strong></p>
+<p><a class="md-button" href="../../../assets/pdf/day2/3_reproducibility_snakemake.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<p><strong>Additional advanced concepts:</strong></p>
+<p><a class="md-button" href="../../../assets/pdf/day2/4_additional_concepts.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0l128 128zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368z"/></svg></span> Download the presentation</a></p>
+<h2 id="exercises">Exercises</h2>
+<p>In this series of exercises, we will create the last two rules of the workflow. Each rule will execute a script, one in Python and one in R, and both rules will have dedicated environment that you will need to take into account in the snakefiles. These last two rules are quite different from the previous ones, so it would be a good idea to implement them in a new snakefile in <code>workflow/rules</code>, for example called <code>analysis.smk</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Development and back-up</p>
+<p>During this session, we will modify our snakefiles quite heavily, so it may be a good idea to start by making a back-up: <code>cp -r worklow/ worklow_backup</code>. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>This is not a programming course, so you won&rsquo;t need to write the scripts: they were already prepared for you!</p>
+</div>
+<h3 id="creating-a-rule-to-gather-read-count-files">Creating a rule to gather read count files</h3>
+<p>To perform a Differential Expression Analysis (DEA), it is easier to have a single file gathering all the read counts of the different samples.</p>
+<p><strong>Exercise:</strong> Implement a rule to list and merge read count files (coming from <code>rule reads_quantification_genes</code>) into a single file using the Python script provided [here]https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py).</p>
+<div class="admonition note">
+<p class="admonition-title">Information on the script to compute the table</p>
+<ul>
+<li>You can download the script with <code>wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py</code></li>
+<li>It goes in a special directory in your workflow</li>
+<li>It is written in Python</li>
+<li>It takes a list of files as input, each file being the read count output of featureCounts</li>
+<li>It produces one output, a tab-separated table containing all the read counts of the different sample gathered by gene</li>
+</ul>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>While the goal of this rule is quite easy to grasp, setting it up requires using several advanced notions of Snakemake, so here is a little outline of the steps you should take:</p>
+<ol>
+<li>Build the basic structure of your rule: name, output, log, benchmark<ul>
+<li>Memory should be set at 500 MB</li>
+<li>Threads should be set at 1</li>
+<li>Don&rsquo;t focus on the inputs for now</li>
+</ul>
+</li>
+<li>Think about the directive you want to use to run the script<ul>
+<li>Looking at the script length with <code>wc -l &lt;path/to/script&gt;</code> could help you decide</li>
+</ul>
+</li>
+<li>Think about the location/path of the script</li>
+<li>Check the beginning of the script to see if you need any special Python packages. You can do that with <code>head &lt;path/to/script&gt;</code>. If you see lines containing <code>import &lt;package_name&gt;</code>, it means that the script is using external Python packages<ul>
+<li>If the script is using external packages, think on how can you provide them</li>
+</ul>
+</li>
+<li>Finally, identify the inputs your rule needs<ul>
+<li>Think on how you can easily list and provide the inputs. Does it remind you of something you saw in the course?</li>
+</ul>
+</li>
+</ol>
+</div>
+<p>Now, let&rsquo;s solve these problems one by one!</p>
+<h4 id="building-the-rule-structure">Building the rule structure</h4>
+<p>You have done that a few times already, so it should not be too difficult. </p>
+<p><strong>Exercise:</strong> Set the output, log, benchmark, resources and thread values.</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">count_table</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule merges all the gene count tables of an assembly into one table.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="err">?</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">count_table</span> <span class="o">=</span> <span class="s1">&#39;results/total_count_table.tsv&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/total_count_table.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/total_count_table.txt&#39;</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_mb</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="err">?</span><span class="p">:</span>
+        <span class="err">?</span>
+</code></pre></div>
+<p>Note that we do not need to use <code>wildcards</code> in the output name: only one file will be created, and its name will not change depending on the sample name, because we use <strong>all</strong> the samples to create it.</p>
+</details>
+<h4 id="getting-the-python-script-and-running-it">Getting the Python script and running it</h4>
+<p><strong>Exercise:</strong> Download the script and place it the proper folder. Remember that per the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html">official documentation</a>, scripts should be stored in a subfolder <code>workflow/scripts</code>.</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code>wget<span class="w"> </span>https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/count_table.py<span class="w">  </span><span class="c1"># Download the script</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>workflow/scripts<span class="w">  </span><span class="c1"># Create the appropriate folder</span>
+mv<span class="w"> </span>count_table.py<span class="w"> </span>workflow/scripts<span class="w">  </span><span class="c1"># Move the script in the newly created folder</span>
+</code></pre></div>
+</details>
+<p><strong>Exercise:</strong> Check how long the script is.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>If you run <code>wc -l workflow/scripts/count_table.py</code>, you will see that the script is 67 lines long. This is too much to use a <code>run</code> directive, so we will use the <code>script</code> directive instead. This means that we need to add the following to our <code>rule count_table</code>:
+<div class="highlight"><pre><span></span><code><span class="n">script</span><span class="p">:</span>
+    <span class="s1">&#39;../scripts/count_table.py&#39;</span>
+</code></pre></div></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Script path</p>
+<p>If you placed included files in subfolders (like <code>rules/analysis.smk</code>), you need to change relative paths for external script files, hence the <code>../</code> in the script path.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>In many cases, it would be nice to have a script that can be called by Snakemake but also work with standard Python, so that the code can be reused in other projects. There are several ways to do that:</p>
+<ul>
+<li>You could implement most of the functionalities in a module and use this module in a simple script called by Snakemake</li>
+<li>You could test for the existence of a <code>snakemake</code> object and handle parameter values differently (<em>e.g.</em> command-line arguments) if the object does not exist</li>
+</ul>
+<p>Inside the script, you have access to an object <code>snakemake</code> that provides access to the same objects that are available in the <code>run</code> and <code>shell</code> directives (input, output, params, wildcards, log, threads, resources, config), <em>e.g.</em> you can use <code>snakemake.input[0]</code> to access the first input file of a rule, or <code>snakemake.input.input_name</code> to access a specific named input.</p>
+</div>
+<p><strong>Exercise:</strong> Check the script content to see whether it requires specific packages.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>If you run <code>head workflow/scripts/count_table.py</code>, you will see several <code>import</code> commands at the start of the script, including <code>import pandas as pd</code>. <a href="https://pandas.pydata.org/docs/index.html"><code>pandas</code></a> is a great package, but it is not part of the default packages natively shipped with Python. This means that we need to find a solution to provide it to the rule. The easiest way to do that is to create a conda environment dedicated to the rule. Conda environments should be stored in a subfolder <code>workflow/envs</code>.</p>
+<p>Create the appropriate folder: <code>mkdir -p workflow/envs</code>. Then, write the following configuration in the environment file, <code>workflow/envs/py.yaml</code>:
+<div class="highlight"><pre><span></span><code><span class="c1"># Environment file to perform data processing with python</span>
+<span class="nt">name </span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python</span>
+<span class="nt">channels </span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bioconda</span>
+<span class="nt">dependencies </span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python &gt;= 3.10</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pandas == 1.4.3</span>
+</code></pre></div></p>
+<p>This means that you need to add the following to your <code>rule count_table</code>:
+<div class="highlight"><pre><span></span><code><span class="n">conda</span><span class="p">:</span>
+    <span class="s1">&#39;../envs/py.yaml&#39;</span>
+</code></pre></div></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Environment file path</p>
+<p>If you placed included files in subfolders (like <code>rules/analysis.smk</code>), you need to change relative paths for conda environments files as well, hence the <code>../</code> in the environment file path.</p>
+</div>
+<p>Using conda environments improves reproducibility for many reasons, including version control and the fact that users do not need to manually manage software dependencies. <strong>Note: the first execution of the workflow after adding Conda environments will take some time, because Conda will have to download and install all the software</strong>.</p>
+<h4 id="identifying-and-listing-the-input-files">Identifying and listing the input files</h4>
+<p>The before-last step is the most complex one: identifying all the inputs of the rule and gathering them in a list. Here, there are only 6 samples, so in theory, we could list them directly&hellip; However, by now you should that is not a good solution. Fortunately, there is a much more elegant and convenient way to do this: an input function, which provides the added benefit of scaling up very well if the number of samples increase.</p>
+<p>We already wrote the input function for you:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Input function used in rule count_table</span>
+<span class="k">def</span> <span class="nf">get_gene_counts</span><span class="p">(</span><span class="n">wildcards</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function lists all the gene count tables of samples in the config file</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Note that here {sample} is not a wildcard, it is an f-string variable!</span>
+    <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;results/</span><span class="si">{</span><span class="n">sample</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sample</span><span class="si">}</span><span class="s2">_genes_read_quantification.tsv&quot;</span>
+            <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">]]</span>
+</code></pre></div>
+<p>This function will loop over the list of samples in the config file, replace &lsquo;{sample}&rsquo; with the current sample name of the iteration to create a string which is the output path from the <code>rule reads_quantification_genes</code> of said sample. Then, it will aggregate all the paths in a list and return this list.</p>
+<div class="admonition note">
+<p class="admonition-title">Details on input functions</p>
+<ul>
+<li>Input functions take the <code>wildcards</code> global object as <strong>single argument</strong></li>
+<li>You can access wildcard values inside an input function with the syntax <code>{wildcards.wildcards_name}</code></li>
+<li>Input and output functions can return a list of files, which will then be automatically handled like multiple inputs or outputs by Snakemake. These functions can also return a dictionary; in this case, the function should be called with the syntax <code>input: unpack(&lt;function_name&gt;)</code>. The dictionary&rsquo;s keys will be interpreted as input/output names and the dictionary&rsquo;s values will be interpreted as input/output values</li>
+<li>Functions are evaluated <strong>before</strong> the workflow is executed. As a consequence, they cannot be used to list the content of an output directory, since the directory does not exist before the workflow is executed!</li>
+</ul>
+</div>
+<p><strong>Exercise:</strong> Insert the function in the proper Snakefile and adapt the input value of the rule accordingly.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>There are two things to do:
+* Insert the input function in <code>workflow/rules/analysis.smk</code>, before the rule, otherwise you will get a <code>name 'get_gene_counts' is not defined</code> error (the function needs to be defined <strong>before</strong> Snakemake looks for it when it parses the rule input).
+* Use the function name as value for the input directive</p>
+<p>Your rule and function should resemble this:
+<div class="highlight"><pre><span></span><code><span class="c1"># Input function used in rule count_table</span>
+<span class="nt">def get_gene_counts(wildcards)</span><span class="p">:</span>
+<span class="w">    </span><span class="s">&#39;</span><span class="se">&#39;&#39;</span>
+<span class="w">    </span><span class="s">This</span><span class="nv"> </span><span class="s">function</span><span class="nv"> </span><span class="s">lists</span><span class="nv"> </span><span class="s">all</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">gene</span><span class="nv"> </span><span class="s">count</span><span class="nv"> </span><span class="s">tables</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">samples</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">config</span><span class="nv"> </span><span class="s">file</span>
+<span class="w">    </span><span class="se">&#39;&#39;</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">return [f&quot;results/{sample}/{sample}_genes_read_quantification.tsv&quot;</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">for sample in config[&#39;samples&#39;]]</span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">count_table</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule merges all the gene count tables of an assembly into one table.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">get_gene_counts</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">count_table</span> <span class="o">=</span> <span class="s1">&#39;results/total_count_table.tsv&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/total_count_table.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/total_count_table.txt&#39;</span>
+    <span class="n">conda</span><span class="p">:</span>
+        <span class="s1">&#39;../envs/py.yaml&#39;</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_mb</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">script</span><span class="p">:</span>
+        <span class="s1">&#39;../scripts/count_table.py&#39;</span>
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Input functions usage</p>
+<p>You don&rsquo;t need to use parentheses or specify any argument when you call an input function in the <code>input</code> directive.</p>
+</div>
+<h4 id="adapting-the-snakefile-and-running-the-rule">Adapting the Snakefile and running the rule</h4>
+<p>Now, all that is left is to run the rule to create the table.</p>
+<p><strong>Exercise:</strong> Which command should you use to create the output? Is there anything else to do beforehand?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the <code>rule all</code>! Your Snakefile should now resemble this:</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Main Snakefile of the RNAseq analysis workflow. This workflow can clean and</span>
+<span class="sd">map reads, and perform Differential Expression Analyses.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># Path of the config file</span>
+<span class="n">configfile</span><span class="p">:</span> <span class="s1">&#39;config/config.yaml&#39;</span>
+
+<span class="c1"># Rules to execute the workflow</span>
+<span class="n">include</span><span class="p">:</span> <span class="s1">&#39;rules/read_mapping.smk&#39;</span>
+<span class="n">include</span><span class="p">:</span> <span class="s1">&#39;rules/analyses.smk&#39;</span>
+
+<span class="c1"># Master rule that launches the workflow</span>
+<span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dummy rule to automatically generate the required outputs.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;results/total_count_table.tsv&#39;</span>
+</code></pre></div>
+<p>Finally, run the workflow with <code>snakemake --cores 4 -r -p --use-conda</code></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">&ndash;use-conda</p>
+<p>Do not forget <code>--use-conda</code> otherwise Snakemake will not use the environments!!!</p>
+</div>
+<h3 id="creating-a-rule-to-detect-differentially-expressed-genes">Creating a rule to detect Differentially Expressed Genes</h3>
+<p>It is now time to write the final rule of the workflow. This rule will perform the DEA using the global count table we previously created.</p>
+<p><strong>Exercise:</strong> Implement a rule to perform DEA using the R script provided <a href="https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/DESeq2.R">here</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Information on the script to compute the table</p>
+<ul>
+<li>You can download the script with <code>wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/DESeq2.R</code></li>
+<li>It goes in a special directory in your workflow</li>
+<li>It is written in R</li>
+<li>It takes a global read counts table as input</li>
+<li>It produces two outputs:<ol>
+<li>A tab-separated table containing the DEG and the associated statistical results</li>
+<li>A pdf file containing control plots of the analysis</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>While not being trivial, this rule is much easier than the previous one and some things work similarly. Still, here is a little outline of the steps you should take:</p>
+<ol>
+<li>Build the basic structure of your rule: name, input, outputs, log, benchmark<ul>
+<li>Memory should be set at 1 GB</li>
+<li>Threads should be set at 2</li>
+</ul>
+</li>
+<li>Think about the directive you want to use to run the script<ul>
+<li>Remember than there is only one way to run an R script</li>
+</ul>
+</li>
+<li>Think about the location/path of the script</li>
+<li>This script is using a lot of external packages. Fortunately, all these packages are available in a <em>certain Docker image you worked with yesterday</em></li>
+</ol>
+</div>
+<p>Now, let&rsquo;s write this last rule!</p>
+<h4 id="building-the-rule-structure_1">Building the rule structure</h4>
+<p>You have done that a few times already, so it should not be too difficult. </p>
+<p><strong>Exercise:</strong> Set the input, outputs, log, benchmark, resources and thread values.</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">differential_expression</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule detects DEGs and plots associated visual control graphs (PCA,</span>
+<span class="sd">    heatmaps...).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">count_table</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">table</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="s1">&#39;results/deg_list.tsv&#39;</span><span class="p">,</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="s1">&#39;results/deg_plots.pdf&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/differential_expression.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/differential_expression.txt&#39;</span>
+    <span class="err">?</span><span class="p">:</span>
+        <span class="err">?</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_gb</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="err">?</span><span class="p">:</span>
+        <span class="err">?</span>
+</code></pre></div>
+<p>Note that we do not need to use <code>wildcards</code> in this rule, because all the files are precisely defined.</p>
+</details>
+<h4 id="getting-the-r-script-and-running-it">Getting the R script and running it</h4>
+<p><strong>Exercise:</strong> Download the script and place it the proper folder. Remember that per the <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html">official documentation</a>, scripts should be stored in a subfolder <code>workflow/scripts</code>.</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code>wget<span class="w"> </span>https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/main/scripts/solutions/day2/session4/workflow/scripts/DESeq2.R<span class="w">  </span><span class="c1"># Download the script</span>
+mv<span class="w"> </span>DESeq2.R<span class="w"> </span>workflow/scripts<span class="w">  </span><span class="c1"># Move the script in the newly created folder</span>
+</code></pre></div>
+</details>
+<p><strong>Exercise:</strong> Find a way to run the script.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>There is only one way to run an R script: use the <code>script</code> directive. This means that we need to add the following to our <code>rule differential_expression</code>:
+<div class="highlight"><pre><span></span><code><span class="n">script</span><span class="p">:</span>
+    <span class="s1">&#39;../scripts/DESeq2.R&#39;</span>
+</code></pre></div></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Script path</p>
+<p>If you placed included files in subfolders (like <code>rules/analysis.smk</code>), you need to change relative paths for external script files, hence the <code>../</code> in the script path.</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Inside the script, an S4 object named <code>snakemake</code> analogous to the Python case available and allows access to input and output files and other parameters. Here the syntax follows that of S4 classes with attributes that are R lists, <em>e.g.</em> you can access the first input file with <code>snakemake@input[[1]]</code> (note that the first file does not have index 0 here, because R starts counting from 1). Named input and output files can be accessed in the same way, by just providing the name instead of an index, <em>e.g.</em> <code>snakemake@input[["myfile"]]</code>.</p>
+</div>
+<p><strong>Exercise:</strong> Find an efficient way to create a computing environment for the rule.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Remember what you did during Day 1, session 3 &ldquo;Working with Dockerfiles&rdquo;!</p>
+</div>
+<details class="done">
+<summary>Answer</summary>
+<p>During Day 1, you built your own docker image, called deseq2. This image actually contains everything we need to run DEA, so let&rsquo;s use it again, but with Snakemake this time! This means that you need to add the following to your <code>rule differential_expression</code>:
+<div class="highlight"><pre><span></span><code><span class="n">container</span><span class="p">:</span>
+    <span class="s1">&#39;docker://geertvangeest/deseq2:v1&#39;</span>
+</code></pre></div></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Your own Docker image</p>
+<p>First try with your own image. If it doesn&rsquo;t work, then you can use Geert&rsquo;s image: <code>geertvangeest/deseq2:v1</code>.</p>
+</div>
+<p>After all these modifcations, this is what your final rule should look like:</p>
+<details class="done">
+<summary>Answer</summary>
+<div class="highlight"><pre><span></span><code><span class="n">rule</span> <span class="n">differential_expression</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule detects DEGs and plots associated visual control graphs (PCA,</span>
+<span class="sd">    heatmaps...).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">count_table</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">table</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">deg</span> <span class="o">=</span> <span class="s1">&#39;results/deg_list.tsv&#39;</span><span class="p">,</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="s1">&#39;results/deg_plots.pdf&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/differential_expression.log&#39;</span>
+    <span class="n">benchmark</span><span class="p">:</span>
+        <span class="s1">&#39;benchmarks/differential_expression.txt&#39;</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;docker://geertvangeest/deseq2:v1&#39;</span>
+    <span class="n">resources</span><span class="p">:</span>
+        <span class="n">mem_gb</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">script</span><span class="p">:</span>
+        <span class="s1">&#39;../scripts/DESeq2.R&#39;</span>
+</code></pre></div>
+</details>
+<h4 id="adapting-the-snakefile-and-running-the-rule_1">Adapting the Snakefile and running the rule</h4>
+<p>Now, all that is left is to run the rule to create the DEG list.</p>
+<p><strong>Exercise:</strong> Which command should you use to create the output? Is there anything else to do beforehand?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>It turns out that we cannnot launch the workflow directly: we need to include the new rule file in the Snakefile and adapt the output of the <code>rule all</code>! Your Snakefile should now resemble this:</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Main Snakefile of the RNAseq analysis workflow. This workflow can clean and</span>
+<span class="sd">map reads, and perform Differential Expression Analyses.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># Path of the config file</span>
+<span class="n">configfile</span><span class="p">:</span> <span class="s1">&#39;config/config.yaml&#39;</span>
+
+<span class="c1"># Rules to execute the workflow</span>
+<span class="n">include</span><span class="p">:</span> <span class="s1">&#39;rules/read_mapping.smk&#39;</span>
+<span class="n">include</span><span class="p">:</span> <span class="s1">&#39;rules/analyses.smk&#39;</span>
+
+<span class="c1"># Master rule that launches the workflow</span>
+<span class="n">rule</span> <span class="nb">all</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dummy rule to automatically generate the required outputs.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s1">&#39;results/deg_list.tsv&#39;</span>
+</code></pre></div>
+<p>Finally, run the workflow with <code>snakemake --cores 4 -r -p --use-singularity</code>. You should see new Snakemake information messages:
+<div class="highlight"><pre><span></span><code>Rscript --vanilla /path/to/snakemake_rnaseq/.snakemake/scripts/tmpge97d_lz.DESeq2.R
+Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
+INFO:    squashfuse not found, will not be able to mount SIF
+INFO:    fuse2fs not found, will not be able to mount EXT3 filesystems
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+INFO:    Converting SIF file to temporary sandbox...
+INFO:    Cleaning up image... 
+</code></pre></div></p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">&ndash;use-singularity</p>
+<p>Do not forget <code>--use-singularity</code> otherwise Snakemake will not pull the image!!!</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>If you want to see how a Snakemake-generated Dockerfile looks like, use: <code>snakemake --cores 1 --containerize &gt; Dockerfile</code></p>
+</div>
+<p><strong>Exercise:</strong> How many DEG were detected?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>Have a look at the list that was just created: <code>cat results/deg_list.tsv</code>. 8 genes are differentially expressed!</p>
+</details>
+<p><strong>Exercise:</strong> If you had to re-run the entire workflow from scratch, what command would you use?</p>
+<details class="done">
+<summary>Answer</summary>
+<p>You would need to execute <code>snakemake --cores 4 -r -p --use-conda --use-singularity -F</code>.
+* <code>-F</code> is to force the execution of the entire workflow
+* Don&rsquo;t forget <code>--use-conda --use-singularity</code>! Otherwise, you will lack some software and packages and the workflow will crash!</p>
+</details>
+<p><strong>Exercise:</strong> Visualise the DAG of the entire workflow.</p>
+<details class="done">
+<summary>Answer</summary>
+<p>You should now be used to this. <code>snakemake --cores 1 -r -p -F --dag | dot -T png &gt; images/total_dag.png</code></p>
+</details>
+<p>This is the DAG you should see:</p>
+<figure align="center">
+  <img src="../../../assets/images/total_dag.png" width="100%"/>
+</figure>
+
+<p>Congratulations, you are now able to create a Snakemake workflow and make it reproducible thanks to conda/mamba and Docker/Singularity! To make things even better, have a look at <a href="https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html">Snakemake&rsquo;s best practices</a>!</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2023 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.af256bd8.min.js"></script>
+      
+    
+  </body>
+</html>
