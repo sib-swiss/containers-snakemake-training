@@ -1,509 +1,670 @@
 [
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946726",
         "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144936",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I had some introduction in unix and ready to get started!"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144937",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I analyzed some datasets for which I used the command line"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144938",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I regularly analyze datasets with the command line"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144939",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I’m a bioinformatician"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873191",
+        "image": null,
+        "imageAltText": null,
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
         "text": "How comfortable are you with the command line?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525126",
-                "alias": null,
-                "text": "I had some introduction in unix and ready to get started!",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525127",
-                "alias": null,
-                "text": "I analyzed some datasets for which I used the command line",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525128",
-                "alias": null,
-                "text": "I regularly analyze datasets with the command line",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525129",
-                "alias": null,
-                "text": "I’m a bioinformatician",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946728",
         "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144944",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "R 🧬"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144945",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Python 🐍"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144946",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "JavaScript ☕"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144947",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Perl 🥸"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144948",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Rust ⚙️"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144949",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Other 🔥"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873193",
+        "image": null,
+        "imageAltText": null,
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "What is your favorite programming language?",
+        "uiType": "default",
+        "weightingFactor": null,
+        "weightingSetting": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144940",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I have zero experience"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144941",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I tried to run a container once or twice because I had to"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144942",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I’m using images built by others on a regular basis"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144943",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I have already built images myself"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873192",
+        "image": null,
+        "imageAltText": null,
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
         "text": "How experienced are you with containers?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525135",
-                "alias": null,
-                "text": "I have zero experience",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525136",
-                "alias": null,
-                "text": "I tried to run a container once or twice because I had to",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525137",
-                "alias": null,
-                "text": "I’m using images built by others on a regular basis",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525138",
-                "alias": null,
-                "text": "I have already built images myself",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
-    },
-    {
-        "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946727",
-        "alias": "",
-        "text": "Why are you joining this course?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525130",
-                "alias": null,
-                "text": "Containers are a hot topic, so I want to learn how it can help me",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525131",
-                "alias": null,
-                "text": "I want to make my workflows/pipelines more reproducible",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525132",
-                "alias": null,
-                "text": "I am done with installing (and failing to install) dependencies",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525133",
-                "alias": null,
-                "text": "I want to use a container from a fellow scientist but don’t know how",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525134",
-                "alias": null,
-                "text": "Other",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
-        "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
     {
         "@type": "OpenTextQuestion",
-        "wordCloudQuestion": true,
-        "lowerCaseAlias": "",
-        "id": "1946729",
         "alias": "",
-        "text": "Write three topics you would like to learn about in this course",
+        "correctAnswerExplanation": null,
+        "correctAnswers": [],
+        "id": "4873194",
         "image": null,
+        "imageAltText": null,
+        "lowerCaseAlias": "",
         "maxLength": 2000,
-        "maxWords": 150,
-        "resultFormat": "WORD_CLOUD",
         "maxWordCount": null,
         "maxWordLength": null,
-        "correctAnswers": [],
-        "correctAnswerExplanation": null
+        "maxWords": 150,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "WORD_CLOUD",
+        "text": "Write three topics you would like to learn about in this course",
+        "wordCloudQuestion": true
     },
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946775",
         "alias": "",
-        "text": "Which statement is true?",
-        "image": null,
         "choices": [
             {
-                "id": "7525339",
                 "alias": null,
-                "text": "The concept of containers is property of Docker, so Docker is the only software that can be used to develop containers",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144961",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Collect new data, analyse it with the same methods as an existing study, and produce the same pattern of results to draw the same overall conclusions"
             },
             {
-                "id": "7525340",
                 "alias": null,
-                "text": "If you have many different tasks, it’s best to use a single container",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144962",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Repeat experiments within a study by the same researchers, and produce the same conclusions"
             },
             {
-                "id": "7525341",
                 "alias": null,
-                "text": "A container contains the information for generating an image",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144963",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Take existing data, re-run the exact same analysis strategy, and produce the exact same statistical findings"
             },
             {
-                "id": "7525342",
                 "alias": null,
-                "text": "An image contains the information for generating a container",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144964",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "All these definitions are equivalent"
             }
         ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
+        "correctAnswerExplanation": null,
         "distributableWeight": null,
-        "weightingSetting": null,
-        "weightingFactor": null,
-        "correctAnswerExplanation": null
-    },
-    {
-        "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946776",
-        "alias": "",
-        "text": "Why is creating an image using docker commit not very reproducible?",
+        "id": "4873198",
         "image": null,
-        "choices": [
-            {
-                "id": "7525343",
-                "alias": null,
-                "text": "In order to recreate the container you will need the entire image (big file)",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525344",
-                "alias": null,
-                "text": "The exact build steps are not described by default",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525345",
-                "alias": null,
-                "text": "It is difficult to trace back software versions",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525346",
-                "alias": null,
-                "text": "All of the above",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
-        "weightingFactor": null,
-        "correctAnswerExplanation": null
-    },
-    {
-        "@type": "MultipleChoiceQuestion",
+        "imageAltText": "",
         "lowerCaseAlias": "",
-        "id": "1946779",
-        "alias": "",
-        "text": "What is the best way to share an image in the context of reproducibility?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525350",
-                "alias": null,
-                "text": "As an image on dockerhub",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525351",
-                "alias": null,
-                "text": "As a tar file generated by docker save",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525352",
-                "alias": null,
-                "text": "As a dockerfile on a git repo",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
         "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
         "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
-        "weightingFactor": null,
-        "correctAnswerExplanation": null
-    },
-    {
-        "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946726",
-        "alias": "",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
         "text": "What is reproducibility?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525126",
-                "alias": null,
-                "text": "Collect new data, analyse it with the same methods as an existing study, and produce the same pattern of results to draw the same overall conclusions",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525127",
-                "alias": null,
-                "text": "Repeat experiments within a study by the same researchers, re-run the same analysis strategy, and produce the same conclusions",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525128",
-                "alias": null,
-                "text": "Take existing data, re-run the exact same analysis strategy, and produce the exact same statistical findings",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525129",
-                "alias": null,
-                "text": "All these definitions are equivalent",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946726",
         "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144965",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Yes, a significant crisis"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144966",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Yes, a slight crisis"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144967",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "No, there is no crisis"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144968",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I don't know"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873199",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
         "text": "Is there a reproducibility crisis?",
-        "image": null,
-        "choices": [
-            {
-                "id": "7525126",
-                "alias": null,
-                "text": "Yes, a significant crisis",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525127",
-                "alias": null,
-                "text": "Yes, a slight crisis",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525128",
-                "alias": null,
-                "text": "No, there is no crisis",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            },
-            {
-                "id": "7525129",
-                "alias": null,
-                "text": "I don't know",
-                "isCorrectAnswer": false,
-                "excludeFromResults": false,
-                "image": null
-            }
-        ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
-        "distributableWeight": null,
-        "weightingSetting": null,
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946726",
         "alias": "",
-        "text": "How experienced are you with snakemake/workflow management systems?",
-        "image": null,
         "choices": [
             {
-                "id": "7525126",
                 "alias": null,
-                "text": "I have zero experience",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144969",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I have zero experience"
             },
             {
-                "id": "7525127",
                 "alias": null,
-                "text": "I tried to run a workflow once or twice because I had to",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144970",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I tried to run a workflow once or twice because I had to"
             },
             {
-                "id": "7525128",
                 "alias": null,
-                "text": "I'm running workflows developed by others on a regular basis",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144971",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I’m running workflows developed by others on a regular basis"
             },
             {
-                "id": "7525129",
                 "alias": null,
-                "text": "I have already developed an entire (Snakemake) workflow",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144972",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I have already developed an entire (Snakemake) workflow"
             }
         ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
+        "correctAnswerExplanation": null,
         "distributableWeight": null,
-        "weightingSetting": null,
+        "id": "4873200",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "<p>How experienced are you with Snakemake/Workflow Management Systems?</p>",
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
     {
         "@type": "MultipleChoiceQuestion",
-        "lowerCaseAlias": "",
-        "id": "1946726",
         "alias": "",
-        "text": "How comfortable are you with python?",
-        "image": null,
         "choices": [
             {
-                "id": "7525126",
                 "alias": null,
-                "text": "I have no python knowledge but I am ready to get started!",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144973",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I have no python knowledge but I am ready to get started!"
             },
             {
-                "id": "7525127",
                 "alias": null,
-                "text": "I analyzed some datasets for which I used this language",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144974",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I analyzed some datasets for which I used this language"
             },
             {
-                "id": "7525128",
                 "alias": null,
-                "text": "I regularly analyze datasets with this language",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144975",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "I regularly analyze datasets with this language"
             },
             {
-                "id": "7525129",
                 "alias": null,
-                "text": "My coffee machine program is coded in Python",
-                "isCorrectAnswer": false,
                 "excludeFromResults": false,
-                "image": null
+                "id": "18144976",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "My coffee machine program is coded in Python"
             }
         ],
-        "minNumberSelections": 1,
-        "maxNumberSelections": 1,
-        "resultFormat": "%",
+        "correctAnswerExplanation": null,
         "distributableWeight": null,
-        "weightingSetting": null,
+        "id": "4873201",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "<p>How comfortable are you with Python?</p>",
+        "uiType": "default",
         "weightingFactor": null,
-        "correctAnswerExplanation": null
+        "weightingSetting": null
     },
-
+    {
+        "@type": "MultipleChoiceQuestion",
+        "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144977",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Should we really use a config file?"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144978",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "As little as possible: sample names are more than enough!"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144979",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Everything: file locations (ex: annotations), sample names and the associated information, rule computing resources…"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144980",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Everything but with paths to other smaller config files: file locations (ex: annotations), sample names and the associated information, rule computing resources…"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873202",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "What should appear in a config file?\n",
+        "uiType": "default",
+        "weightingFactor": null,
+        "weightingSetting": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144981",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "One small environment per rule"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144982",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "One medium environment per Snakefile"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144983",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "One big environment with everything in it for all the rules"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18144984",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Use package and container managers"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873203",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 4,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "What is the best setting for Snakemake environments?",
+        "uiType": "default",
+        "weightingFactor": null,
+        "weightingSetting": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146021",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "None"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146022",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Some"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146023",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "A lot"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873432",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "<p>Do you have experience with HPC environments?</p>",
+        "uiType": "default",
+        "weightingFactor": null,
+        "weightingSetting": null
+    },
+    {
+        "@type": "MultipleChoiceQuestion",
+        "alias": "",
+        "choices": [
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146024",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "None"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146025",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "Some"
+            },
+            {
+                "alias": null,
+                "excludeFromResults": false,
+                "id": "18146026",
+                "image": null,
+                "imageAltText": null,
+                "isCorrectAnswer": false,
+                "text": "A lot"
+            }
+        ],
+        "correctAnswerExplanation": null,
+        "distributableWeight": null,
+        "id": "4873433",
+        "image": null,
+        "imageAltText": "",
+        "lowerCaseAlias": "",
+        "maxNumberSelections": 1,
+        "minNumberSelections": 1,
+        "questionSettings": {},
+        "resultDisplayType": "default",
+        "resultFormat": "%",
+        "resultSorting": null,
+        "splitPercentageQuestion": false,
+        "text": "<p>Do you have experience with SLURM? </p>",
+        "uiType": "default",
+        "weightingFactor": null,
+        "weightingSetting": null
+    }
 ]

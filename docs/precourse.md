@@ -1,4 +1,4 @@
-## Knowledge background
+## Background knowledge
 
 As is stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20250528_SNAKE), we expect participants to have a basic understanding of working with the command line on UNIX-based systems and a a good understanding of Docker and Apptainer/Singularity containers.
 
