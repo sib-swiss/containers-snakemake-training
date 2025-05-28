@@ -467,7 +467,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
     * The location/path of the script
     * Check whether the script need a special environment
         * If so, and if you attended the [SIB course on Containers](https://www.sib.swiss/training/course/20250527_DOCK), remember a _certain Docker image_ you created during the course
-        * If not, use the following container: `docker://geertvangeest/deseq2:v1`
+        * If not, use the following container: `docker://athiebaut/deseq2:v3`
 
 ??? success "Answer"
     Like with the Python script, there are two problems to solve to run the R script:
@@ -512,7 +512,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 'logs/differential_expression.log'
             threads: 2
             container:  # Add container directive
-                'docker://geertvangeest/deseq2:v1'  # Try with your own image; if it doesn't work, use Geert's
+                'docker://athiebaut/deseq2:v3'  # Try with your own image; if it doesn't work, use Geert's
             script:
                 '../scripts/DESeq2.R'
         ```
@@ -535,7 +535,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 
     During the run, you should see log messages about Snakemake managing the Docker image:
     ```sh
-    Pulling singularity image docker://geertvangeest/deseq2:v1.
+    Pulling singularity image docker://athiebaut/deseq2:v3.
     [...]
     Activating singularity image /path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
     ```

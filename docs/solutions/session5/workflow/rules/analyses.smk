@@ -51,6 +51,6 @@ rule differential_expression:
         mem_mb = 1000
     threads: 2
     container:
-        'docker://geertvangeest/deseq2:v1'
+        'docker://athiebaut/deseq2:v3'
     script:
         '../scripts/DESeq2.R'
