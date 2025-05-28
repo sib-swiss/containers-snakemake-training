@@ -43,6 +43,6 @@ rule differential_expression:
         'logs/differential_expression.log'
     threads: 2
     container:
-        'docker://geertvangeest/deseq2:v1'
+        'docker://athiebaut/deseq2:v3'
     script:
         '../scripts/DESeq2.R'

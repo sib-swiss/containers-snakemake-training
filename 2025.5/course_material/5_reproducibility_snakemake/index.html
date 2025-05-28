@@ -1603,7 +1603,7 @@ Remember that we don&rsquo;t need to add both outputs of rule <code>differential
 <li>The location/path of the script</li>
 <li>Check whether the script need a special environment<ul>
 <li>If so, and if you attended the <a href="https://www.sib.swiss/training/course/20250527_DOCK">SIB course on Containers</a>, remember a <em>certain Docker image</em> you created during the course</li>
-<li>If not, use the following container: <code>docker://geertvangeest/deseq2:v1</code></li>
+<li>If not, use the following container: <code>docker://athiebaut/deseq2:v3</code></li>
 </ul>
 </li>
 </ul>
@@ -1679,7 +1679,7 @@ Remember that we don&rsquo;t need to add both outputs of rule <code>differential
         <span class="s1">&#39;logs/differential_expression.log&#39;</span>
     <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
     <span class="n">container</span><span class="p">:</span>  <span class="c1"># Add container directive</span>
-        <span class="s1">&#39;docker://geertvangeest/deseq2:v1&#39;</span>  <span class="c1"># Try with your own image; if it doesn&#39;t work, use Geert&#39;s</span>
+        <span class="s1">&#39;docker://athiebaut/deseq2:v3&#39;</span>  <span class="c1"># Try with your own image; if it doesn&#39;t work, use Geert&#39;s</span>
     <span class="n">script</span><span class="p">:</span>
         <span class="s1">&#39;../scripts/DESeq2.R&#39;</span>
 </code></pre></div></td></tr></table></div>
@@ -1700,7 +1700,7 @@ Remember that we don&rsquo;t need to add both outputs of rule <code>differential
 </code></pre></div>
 Do not forget to add <code>--sdm apptainer</code>, otherwise Snakemake will not pull the image and the script will be executed in the default environment (which will most likely lead to a crash).</p>
 <p>During the run, you should see log messages about Snakemake managing the Docker image:
-<div class="highlight"><pre><span></span><code>Pulling<span class="w"> </span>singularity<span class="w"> </span>image<span class="w"> </span>docker://geertvangeest/deseq2:v1.
+<div class="highlight"><pre><span></span><code>Pulling<span class="w"> </span>singularity<span class="w"> </span>image<span class="w"> </span>docker://athiebaut/deseq2:v3.
 <span class="o">[</span>...<span class="o">]</span>
 Activating<span class="w"> </span>singularity<span class="w"> </span>image<span class="w"> </span>/path/to/snakemake_rnaseq/.snakemake/singularity/8bfdbe93244feb95887ab5d33a705017.simg
 </code></pre></div></p>
