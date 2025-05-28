@@ -512,7 +512,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
                 'logs/differential_expression.log'
             threads: 2
             container:  # Add container directive
-                'docker://athiebaut/deseq2:v3'  # Try with your own image; if it doesn't work, use Geert's
+                'docker://athiebaut/deseq2:v3'  # Try with your own image; if it doesn't work, use this one
             script:
                 '../scripts/DESeq2.R'
         ```
