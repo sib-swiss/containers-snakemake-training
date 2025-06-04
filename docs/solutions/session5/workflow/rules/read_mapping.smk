@@ -21,7 +21,7 @@ rule fastq_trim:
     benchmark:
         'benchmarks/{sample}/{sample}_atropos_trimming.txt'
     resources:
-        mem_mb = 500
+        mem_mb = 4096
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2'
@@ -107,7 +107,7 @@ rule fastq_qc_sol4:
     benchmark:
         'benchmarks/{sample}/{sample}_atropos_fastqc.txt'
     resources:
-        mem_mb = 1000
+        mem_mb = 1024
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0'
@@ -153,7 +153,7 @@ rule read_mapping:
     benchmark:
         'benchmarks/{sample}/{sample}_mapping.txt'
     resources:
-        mem_mb = 2000
+        mem_mb = 4096
     threads: 4
     container:
         'https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6'
@@ -182,7 +182,7 @@ rule sam_to_bam:
     benchmark:
         'benchmarks/{sample}/{sample}_mapping_sam_to_bam.txt'
     resources:
-        mem_mb = 250
+        mem_mb = 1024
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/samtools%3A1.21--h50ea8bc_0'
@@ -214,7 +214,7 @@ rule reads_quantification_genes:
     benchmark:
         'benchmarks/{sample}/{sample}_genes_read_quantification.txt'
     resources:
-        mem_mb = 500
+        mem_mb = 512
     threads: 2
     container:
         'https://depot.galaxyproject.org/singularity/subread%3A2.0.6--he4a0461_2'

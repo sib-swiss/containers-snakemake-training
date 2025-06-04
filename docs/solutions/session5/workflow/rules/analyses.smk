@@ -26,7 +26,7 @@ rule count_table:
     benchmark:
         'benchmarks/total_count_table.txt'
     resources:
-        mem_mb = 500
+        mem_mb = 512
     threads: 1
     conda:
         '../envs/py.yaml'
@@ -48,7 +48,7 @@ rule differential_expression:
     benchmark:
         'benchmarks/differential_expression.txt'
     resources:
-        mem_mb = 1000
+        mem_mb = 4096
     threads: 2
     container:
         'docker://athiebaut/deseq2:v3'
