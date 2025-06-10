@@ -1,12 +1,14 @@
 {
   "upload_type": "lesson",
   "license": "cc-by-4.0",
-  "title": " Introduction to Containers and Snakemake for Reproducible Research",
+  "title": " Reproducible and Scalable Research with Snakemake and Software Containers",
   "keywords": [
     "Docker",
     "Singularity",
     "apptainer",
     "Containers",
+    "conda",
+    "mamba",
     "Reproducibility",
     "Snakemake",
     "Workflows",
@@ -17,14 +19,19 @@
   ],
   "creators": [
     {
+      "name": "Antonin Thiébaut",
+      "affiliation": "Biomedical Data Science Center, Lausanne University Hospital, Lausanne, Switzerland",
+      "orcid": "0000-0002-7587-5587"
+    },
+    {
+      "name": "Rafael Riudavets Puig",
+      "affiliation": "Multi-omics for healthcare materials lab, Nanomaterials in Health department, Empa, Lerchenfeldstrasse 5, 9014 St Gallen, Switzerland",
+      "orcid": "0000-0002-2855-9952"
+    },
+    {
       "name": "Geert van Geest",
       "affiliation": "SIB Swiss Institute of Bioinformatics",
       "orcid": "0000-0002-1561-078X"
-    },
-    {
-      "name": " Antonin Thiébaut",
-      "affiliation": "University of Lausanne",
-      "orcid": "0000-0002-7587-5587"
     },
     {
       "name": "Patricia Palagi",
