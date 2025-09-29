@@ -13,4 +13,3 @@ dependencies:
   - snakemake-interface-report-plugins=1.2.0
   - snakemake-interface-scheduler-plugins=2.0.1
   - snakemake-interface-storage-plugins=4.2.3
-  - snakemake-minimal=9.11.6
