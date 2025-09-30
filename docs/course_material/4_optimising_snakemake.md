@@ -171,9 +171,9 @@ If you develop a large workflow, you are bound to encounter some cluttering prob
 1. The most fine-grained level is wrappers
 
     ??? info "More information on wrappers"
-        Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility. However their implementation can be 'rigid' and sometimes it may be better to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#wrappers) for more explanations
+        Wrappers allow to quickly use popular tools and libraries in Snakemake workflows, thanks to the `wrapper` directive. Wrappers are automatically downloaded and deploy a conda environment when running the workflow, which increases reproducibility. However their implementation can be 'rigid' and sometimes it may be better to write your own rule. See the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/modularization.html#wrappers) for more explanations
 
-1. For larger parts belonging to the same workflow, it is recommended to split the main Snakefile into smaller snakefiles, each containing rules with a common topic. Smaller snakefiles are then integrated into the main Snakefile with the `include` statement. In this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#includes) for more explanations
+1. For larger parts belonging to the same workflow, it is recommended to split the main Snakefile into smaller snakefiles, each containing rules with a common topic. Smaller snakefiles are then integrated into the main Snakefile with the `include` statement. In this case, all rules share a common config file. See the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/modularization.html#includes) for more explanations
 
     ??? info "Rules organisation"
         There is no official guideline on how to regroup rules, but a simple and logic approach is to create "thematic" snakefiles, _i.e._ place rules related to the same topic in the same file. Modularisation is a common practice in programming in general: it is often easier to group all variables, functions, classes... related to a common theme into a single script, package, software...
@@ -181,7 +181,7 @@ If you develop a large workflow, you are bound to encounter some cluttering prob
 1. The final level of modularisation is modules
 
     ??? info "More on modules"
-        It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/modularization.html#modules) for more explanations
+        It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/modularization.html#modules) for more explanations
 
 In this course, you will only use the second level of modularisation. Briefly, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefile containing rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefile in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
 
@@ -276,7 +276,7 @@ After several (dry-)runs, you may have noticed that the rule order is not always
 
 ### Aggregating outputs to process lists of files
 
-Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the previous rule `all`, inputs are still hard-coded... and you know that this is not an optimal solution, especially if there are many samples to process. The [`expand()` function](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#the-expand-function) will solve both problems.
+Using a target rule like the one presented in the previous paragraph gives another opportunity to make things easier. In the previous rule `all`, inputs are still hard-coded... and you know that this is not an optimal solution, especially if there are many samples to process. The [`expand()` function](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/rules.html#the-expand-function) will solve both problems.
 
 `expand()` is used to generate a list of output files by automatically expanding a wildcard expression to several values. In other words, it will replace a wildcard in an expression by all the values of a list, successively. For instance, `expand('{sample}.tsv', sample=['A', 'B', 'C'])` will create the list of files `['A.tsv', 'B.tsv', 'C.tsv']`.
 

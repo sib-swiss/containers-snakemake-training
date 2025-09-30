@@ -120,7 +120,7 @@ This function will loop over the list of samples in the config file and replace 
         The dictionary keys will be used as input names and the dictionary values will be used as input values, providing a list of named inputs
 
 ??? warning "Input functions and output directory"
-    Input functions are evaluated **before** the workflow is executed, so they cannot be used to list the content of an output directory, since it does not exist before the workflow is executed. Instead, you can use a [checkpoint](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
+    Input functions are evaluated **before** the workflow is executed, so they cannot be used to list the content of an output directory, since it does not exist before the workflow is executed. Instead, you can use a [checkpoint](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/rules.html#data-dependent-conditional-execution) to trigger a re-evaluation of the DAG.
 
 **Exercise:** Insert the function `get_gene_counts()` in `workflow/rules/analysis.smk` and adapt the input value of `count_table` accordingly. Do you need to insert the function in a specific location?
 
@@ -239,7 +239,7 @@ Or you can copy it from here:
             print('Done')
     ```
 
-**Exercise:** Get the script with your favourite method and place it the proper folder according to the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). Where should you store it?
+**Exercise:** Get the script with your favourite method and place it the proper folder according to the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/deployment.html). Where should you store it?
 
 ??? success "Answer"
     Scripts should be gathered in their own dedicated folder: `workflow/scripts`.
@@ -466,7 +466,7 @@ The next exercise won't be as guided as the other ones. This is done on purpose 
     * The directive you need to run the script
     * The location/path of the script
     * Check whether the script need a special environment
-        * If so, and if you attended the [SIB course on Containers](https://www.sib.swiss/training/course/20250527_DOCK), remember a _certain Docker image_ you created during the course
+        * If so, and if you attended the [SIB course on Containers](https://www.sib.swiss/training/course/20251009_DOCK), remember a _certain Docker image_ you created during the course
         * If not, use the following container: `docker://athiebaut/deseq2:v3`
 
 ??? success "Answer"

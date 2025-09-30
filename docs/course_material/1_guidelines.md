@@ -10,7 +10,7 @@ All the software needed in this workflow is either:
 * Already installed in a Docker container
 * Will be installed via conda environments/containers during today's exercises
 
-All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/) for Snakemake version `8.20.5`.
+All information of this course is based on the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/) for Snakemake version `9.11.6`.
 
 ## Website colour code explanation
 
@@ -41,7 +41,7 @@ Do not hesitate to modify and overwrite your code from previous answers as diffi
     * If you feel that you drifted too far apart from the solution, you can always restart from files provided in the [solutions folder](https://github.com/sib-swiss/containers-snakemake-training/tree/main/docs/solutions/) of the course repository
     * At the start of sessions 3, 4 and 5, you will also find a short note with a command to download the complete Snakefile from the previous session
 
-If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/v8.20.5/index.html) for more information.
+If something is not clear at any point, please call us and we will do our best to answer your questions! You can also check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/v9.11.6/index.html) for more information.
 
 ## Computing environment
 

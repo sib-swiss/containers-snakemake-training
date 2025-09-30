@@ -56,7 +56,7 @@ At the end of this series of exercises, your workflow should look like this:
 
 ### Downloading data and setting up folder structure
 
-In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/deployment.html). You already started doing so in the previous series of exercises and at the end of the course, it should resemble this:
+In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/deployment.html). You already started doing so in the previous series of exercises and at the end of the course, it should resemble this:
 ```
 │── .gitignore
 │── README.md

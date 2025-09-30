@@ -36,7 +36,7 @@ Knowing how many resources are being used by each job can be very useful to opti
 * Likewise, you can use `max_rss` (shown in megabytes) to figure out how much memory was used by the job and use this value in the `memory` keyword
 
 ??? info "What are the other columns?"
-    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
+    In case you are wondering about the other columns of the table, the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/rules.html#benchmark-rules) has detailed explanations about their content.
 
 **Exercise:** Add the and `benchmark` directive to the rules. You can follow the same logic as you did with the `log` directive.
 
@@ -442,4 +442,4 @@ This will give you information such as the job id, the job status, how long is h
 
 Congratulations, you made it to the end! You are now able to create a Snakemake workflow, make it reproducible thanks to Conda and Docker/Apptainer and even run it in an HPC! This is a great time to get yourself a coffee/tea and celebrate! :coffee: :tea:
 
-To make things even better, have a look at some [additional concepts](7_debugging_snakemake.md#using-non-conventional-outputs) and [Snakemake's best practices](https://snakemake.readthedocs.io/en/v8.20.5/snakefiles/best_practices.html)!
+To make things even better, have a look at some [additional concepts](7_debugging_snakemake.md#using-non-conventional-outputs) and [Snakemake's best practices](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/best_practices.html)!
