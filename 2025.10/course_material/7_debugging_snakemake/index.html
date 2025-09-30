@@ -1,0 +1,1381 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../6_hpc_snakemake/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/SIB_logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Additional concepts and workflow design/debugging - Reproducible and Scalable Research with Snakemake</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  <!-- Matomo -->
+<script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="https://matomo.sib.swiss/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '220']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learning-outcomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../.."> 
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Reproducible and Scalable Research with Snakemake" class="md-header__button md-logo" aria-label="Reproducible and Scalable Research with Snakemake" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Reproducible and Scalable Research with Snakemake
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Additional concepts and workflow design/debugging
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Reproducible and Scalable Research with Snakemake" class="md-nav__button md-logo" aria-label="Reproducible and Scalable Research with Snakemake" data-md-component="logo">
+      
+  <img src="../../assets/images/SIB_logo.svg" alt="logo">
+
+    </a>
+    Reproducible and Scalable Research with Snakemake
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sib-swiss/containers-snakemake-training" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sib-swiss/containers-snakemake-training
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../precourse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Precourse preparations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_schedule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Course schedule
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Course material
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Course material
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_guidelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    General guidelines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_introduction_snakemake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction to Snakemake
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_generalising_snakemake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Making a more general-purpose Snakemake workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_optimising_snakemake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Decorating and optimising a Snakemake workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_reproducibility_snakemake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Being reproducible with Snakemake
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_hpc_snakemake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Running Snakemake in an HPC environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional concepts and workflow design/debugging
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designing-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designing a workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging a workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging a workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#order-of-operations-in-snakemake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order of operations in Snakemake
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-advice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging advice
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-non-conventional-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using non-conventional outputs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-conventional outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#removing-and-safeguarding-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing and safeguarding outputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-an-output-directory-the-fastqc-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using an output directory: the FastQC example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning outcomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Material
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#designing-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Designing a workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-a-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging a workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging a workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#order-of-operations-in-snakemake" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order of operations in Snakemake
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-advice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging advice
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-non-conventional-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using non-conventional outputs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using non-conventional outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#removing-and-safeguarding-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing and safeguarding outputs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-an-output-directory-the-fastqc-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using an output directory: the FastQC example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Additional concepts and workflow design/debugging</h1>
+
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p><strong>After having completed this chapter you will be able to:</strong></p>
+<ul>
+<li>Understand the inner workings and order of operations in Snakemake</li>
+<li>Efficiently design and debug a Snakemake workflow</li>
+<li>Use flags to delete or protect outputs</li>
+<li>Use flags to consider a directory as output</li>
+</ul>
+<h2 id="material">Material</h2>
+<p><a class="md-button" href="../../assets/pdf/7_additional_concepts.pdf"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M0 64C0 28.7 28.7 0 64 0h160v128c0 17.7 14.3 32 32 32h128v144H176c-35.3 0-64 28.7-64 64v144H64c-35.3 0-64-28.7-64-64zm384 64H256V0zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16m32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16m32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V368"/></svg></span> Download the presentation</a></p>
+<h2 id="designing-a-workflow">Designing a workflow</h2>
+<p>There are many ways to design a new workflow, but these few pieces of advice will be useful in most cases:</p>
+<ul>
+<li>Start with a pen and paper: try to find out how many rules you will need and how they depend on each other. In other terms, start by sketching the DAG of your workflow!<ul>
+<li>Remember that Snakemake has a bottom-up approach (it goes from the final outputs to the first input), so it may be easier for you to work in that order as well and write your last rule first</li>
+<li>Determine which rules (if any) aggregate or split inputs and create input functions accordingly (the topic is tackled in <a href="../5_reproducibility_snakemake/">this</a> series of exercises)</li>
+</ul>
+</li>
+<li>Make sure your input and output directives are right before worrying about anything else, especially the shell sections. There is no point in executing commands with the wrong inputs/outputs!<ul>
+<li>Remember that Snakemake builds the DAG before running the shell commands, so you can use the <code>-n/--dry-run/--dryrun</code> parameter to test the workflow before running it. You can even do that without writing all the shell commands!</li>
+</ul>
+</li>
+<li>List any parameters or settings that might need to be adjusted later</li>
+<li>Choose meaningful and easy-to-understand names for your rules, inputs, outputs, parameters, <code>wildcards</code>&hellip; to make your Snakefile as readable as possible. This is true for every script, piece of code, variable&hellip; and Snakemake is no exception! Have a look at <a href="https://peps.python.org/pep-0020/">The Zen of Python</a> for more information</li>
+</ul>
+<h2 id="debugging-a-workflow">Debugging a workflow</h2>
+<p>It is very likely you will see bugs and errors the first time you try to run a new Snakefile: don’t be discouraged, this is normal!</p>
+<h3 id="order-of-operations-in-snakemake">Order of operations in Snakemake</h3>
+<p>The topic was approached when we discussed <a href="../2_introduction_snakemake/#chaining-rules">DAGs</a>, but to efficiently debug a workflow, it is worth taking a deeper look at what Snakemake does when you execute the command <code>snakemake -c 1 &lt;target&gt;</code>. There are 3 main phases:</p>
+<ol>
+<li>Prepare to run:<ol>
+<li>Read all the rule definitions from the Snakefile</li>
+</ol>
+</li>
+<li>Resolve the DAG (happens when Snakemake says &lsquo;Building DAG of jobs&rsquo;):<ol>
+<li>Check what output(s) are required</li>
+<li>Look for matching input(s) by looking at the outputs of all the rules</li>
+<li>Fill in the <code>wildcards</code> to determine the exact input(s) of the matching rule(s)</li>
+<li>Check whether this(these) input(s) is(are) available; if not, repeat Step 2 until everything is resolved</li>
+</ol>
+</li>
+<li>Run:<ol>
+<li>If needed, create the output(s) folder path</li>
+<li>If needed, remove the outdated output(s)</li>
+<li>Fill in the placeholders and run the shell commands</li>
+<li>Check that the commands ran without errors and produced the expected output(s)</li>
+</ol>
+</li>
+</ol>
+<h3 id="debugging-advice">Debugging advice</h3>
+<p>Sometimes, Snakemake will give you a precise error report, but other times&hellip; less so. Try to identify which phase of execution failed (see previous paragraph on <a href="./#order-of-operations-in-snakemake">order of operations</a>) and double-check the most common error causes for that phase:</p>
+<ol>
+<li>Parsing phase failures (phase 1):<ul>
+<li>Syntax errors, among which (but not limited to):<ul>
+<li>Missing commas/colons/semicolons</li>
+<li>Unbalanced quotes/brackets/parenthesis</li>
+<li>Wrong indentation</li>
+<li><em>These errors can be easily solved using a text editor with Python/Snakemake text colouring</em></li>
+</ul>
+</li>
+<li>Failure to evaluate expressions<ul>
+<li>Problems in functions (<code>expand()</code>, input functions&hellip;) in input/output directives</li>
+<li>Python logic added outside of rules</li>
+</ul>
+</li>
+<li>Other problems with rule definition<ul>
+<li>Invalid rule names/directives</li>
+<li>Invalid wildcard names</li>
+<li>Mismatched <code>wildcards</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DAG building failures (phase 2, before Snakemake tries to run any job):<ul>
+<li>Failure to determine the target</li>
+<li>Ambiguous rules making the same output(s)</li>
+<li>On the contrary, no rule making the required output(s)</li>
+<li>Circular dependency (violating the <strong>&lsquo;Acyclic&rsquo;</strong> property of a D<strong>A</strong>G).</li>
+<li>Write-protected output(s)</li>
+</ul>
+</li>
+<li>DAG running failures (phase 3, <code>--dry-run</code> works and builds the DAG, but the jobs execution fails):<ul>
+<li>Shell command returning non-zero status</li>
+<li>Missing output file(s) after the commands have run</li>
+<li>Reference to a <code>$shell_variable</code> before it was set</li>
+<li>Use of a wrong/unknown placeholder inside <code>{ }</code></li>
+<li><em>When a job fails, Snakemake reports an error, deletes all output file(s) for that job (because of potential corruption), and stops</em></li>
+</ul>
+</li>
+</ol>
+<h2 id="using-non-conventional-outputs">Using non-conventional outputs</h2>
+<p><em>This part is an extra-exercise about non-conventional Snakemake outputs. It is quite long, so do it only if you finished the rest of the course beforehand.</em></p>
+<p>Snakemake has several built-in utilities to assign properties to outputs that are deemed &lsquo;special&rsquo;. These properties are listed in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Syntax</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temporary</td>
+<td><code>temp('file.txt')</code></td>
+<td>File is deleted as soon as it is not required by a future jobs</td>
+</tr>
+<tr>
+<td>Protected</td>
+<td><code>protected('file.txt')</code></td>
+<td>File cannot be overwritten after job ends (useful to prevent erasing a file by mistake, for example files requiring heavy computation)</td>
+</tr>
+<tr>
+<td>Ancient</td>
+<td><code>ancient('file.txt')</code></td>
+<td>Ignore file timestamp and assume file is older than any outputs: file will not be re-created when re-running workflow, except when <code>--force</code> options are used</td>
+</tr>
+<tr>
+<td>Directory</td>
+<td><code>directory('directory')</code></td>
+<td>Output is a directory instead of a file (use <code>touch()</code> instead if possible)</td>
+</tr>
+<tr>
+<td>Touch</td>
+<td><code>touch('file.txt')</code></td>
+<td>Create an empty flag file <code>file.txt</code> regardless of shell commands (only if commands finished without errors)</td>
+</tr>
+</tbody>
+</table>
+<p>The next paragraphs will show how to use some of these properties.</p>
+<h3 id="removing-and-safeguarding-outputs">Removing and safeguarding outputs</h3>
+<p>This part shows a few examples using <code>temp()</code> and <code>protected()</code> flags.</p>
+<p><strong>Exercise:</strong> Can you think of a convenient use of the <code>temp()</code> flag?</p>
+<details class="success">
+<summary>Answer</summary>
+<p><code>temp()</code> is extremely useful to automatically remove intermediary outputs that are no longer needed.</p>
+</details>
+<p><strong>Exercise:</strong> In your workflow, identify outputs that are intermediary and mark them as temporary with <code>temp()</code>.</p>
+<details class="success">
+<summary>Answer</summary>
+<p>Unsorted .bam and .sam outputs seem like great candidates to be marked as temporary. One could argue that trimmed .fastq files could also be marked as temporary, but we won&rsquo;t bother with them here. For clarity, only lines that changed are shown below:</p>
+<ul>
+<li>
+<p>rule <code>read_mapping</code>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">sam</span> <span class="o">=</span> <span class="n">temp</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.sam&#39;</span><span class="p">),</span>
+</code></pre></div></td></tr></table></div></p>
+</li>
+<li>
+<p>rule <code>sam_to_bam</code>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">bam</span> <span class="o">=</span> <span class="n">temp</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.bam&#39;</span><span class="p">),</span>
+</code></pre></div></td></tr></table></div></p>
+</li>
+</ul>
+</details>
+<details class="warning">
+<summary>Advantages and drawbacks of <code>temp()</code></summary>
+<p>On one hand, removing temporary outputs is a great way to save storage space. If you look at the size of your current <code>results/</code> folder (<code>du -bchd0 results/</code>), you will notice that it drastically increased. Just removing these two files would allow to save ~1 GB. While it may not seem like much, remember that you usually have much bigger files and many more samples!</p>
+<p>On the other hand, using temporary outputs might force you to re-run more jobs than necessary if an input changes, so think carefully before using <code>temp()</code>.</p>
+</details>
+<p><strong>Exercise:</strong> On the contrary, is there a file of your workflow that you would like to protect? If so, mark it with <code>protected()</code>.</p>
+<details class="success">
+<summary>Answer</summary>
+<p>Sorted .bam files from rule <code>sam_to_bam</code> seem like good candidates for protection:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">output</span><span class="p">:</span>
+    <span class="n">bam_sorted</span> <span class="o">=</span> <span class="n">protected</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads_sorted.bam&#39;</span><span class="p">),</span>
+</code></pre></div></td></tr></table></div>
+If you set this output as protected, be careful when you want to re-run your workflow to recreate the file!</p>
+</details>
+<h3 id="using-an-output-directory-the-fastqc-example">Using an output directory: the FastQC example</h3>
+<p><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> is a program designed to spot potential problems in high-througput sequencing datasets. It is a very popular tool, notably because it is fast and does not require a lot of configuration. It runs a set of analyses on one or more sequence files in FASTQ or BAM format and produces a quality report with plots that summarise the results. It highlights potential problems that might require a closer look in your dataset.</p>
+<p>As such, it would be interesting to run FastQC on the original and trimmed .fastq files to check whether trimming actually improved read quality. FastQC can be run interactively or in batch mode, during which it saves results as an HTML file and a ZIP file. You will later see that running FastQC in batch mode is a bit harder than it looks.</p>
+<details class="info">
+<summary>Data types and FastQC</summary>
+<p>FastQC does not differentiate between sequencing techniques and as such can be used to look at libraries coming from a large number of experiments (Genomic Sequencing, ChIP-Seq, RNAseq, BS-Seq etc&hellip;).</p>
+</details>
+<p>If you run <code>fastqc -h</code>, you will notice something a bit surprising, but not unusual in bioinformatics:
+<div class="highlight"><pre><span></span><code><span class="w">    </span>-o<span class="w"> </span>--outdir<span class="w">     </span>Create<span class="w"> </span>all<span class="w"> </span>output<span class="w"> </span>files<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>specified<span class="w"> </span>output<span class="w"> </span>directory.
+<span class="w">                    </span>Please<span class="w"> </span>note<span class="w"> </span>that<span class="w"> </span>this<span class="w"> </span>directory<span class="w"> </span>must<span class="w"> </span>exist<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>program
+<span class="w">                    </span>will<span class="w"> </span>not<span class="w"> </span>create<span class="w"> </span>it.<span class="w"> </span>If<span class="w"> </span>this<span class="w"> </span>option<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>the
+<span class="w">                    </span>output<span class="w"> </span>file<span class="w"> </span><span class="k">for</span><span class="w"> </span>each<span class="w"> </span>sequence<span class="w"> </span>file<span class="w"> </span>is<span class="w"> </span>created<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>same
+<span class="w">                    </span>directory<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>sequence<span class="w"> </span>file<span class="w"> </span>which<span class="w"> </span>was<span class="w"> </span>processed.
+
+<span class="w">   </span>-d<span class="w"> </span>--dir<span class="w">         </span>Selects<span class="w"> </span>a<span class="w"> </span>directory<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>temporary<span class="w"> </span>files<span class="w"> </span>written<span class="w"> </span>when
+<span class="w">                    </span>generating<span class="w"> </span>report<span class="w"> </span>images.<span class="w"> </span>Defaults<span class="w"> </span>to<span class="w"> </span>system<span class="w"> </span>temp<span class="w"> </span>directory<span class="w"> </span><span class="k">if</span>
+<span class="w">                    </span>not<span class="w"> </span>specified.
+</code></pre></div></p>
+<p>Two files are produced for each .fastq file and these files appear in the same directory as the input file: FastQC does not allow to specify the output file names! However, you can set an alternative output directory, even though <strong>it needs to be manually created before FastQC is run</strong>.</p>
+<p>There are different solutions to this problem:</p>
+<ol>
+<li>Work with the default file names produced by FastQC and leave the reports in the same directory as the input files</li>
+<li>Create the outputs in a new directory and leave the reports with their default name</li>
+<li>Create the outputs in a new directory and tell Snakemake that the directory itself is the output</li>
+<li>Force a naming convention by manually renaming the FastQC output files within the rule</li>
+</ol>
+<p>It would be too long to test all four solutions, so you will work on the 3<sup>rd</sup> <strong>or</strong> the 4<sup>th</sup> solution. Here is a brief summary of solutions 1 and 2:</p>
+<ol>
+<li>This could work, but it&rsquo;s better not to put reports in the same directory as input sequences. As a general principle, when writing Snakemake rules, we prefer to be in charge of the output names and to have all the files linked to a sample in the same directory</li>
+<li>This involves manually constructing the output directory path to use with the <code>-o</code> parameter, which works but isn&rsquo;t very convenient</li>
+</ol>
+<p>The first part of the FastQC command is:
+<div class="highlight"><pre><span></span><code>fastqc<span class="w"> </span>--format<span class="w"> </span>fastq<span class="w"> </span>--threads<span class="w"> </span><span class="o">{</span>threads<span class="o">}</span><span class="w"> </span>--outdir<span class="w"> </span><span class="o">{</span>folder_path<span class="o">}</span><span class="w"> </span>--dir<span class="w"> </span><span class="o">{</span>folder_path<span class="o">}</span><span class="w"> </span>&lt;input_fastq1&gt;<span class="w"> </span>&lt;input_fastq2&gt;
+</code></pre></div></p>
+<details class="info">
+<summary>Explanation of FastQC parameters</summary>
+<ul>
+<li><code>-t/--threads</code>: specify how many files can be processed simultaneously. Here, it will be 2 because inputs are paired-end files</li>
+<li><code>-o/--outdir</code>: create output files in specified output directory</li>
+<li><code>-d/--dir</code>: select a directory to be used for temporary files</li>
+</ul>
+</details>
+<p><strong>Choose between solution 3 or 4 and implement it. You will find more information and help below.</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Solution 3</label><label for="__tabbed_1_2">Solution 4</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>This option is equivalent to tell Snakemake not to worry about individual files at all and consider an entire directory as the rule output.</p>
+<p><strong>Exercise:</strong> Implement a single rule to run FastQC on both the original and trimmed .fastq files (four files in total) using directories as ouputs with the <code>directory()</code> flag.</p>
+<ul>
+<li>The container image can be found at <code>https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0</code></li>
+</ul>
+<details class="success">
+<summary>Answer</summary>
+<p>This makes the rule definition quite &lsquo;simple&rsquo; compared to solution 4:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_qc_sol3</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule performs a QC on paired-end .fastq files before and after trimming.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">reads1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads1</span><span class="p">,</span>
+        <span class="n">reads2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads2</span><span class="p">,</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">before_trim</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/before_trim/&#39;</span><span class="p">),</span>
+        <span class="n">after_trim</span> <span class="o">=</span> <span class="n">directory</span><span class="p">(</span><span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/after_trim/&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_fastqc.log&#39;</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        echo &quot;Creating output directory &lt;{output.before_trim}&gt;&quot; &gt; {log}</span>
+<span class="sd">        mkdir -p {output.before_trim} 2&gt;&gt; {log}  # FastQC doesn&#39;t create output directories so we have to do it manually</span>
+<span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.before_trim} \</span>
+<span class="sd">        --dir {output.before_trim} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        echo &quot;Results saved in &lt;{output.before_trim}&gt;&quot; &gt;&gt; {log}</span>
+</span><span class="sd">        echo &quot;Creating output directory &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        mkdir -p {output.after_trim} 2&gt;&gt; {log}  # FastQC doesn&#39;t create output directories so we have to do it manually</span>
+<span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {output.after_trim} \</span>
+<span class="sd">        --dir {output.after_trim} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        echo &quot;Results saved in &lt;{output.after_trim}&gt;&quot; &gt;&gt; {log}</span>
+</span><span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div></p>
+</details>
+<details class="info">
+<summary> <code>.snakemake_timestamp</code></summary>
+<p>When <code>directory()</code> is used, Snakemake creates an empty file called <code>.snakemake_timestamp</code> in the output directory. This is the marker file it uses to know whether it needs to re-run the rule producing the directory.</p>
+</details>
+<p>Overall, this rule works quite well and allows for an easy rule definition. However, in this case, individual files are not explicitly named as outputs and this may cause problems to chain rules later. Also, remember that some software won’t give you any control at all over the outputs, which is why you need a back-up plan, <em>i.e.</em> solution 4: the most powerful solution is still to use shell commands to move and/or rename files to names you want. Also, the Snakemake developers advise to use <code>directory()</code> only as a last resort and to use <a href="https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/rules.html#flag-files"><code>touch()</code></a> instead.</p>
+</div>
+<div class="tabbed-block">
+<p>This option amounts to let FastQC follows its default behaviour but manually rename the files afterwards to obtain the exact outputs we require.</p>
+<p><strong>Exercise:</strong> Implement a single rule to run FastQC on both the original and trimmed .fastq files (four files in total) and rename the files created by FastQC to the desired output names using the <code>mv &lt;old_name&gt; &lt;new_name&gt;</code> command.</p>
+<ul>
+<li>The container image can be found at <code>https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0</code></li>
+</ul>
+<details class="success">
+<summary>Answer</summary>
+<p>This makes the rule definition (much) more complicated than solution 3:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">fastq_qc_sol4</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule performs a QC on paired-end .fastq files before and after trimming.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">reads1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads1</span><span class="p">,</span>
+        <span class="n">reads2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">reads2</span><span class="p">,</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="c1"># QC before trimming</span>
+        <span class="n">html1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_1.html&#39;</span><span class="p">,</span>  <span class="c1"># Forward-read report in HTML format before trimming</span>
+        <span class="n">zipfile1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_1.zip&#39;</span><span class="p">,</span>  <span class="c1"># Forward-read report in ZIP format before trimming</span>
+        <span class="n">html2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_2.html&#39;</span><span class="p">,</span>  <span class="c1"># Reverse-read report in HTML format before trimming</span>
+        <span class="n">zipfile2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_before_trim_2.zip&#39;</span><span class="p">,</span>  <span class="c1"># Reverse-read report in ZIP format before trimming</span>
+        <span class="c1"># QC after trimming</span>
+        <span class="n">html1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_1.html&#39;</span><span class="p">,</span>  <span class="c1"># Forward-read report in HTML format after trimming</span>
+        <span class="n">zipfile1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_1.zip&#39;</span><span class="p">,</span>  <span class="c1"># Forward-read report in ZIP format after trimming</span>
+        <span class="n">html2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_2.html&#39;</span><span class="p">,</span>  <span class="c1"># Forward-read report in HTML format after trimming</span>
+        <span class="n">zipfile2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_after_trim_2.zip&#39;</span>  <span class="c1"># Forward-read report in ZIP format after trimming</span>
+    <span class="n">params</span><span class="p">:</span>
+        <span class="n">wd</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/&#39;</span><span class="p">,</span>  <span class="c1"># Temporary directory to store files before renaming</span>
+        <span class="c1"># QC before trimming</span>
+        <span class="n">html1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_1_fastqc.html&#39;</span><span class="p">,</span>  <span class="c1"># Default FastQC output name for forward-read report in HTML format before trimming</span>
+        <span class="n">zipfile1_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_1_fastqc.zip&#39;</span><span class="p">,</span>  <span class="c1"># Default FastQC output name for forward-read report in ZIP format before trimming</span>
+        <span class="n">html2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_2_fastqc.html&#39;</span><span class="p">,</span>  <span class="c1"># Default FastQC output name for reverse-read report in HTML format before trimming</span>
+        <span class="n">zipfile2_before</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_2_fastqc.zip&#39;</span><span class="p">,</span>  <span class="c1"># Default FastQC output name for reverse-read report in ZIP format before trimming</span>
+        <span class="c1"># QC after trimming</span>
+        <span class="n">html1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1_fastqc.html&#39;</span><span class="p">,</span><span class="c1"># Default FastQC output name for forward-read report in HTML format after trimming</span>
+        <span class="n">zipfile1_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_1_fastqc.zip&#39;</span><span class="p">,</span><span class="c1"># Default FastQC output name for forward-read report in ZIP format after trimming</span>
+        <span class="n">html2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2_fastqc.html&#39;</span><span class="p">,</span><span class="c1"># Default FastQC output name for reverse-read report in HTML format after trimming</span>
+        <span class="n">zipfile2_after</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/fastqc_reports/</span><span class="si">{sample}</span><span class="s1">_atropos_trimmed_2_fastqc.zip&#39;</span><span class="c1"># Default FastQC output name for reverse-read report in ZIP format after trimming</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_fastqc.log&#39;</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/fastqc%3A0.12.1--hdfd78af_0&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        echo &quot;Creating output directory &lt;{params.wd}&gt;&quot; &gt; {log}</span>
+<span class="sd">        mkdir -p {params.wd} 2&gt;&gt; {log}  # FastQC doesn&#39;t create output directories so we have to do it manually</span>
+<span class="sd">        echo &quot;Performing QC of reads before trimming in &lt;{input.reads1}&gt; and &lt;{input.reads2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} \</span>
+<span class="sd">        --dir {params.wd} {input.reads1} {input.reads2} &amp;&gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        echo &quot;Renaming results from original fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
+</span><span class="sd">        mv {params.html1_before} {output.html1_before} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile1_before} {output.zipfile1_before} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.html2_before} {output.html2_before} 2&gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        mv {params.zipfile2_before} {output.zipfile2_before} 2&gt;&gt; {log}</span>
+</span><span class="sd">        echo &quot;Performing QC of reads after trimming in &lt;{input.trim1}&gt; and &lt;{input.trim2}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        fastqc --format fastq --threads {threads} --outdir {params.wd} \</span>
+<span class="sd">        --dir {params.wd} {input.trim1} {input.trim2} &amp;&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Renaming results from trimmed fastq analysis&quot; &gt;&gt; {log}  # Renames files because we can&#39;t choose fastqc output</span>
+<span class="sd">        mv {params.html1_after} {output.html1_after} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.zipfile1_after} {output.zipfile1_after} 2&gt;&gt; {log}</span>
+<span class="sd">        mv {params.html2_after} {output.html2_after} 2&gt;&gt; {log}</span>
+<span class="hll"><span class="sd">        mv {params.zipfile2_after} {output.zipfile2_after} 2&gt;&gt; {log}</span>
+</span><span class="sd">        echo &quot;Results saved in &lt;results/{wildcards.sample}/fastqc_reports/&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div></p>
+</details>
+<p>This solution is very long and much more complicated than the other one. However, it makes up for its complexity by allowing a total control on what is happening: with this method, we can choose where temporary files are saved as well as output names. It could have been shortened by using <code>-o .</code> to tell FastQC to create files in the current working directory instead of a specific one, but this would have created another problem: if we run multiple jobs in parallel, then Snakemake may try to produce files from different jobs at the same temporary destination. In this case, the different Snakemake instances would be trying to write to the same temporary files at the same time, overwriting each other and corrupting the output files.</p>
+</div>
+</div>
+</div>
+<p>Three interesting things are happening in both versions of this rule:</p>
+<ul>
+<li>Similarly to outputs, it is possible to refer to inputs of a rule directly in another rule with the syntax <code>rules.&lt;rule_name&gt;.input.&lt;input_name&gt;</code></li>
+<li>FastQC doesn&rsquo;t create output directories by itself (other programs might insist that output directories <strong>do not</strong> already exist), so you have to manually create it with <code>mkdir</code> in the <code>shell</code> directive before running FastQC<ul>
+<li>Overall, most software will create the required directories for you; FastQC is an exception</li>
+</ul>
+</li>
+<li>When using output <strong>files</strong>, Snakemake creates the missing folders by itself. However, when using a <code>directory(</code>) output, Snakemake <strong>will not</strong> create the directory. Otherwise, this would guarantee the rule to succeed every time, independently of the <code>shell</code> directive status: as soon as the directory is created, the rule succeeds, even if the <code>shell</code> directive fails. The current behaviour prevents Snakemake from continuing the workflow when a command may have failed. This also shows that solution 3, albeit simple, can be risky</li>
+</ul>
+<details class="tip">
+<summary>Controlling execution flow</summary>
+<p>If you want to make sure that a certain rule is executed before another, you can write the outputs of the first rule as inputs of the second one, even if the rule doesn&rsquo;t use them. For example, you could force the execution of FastQC before mapping reads with one more line in rule <code>read_mapping</code>:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">rule</span> <span class="n">read_mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This rule maps trimmed reads of a fastq onto a reference assembly.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="n">trim1</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim1</span><span class="p">,</span>
+        <span class="n">trim2</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_trim</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">trim2</span><span class="p">,</span>
+        <span class="n">fastqc</span> <span class="o">=</span> <span class="n">rules</span><span class="o">.</span><span class="n">fastq_qc_sol4</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">html1_before</span>  <span class="c1"># This single line will force the execution of FastQC before read mapping</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="n">sam</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapped_reads.sam&#39;</span><span class="p">,</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="s1">&#39;results/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping_report.txt&#39;</span>
+    <span class="n">params</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
+    <span class="n">log</span><span class="p">:</span>
+        <span class="s1">&#39;logs/</span><span class="si">{sample}</span><span class="s1">/</span><span class="si">{sample}</span><span class="s1">_mapping.log&#39;</span>
+    <span class="n">threads</span><span class="p">:</span> <span class="mi">4</span>
+    <span class="n">container</span><span class="p">:</span>
+        <span class="s1">&#39;https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6&#39;</span>
+    <span class="n">shell</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        echo &quot;Mapping the reads&quot; &gt; {log}</span>
+<span class="sd">        hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
+<span class="sd">        -x {params.index} --threads {threads} \</span>
+<span class="sd">        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Mapped reads saved in &lt;{output.sam}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        echo &quot;Mapping report saved in &lt;{output.report}&gt;&quot; &gt;&gt; {log}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+</code></pre></div></td></tr></table></div></p>
+</details>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../6_hpc_snakemake/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Running Snakemake in an HPC environment">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Running Snakemake in an HPC environment
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2025 SIB Swiss institute of Bioinformatics - <a href="#__consent">Change cookie settings</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["announce.dismiss", "content.code.copy", "navigation.top", "navigation.footer"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
