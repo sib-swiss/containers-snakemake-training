@@ -28,7 +28,7 @@ You should have a modern code editor installed. During the course, we can give o
 
 ### SSH connections
 
-In addition to your local computer, you will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/)) Elastic Cloud (EC2) [server](https://aws.amazon.com/ec2/). This Ubuntu server behaves like a 'normal' remote server, and can be approached through [`ssh`](https://man7.org/linux/man-pages/man1/ssh.1.html). If you are enrolled in the course, you have received an e-mail with an IP address, username, private key and password to grant you access to a personal home directory on the server.
+In addition to your local computer, you will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/)) Elastic Cloud (EC2) [server](https://aws.amazon.com/ec2/). This Ubuntu server behaves like a 'normal' remote server, and can be approached through [`ssh`](https://man7.org/linux/man-pages/man1/ssh.1.html). If you are enrolled in the course, you have access to a shared document containing instruction to retrieve your username and private ssh key, granting you access to a personal home directory on the server.
 
 ??? tip "If you want to know more about `ssh`"
     If you are not familiar with `ssh`, you can check the [Heidelberg University tutorial](https://zah.uni-heidelberg.de/it-guide/ssh-tutorial-linux) for information on how to set it up and use it.
@@ -42,7 +42,7 @@ Here are instructions on how to use VScode to connect with SSH to a remote serve
     ```
 
 === "macOS/Linux"
-    Open a terminal, and `cd` to the directory where you have stored your private key. Then change the permissions of the key file and move it to `~/.ssh`:
+    Open a terminal, `cd` to the directory where you have stored your private key (`key_username.pem` file), change the permissions of the key file and move it to `~/.ssh`:
     ```sh
     chmod 400 key_username.pem
     mv key_username.pem ~/.ssh
@@ -52,21 +52,25 @@ Then:
 
 * Open VScode and click on the green or blue button in the bottom left corner
 * Select `Connect to Host...` and then `Configure SSH Hosts...`
-* Specify a location for the SSH config file. Use the same directory as where your keys are stored (so `~/.ssh/config`)
-* A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and specify the correct IP at `HostName`):
+* Specify a location for the SSH config file (preferably the same directory as where your keys are stored): `~/.ssh/config`
+* A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and make sure the IP address in `HostName` match what the one given in the shared document):
 
     === "Windows"
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.170.182
+            HostName 18.195.137.58
             IdentityFile ~\.ssh\key_username.pem
+        ```
+        Note: if you are working with the Windows SSH executable (for example `C:\WINDOWS\System32\OpenSSH\ssh.exe`), you may have to use the full path of the key file instead of a relative one in `IdentityFile`:
+        ```
+            IdentityFile C:\Users\<windows_username>\.ssh\key_username.pem
         ```
     === "MacOS/Linux"
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.170.182
+            HostName 18.195.137.58
             IdentityFile ~/.ssh/key_username.pem
         ```
 
@@ -82,6 +86,6 @@ You can also find a video tutorial below:
 ??? info "If you are not working with VScode"
     If you are not working with VScode, you can login to the remote server with the following command in a terminal:
     ```sh
-    ssh -i key_username.pem username@18.195.170.182
+    ssh -i key_username.pem username@18.195.137.58
     ```
     If you want to edit files directly on the server, you can mount a directory with `sshfs`.
