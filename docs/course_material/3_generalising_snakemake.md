@@ -194,20 +194,17 @@ To solve this problem, Snakemake can use package managers (more on this [later](
 
 **Exercise:**
 
-* Complete the atropos command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)
-    * You can find information on how to use `atropos` and its parameters with `atropos trim -h` or you can look at the tip below
+* Complete the `atropos` command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)
+    * .fastq files to trim are located in `data/`
+    * Paths of files to trim (_i.e._ input files, in FASTQ format) are specified with the parameters `-pe1` (first read) and `-pe2` (second read)
+    * Paths of trimmed files (_i.e._ output files, also in FASTQ format) are specified with the parameters `-o` (first read) and `-p` (second read)
 * Implement a rule containing your command to trim reads contained in a .fastq files
     * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
     * The container image can be found at `https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2`
 
-??? tip "atropos inputs and outputs"
-    * .fastq files to trim are located in `data/`
-    * Paths of files to trim (_i.e._ input files, in FASTQ format) are specified with the parameters `-pe1` (first read) and `-pe2` (second read)
-    * Paths of trimmed files (_i.e._ output files, also in FASTQ format) are specified with the parameters `-o` (first read) and `-p` (second read)
-
 ??? success "Answer"
     This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
-    ```python linenums="1" hl_lines="2-7 12-15 18 19"
+    ```python linenums="1" hl_lines="1 8-15 20"
     rule fastq_trim:
         """
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -281,21 +278,17 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 
 **Exercise:**
 
-* Complete the HISAT2 command given above with parameters to specify inputs and outputs
-    * You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)
-        * You can find more information on how to use HISAT2 and its parameters with `hisat2 -h` or you can look at the tip below
-* Implement a rule containing your command to map trimmed reads contained in .fastq files
-    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
-    * The container image can be found at `https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6`
-
-??? tip "HISAT2 inputs and outputs"
+* Complete the HISAT2 command given above with parameters to specify inputs and outputs. You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)
     * Paths of trimmed files (_i.e._ input files) are specified with the parameters `-1` (first read) and `-2` (second read)
     * Basename of genome indices (binary format) is specified with the parameter `-x`. The files have a shared name of `resources/genome_indices/Scerevisiae_index`, which is the value you need to use for `-x`
     * Path of mapped reads files (_i.e._ output file, in SAM format) is specified with the parameter `-S` (do not forget the .sam extension at the end of the filename)
     * Path of mapping report (_i.e._ output file, in text format) is specified with the parameter `--summary-file`
+* Implement a rule containing your command to map trimmed reads contained in .fastq files
+    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6`
 
 ??? success "Answer"
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="5-12 16-17"
     rule read_mapping:
         """
         This rule maps trimmed reads of a fastq onto a reference assembly.
@@ -457,7 +450,7 @@ rule reads_quantification_genes:
 
 It would be interesting to know what is happening when featureCounts runs. This is where the `log` directive comes into play!
 
-**(Optional) Exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 27-30 of the presentation (available [here](#material)) for information on this directive.
+**Optional exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 27-30 of the presentation (available [here](#material)) for information on this directive.
 
 ??? tip "Logs"
     * The `log` directive must contain the same `wildcards` as the `output` directive, here `sample`
@@ -555,7 +548,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
     \\============================================================================//
     ```
 
-**(Optional) Exercise:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
+**Optional exercise:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
 
 ??? success "Answer"
     You can check the logs with:

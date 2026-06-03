@@ -110,7 +110,7 @@ def get_gene_counts(wildcards):
             for sample in config['samples']]
 ```
 ??? warning "Snakemake wildcards vs Python f-strings"
-    This input function is pure Python code: in the return statement, `{sample}` isn't a wildcard, it is an f-string variable! This shows that you can natively use basic Python elements in a workflow: Snakemake will still be able understand them. This is because Snakemake was built on top of Python.
+    This input function is pure Python code: in the return statement, **`{sample}` isn't a wildcard, it is an f-string variable**! This shows that you can natively use basic Python elements in a workflow: Snakemake will still be able understand them. This is because Snakemake was built on top of Python.
 
 This function will loop over the list of samples in the config file and replace `{sample}` with the current sample name of the iteration to create a string which is the output path from the rule `reads_quantification_genes` of said sample. Then, it will aggregate all the paths in a list and return this list.
 
@@ -325,7 +325,7 @@ If you remember the presentation, there are two directives that you can use to r
 
 Given the presence of a non-default package in the script, we need to find a solution to make it accessible inside the rule. The easiest way to do that is to create a rule-specific conda environment. In Snakemake, you can do this by providing an environment config file (in YAML format) to the rule with the `conda` directive.
 
-**(Optional) Exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how environment files look and work, you can check out slides 4-10 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
+**Optional exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how environment files look and work, you can check out slides 4-10 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
 
 ??? tip "Environment features"
     * Environment `name` is `py3.12`
@@ -575,7 +575,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     snakemake -c 1 --containerize > Dockerfile
     ```
 
-**(Optional) Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
+**Optional exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
 
 ??? success "Answer"
     You can re-run the whole workflow with:
