@@ -1,7 +1,7 @@
 # Script designed to find Differentially Expressed Genes using DESeq2
 
 
-# Redirects all R logs to snakemake log
+# Redirects all R logs to Snakemake log
 log <- file(snakemake@log[[1]], open = "wt")
 sink(log, type = "output")
 sink(log, type = "message")
@@ -25,7 +25,7 @@ suppressMessages({
 })
 
 
-cat("Getting data from snakemake\n")
+cat("Getting data from Snakemake\n")
 read_counts <- unlist(snakemake@input$table)
 condition <- "Treatment"
 target <- "highCO2"
@@ -53,7 +53,7 @@ deg_table <- unlist(snakemake@output$deg)
 plots_pdf <- unlist(snakemake@output$pdf)
 
 
-# Logs variables imported from snakemake; mainly for debugging purpose
+# Logs variables imported from Snakemake; mainly for debugging purpose
 cat("Variables and types used for this analysis:\n")
 cat("\tread_counts <--  ", read_counts, ", type: ", data.class(read_counts), "\n",
     sep = "")

@@ -53,7 +53,7 @@ Here are instructions on how to use VScode to connect with SSH to a remote serve
 
 Then:
 
-* Open VScode and click on the green or blue button in the bottom left corner
+* Open VS Code and click on the green or blue button in the bottom left corner
 * Select `Connect to Host...` and then `Configure SSH Hosts...`
 * Specify a location for the SSH config file (preferably the same directory as where your keys are stored): `~/.ssh/config`
 * A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and make sure the IP address in `HostName` match what the one given in the shared document):
@@ -88,8 +88,8 @@ Finally:
 You can find a video tutorial to configure SSH connections in VScode below:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/cOopQQIL8JU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-??? info "If you are not working with VScode"
-    If you are not working with VScode, you can login to the remote server with the following command in a terminal:
+??? info "If you are not working with VS Code"
+    If you are not working with VS Code, you can login to the remote server with the following command in a terminal:
     ```sh
     ssh -i key_username.pem username@18.195.137.58
     ```

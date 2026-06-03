@@ -42,7 +42,7 @@ if __name__ == '__main__':
         # Redirect everything from script to Snakemake log
         sys.stderr = sys.stdout = logfile
 
-        print('Getting data from snakemake')
+        print('Getting data from Snakemake')
         list_of_files = snakemake.input
         count_table = snakemake.output.table
 

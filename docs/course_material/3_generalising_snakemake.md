@@ -110,7 +110,7 @@ In this part, you will download the data and start building the directory struct
 
 For now, the main thing to remember is that **code** should go into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**. The only exception is the **`config` subfolder**, but it will be [explained later](4_optimising_snakemake.md#config-files). All **output files** generated in the workflow should be stored under **`results/`**.
 
-Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VScode terminal:
+Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VS Code terminal:
 ```sh linenums="1"
 wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download data
 tar -xvf snakemake_rnaseq.tar.gz  # Uncompress archive
@@ -118,7 +118,7 @@ rm snakemake_rnaseq.tar.gz  # Delete archive
 cd snakemake_rnaseq/  # Start developing in new folder
 ```
 
-In ` snakemake_rnaseq/`, you should see two subfolders:
+In `snakemake_rnaseq/`, you should see two subfolders:
 
 * `data/`, which contains data to analyse
 * `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow
@@ -240,7 +240,7 @@ To solve this problem, Snakemake can use package managers (more on this [later](
     snakemake -c 1 -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
     ```
 
-    * You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
+    * You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the Snakemake command used to execute the workflow!
     * Do not forget to add `--sdm=apptainer`, otherwise Snakemake will not pull the image and the command will be executed in the default environment (which will most likely lead to a crash). Don't worry if the first execution is somewhat slow: Snakemake has to download the image. The next ones will be much faster as the images are cached
 
 ### Creating a rule to map trimmed reads onto a reference genome
@@ -568,7 +568,7 @@ You have now implemented and run the main steps of the workflow. It is always a 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
         * `images/` is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when you set up the [workflow structure](#downloading-data-and-setting-up-folder-structure)
-    * If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs
+    * If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the `snakemake` command to force the execution of all jobs
         * You can also use `-f <target>` to show fewer jobs
 
 ??? tip "The `dot` command"
