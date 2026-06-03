@@ -19,7 +19,8 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 ## Material
 
 * This website
-* Shared document (through email)
+* Zoom meeting (through mail)
+* Shared document (through mail)
 
 ## Learning outcomes
 
@@ -34,7 +35,7 @@ After this course, you will be able to:
 
 ### Learning outcomes explained
 
-To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter (found at [Course material](course_material/2_introduction_snakemake.md#learning-outcomes)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
+To reach the general learning outcomes above, we have set a number of smaller learning outcomes. Each chapter ([for example here](course_material/2_introduction_snakemake.md#learning-outcomes)) starts with these smaller learning outcomes. Use these at the start of a chapter to get an idea what you will learn. Use them also at the end of a chapter to evaluate whether you have learned what you were expected to learn.
 
 ## Learning experiences
 
@@ -46,20 +47,24 @@ Each block has practical work involved. Some more than others. The practicals ar
 
 ### Asking questions
 
-During lectures, you are encouraged to raise your hand if you have questions. Feel free to speak up!
-
-**Asking questions online:**
-
-If the course is online, a main source of communication will be our [Slack channel](https://www.slack.com). Ask background questions that interest you personally at **#background**. During the exercises, _e.g_. if you are stuck or don't understand what is going on, use the Slack channel **#q-and-a**.  This channel is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question, use the "reply in thread" option:
+During lectures, you are encouraged to raise your hand if you have questions (if in-person), or use the 'Raise Hand' Zoom functionality or write a message in the general chat (if online). Feel free to speak up! Find the buttons in the participants list ('Participants' button):
 
 <figure>
-  <img src="assets/images/reply_in_thread.png" width="350"/>
+  <img src="assets/images/zoom_icons.png" width="300"/>
 </figure>
 
-The teachers will review the answers, and add/modify if necessary. If you are really stuck and need specific tutor support, write the teachers or helpers personally.
+Alternatively, (depending on your zoom version or OS) use the 'Reactions' button:
+
+<figure>
+  <img src="assets/images/reactions_zoom.png" width="200"/>
+</figure>
+
+During the exercises, e.g. if you are stuck or don't understand what is going on, write to the teachers or helpers directly.
+
+You can also write questions in the `Questions & answers` section of the shared document, including background questions that interest you personally. This section is not only meant for asking questions but also for answering questions of other participants. If you are replying to a question of another participant, write underneath it with a supplementary indent for the bullet point. The teachers will review the answers, and add/modify if necessary.
 
 **To summarise:**
 
-* During lectures: raise hand
-* Personal interest questions: **#background** on Slack
-* During exercises: raise hand/**\#q-and-a** on Slack
+* During lectures: **raise hand/Zoom functionality**, general Zoom chat messages
+* Personal interest questions: **shared document**
+* During exercises: **private messages** to teachers
