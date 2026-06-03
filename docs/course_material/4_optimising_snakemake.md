@@ -1,3 +1,5 @@
+# Optimising Snakemake runs
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**

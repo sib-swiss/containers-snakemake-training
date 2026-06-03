@@ -1,4 +1,4 @@
-# Course website
+# Reproducible and Scalable Research with Snakemake
 
 ## Teachers 
 

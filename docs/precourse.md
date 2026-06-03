@@ -1,3 +1,5 @@
+# Precourse instructions
+
 ## Background knowledge
 
 As stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20260610_INSNAK), we expect participants to have a basic understanding of working with the command line on UNIX-based systems and a good understanding of Docker and Apptainer/Singularity containers.

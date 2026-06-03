@@ -1,3 +1,5 @@
+# Running Snakemake in HPCs
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**

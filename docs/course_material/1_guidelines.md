@@ -1,3 +1,5 @@
+# General guidelines
+
 ## Course goal
 
 Throughout this course, you will build and refine a workflow to process bulk RNA-seq data. This includes trimming reads, aligning them to a reference genome, performing Quality Controls (QC), counting mapped reads, and identifying differentially expressed genes (DEGs). By the end of the course, you will have constructed a complete, functional workflow with commonly used Snakemake features. You will also have gained experience running the workflow both locally and on a High Performance Computing (HPC) environment. This workflow will be a useful reference for implementing your own workflows in the future.
