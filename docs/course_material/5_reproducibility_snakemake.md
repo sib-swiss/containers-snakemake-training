@@ -174,11 +174,10 @@ wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/m
 Or you can copy it from here:
 
 ??? tip "Click here to see a nice Python script!"
-    ```python linenums="1" hl_lines="7" title="count_table.py"
-    '''
+    ```python linenums="1" hl_lines="6" title="count_table.py"
+    """
     Merge gene counts from all samples of an assembly into a single table.
-    '''
-
+    """
 
     import os
     import pandas as pd  # Non built-in package
@@ -190,53 +189,76 @@ Or you can copy it from here:
     STR_TO_REMOVE = '_genes_read_quantification.tsv'
 
 
-    # Functions
+    # Function to read and clean gene quantification table
     def import_clean(table):
+        """
+        Import and clean a gene quantification table from a single sample.
+
+        Parameters:
+        -----------
+        table: str
+          Path to the TSV quantification file for a single sample.
+
+        Returns:
+        --------
+        pd.DataFrame
+          Cleaned DataFrame indexed by Geneid, containing only read counts,
+          sorted by chromosome and start position.
+        """
+
         print(f'Importing and cleaning quantification data from <{table}>')
         reads = pd.read_csv(table, sep='\t', comment='#')
         reads.rename(columns={reads.columns[-1]: 'Reads_quant'}, inplace=True)
+
         print('Sorting <gene> table by Chromosome then Start position')
-        # New columns are simpler and will be used to properly reorder the table
+        # New columns are simpler and will be used to properly reorder table
         print('\tCreating temporary columns')
         # Get unique Chr ID using a set
         reads['Chr_new'] = reads['Chr'].apply(lambda x: ''.join(set(x.split(';'))))
         # Select start of the first exon
         reads['Start_new'] = reads['Start'].apply(lambda x: int(x.split(';')[0]))
+
         print('\tSorting table')
-        reads.sort_values(['Chr_new', 'Start_new'], ascending=[True, True],
-                          inplace=True)
+        reads.sort_values(
+            ['Chr_new', 'Start_new'], ascending=[True, True], inplace=True
+        )
+
         print('\tRemoving temporary columns')
         reads.drop(['Chr_new', 'Start_new'], axis='columns', inplace=True)
         final_table = reads[FIELDS].set_index('Geneid', drop=True)
+
         return final_table
 
 
     # Main code execution
     if __name__ == '__main__':
-
+        # Encase everything into with statemetn to redirect log messages
         with open(snakemake.log[0], 'w') as logfile:
-
-            # Redirect everything from the script to Snakemake log
+            # Redirect everything from script to Snakemake log
             sys.stderr = sys.stdout = logfile
 
-            print('Getting data from snakemake')
+            print('Getting data from Snakemake')
             list_of_files = snakemake.input
             count_table = snakemake.output.table
 
+            print('Creating output folder')
             output_dir = os.path.dirname(count_table)
             os.makedirs(output_dir, exist_ok=True)
 
             print(f'Initialising global table with <{list_of_files[0]}>')
             total_table = import_clean(list_of_files[0])
 
+            print('Processing remaining tables')
             for file in list_of_files[1:]:
                 print(f'\tAdding data from <{file}>')
                 tmp_table = import_clean(file)
                 total_table = pd.concat([total_table, tmp_table], axis=1)
 
             print('Renaming columns')
-            column_titles = [os.path.basename(x).replace(STR_TO_REMOVE, '')
-                             for x in list_of_files]
+            column_titles = [
+                os.path.basename(x).replace(STR_TO_REMOVE, '')
+                for x in list_of_files
+            ]
             total_table.columns = column_titles
 
             print(f'Saving final table in <{count_table}>')
@@ -263,7 +285,7 @@ If you remember the presentation, there are two directives that you can use to r
 
     1. The script length:
 
-        If we open the script in a text editor or run `wc -l workflow/scripts/count_table.py`, we see that it is 67 lines long. It is also quite complex, with function definitions, loops... This favours the `script` directive, as it's better to use `run` with short and simple code.
+        If we open the script in a text editor or run `wc -l workflow/scripts/count_table.py`, we see that it is 89 lines long. It is also quite complex, with function definitions, loops... This favours the `script` directive, as it's better to use `run` with short and simple code.
 
     1. The use of external packages (packages that are not included in a default Python installation):
 
