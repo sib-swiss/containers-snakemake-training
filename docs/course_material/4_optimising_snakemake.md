@@ -28,6 +28,9 @@ This series of exercises focuses on how to improve the workflow that you develop
 ??? tip "Development and back-up"
     During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
 
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
+
 ### Using non-file parameters and config files
 
 #### Non-file parameters

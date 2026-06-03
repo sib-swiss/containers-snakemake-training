@@ -29,6 +29,9 @@ In this series of exercises, you will create the last two rules of the workflow.
 ??? tip "Development and back-up"
     During this session as well, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
 
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
+
 ### Creating a rule to gather read counts
 
 To perform a Differential Expression Analysis (DEA), it is easier to have a single file gathering all the read counts from the different samples. The next rule that you will create will both find the required files and merge them, thanks to an input function and a Python script.

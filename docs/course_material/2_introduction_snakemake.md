@@ -21,6 +21,9 @@ It is advised to implement your code in a directory called `workflow` (you will 
 
 This series of exercises will bear no biological meaning, on purpose: it is designed to explain the fundamentals of Snakemake.
 
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
+
 ### Creating a basic rule
 
 A **rule** is the smallest block of code with which you can build a **workflow**. It is a **set of instructions** to create one or more **output(s)** from zero or more **input(s)**. When a rule is **executed** (in other words, applied to specific input/output file(s)), it is called a **job**. The definition of a rule always starts with the **keyword** `rule`. Similarly to Python classes and their attributes, rules have **directives**, which contain information about their **properties**.

@@ -56,6 +56,9 @@ At the end of this series of exercises, your workflow should look like this:
   <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
 </figure>
 
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
+
 ### Downloading data and setting up folder structure
 
 In this part, you will download the data and start building the directory structure of your workflow according to the [official recommendations](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/deployment.html). You already started doing so in the previous series of exercises and at the end of the course, it should resemble this:
