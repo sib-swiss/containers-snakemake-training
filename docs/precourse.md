@@ -76,7 +76,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~\.ssh\key_username.pem
         ```
         Note: if you are working with the Windows SSH executable (for example `C:\WINDOWS\System32\OpenSSH\ssh.exe`), you may have to use the full path of the key file instead of a relative one in `IdentityFile`:
@@ -87,7 +87,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~/.ssh/key_username.pem
         ```
 
@@ -105,6 +105,6 @@ You can find below a video tutorial showing how to configure SSH connections in 
 ??? info "If you are not working with VS Code"
     If you are not working with VS Code, you can login to the remote server with the following command in a terminal:
     ```sh
-    ssh -i key_username.pem username@18.195.137.58
+    ssh -i key_username.pem username@52.57.40.7
     ```
     If you want to edit files directly on the server, you can mount a directory with `sshfs`.
