@@ -1,7 +1,7 @@
 # Script designed to find Differentially Expressed Genes using DESeq2
 
 
-# Redirects all R logs to snakemake log
+# Redirect all R logs to Snakemake log
 log <- file(snakemake@log[[1]], open = "wt")
 sink(log, type = "output")
 sink(log, type = "message")
@@ -25,13 +25,13 @@ suppressMessages({
 })
 
 
-cat("Getting data from snakemake\n")
+cat("Getting data from Snakemake\n")
 read_counts <- unlist(snakemake@input$table)
 condition <- "Treatment"
 target <- "highCO2"
 control <- "lowCO2"
 threshold <- 2
-## To make sure threshold and a posteriori are valid numbers
+# To make sure threshold and a posteriori threshold are valid
 if (threshold < 1) {
   cat("\tYou can't perform a DE analysis with a threshold < 1.")
   cat(" Please check <DE_contrats.tsv>. Analysis will now stop")
@@ -53,7 +53,7 @@ deg_table <- unlist(snakemake@output$deg)
 plots_pdf <- unlist(snakemake@output$pdf)
 
 
-# Logs variables imported from snakemake; mainly for debugging purpose
+# Log variables imported from Snakemake; mainly for debugging purpose
 cat("Variables and types used for this analysis:\n")
 cat("\tread_counts <--  ", read_counts, ", type: ", data.class(read_counts), "\n",
     sep = "")
@@ -121,11 +121,11 @@ cts <- fread(input = read_counts, header = TRUE, sep = "\t", quote = FALSE,
              data.table = TRUE, nThread = threads)
 
 cat("\tFiltering and reordering count data\n")
-## Removes unused samples in count table and sorts its columns in same
-## order than sample columns of metadata (required by DESeq2)
+# Remove unused samples in count table and sort its columns in same order as
+# sample columns of metadata (required by DESeq2)
 cts <- cts[, .SD, .SDcols = c("Geneid", as.character(metadata[, Sample]))]
 
-## Checks whether reordering worked, message is mainly for debugging purpose
+# Check whether reordering worked, message is mainly for debugging purpose
 if (all(metadata[, Sample] == colnames(cts)[-1])) {
   cat("\tColumns of count table and rows of samples information")
   cat(" are identical. DE analysis can continue\n")
@@ -142,22 +142,22 @@ for (col in 2:ncol(cts)){
 }
 
 cat("\tReplacing <Unknown/NA> read counts by <0>\n")
-cts[is.na(cts)] <- 0  # Avoids a crash in DEseq2
+cts[is.na(cts)] <- 0  # Avoid a crash in DEseq2
 
 cat("\tRemoving genes with less than <5> reads in at least 3 samples\n")
-## Not mandatory, but it avoids to waste time on genes with low read counts
+# Not mandatory, but it avoids to waste time on genes with low read counts
 keep <- rowSums(cts >= 5) >= 3
 counts_filtered <- cts[keep, ]
 cat("\t<", nrow(cts) - nrow(counts_filtered), "> genes removed\n", sep = "")
 
 cat("\tSetting rownames in filtered table\n")
-# Sets first column as rownames because DESeq2 needs them
+# Set first column as rownames because DESeq2 needs them
 counts_filtered <- as.data.frame(counts_filtered)
 rownames(counts_filtered) <- counts_filtered$Geneid
 counts_filtered$Geneid <- NULL
 
 
-# Creates a DESeqDataSet
+# Create DESeqDataSet
 cat("No input of batch effect detected,")
 cat(" creating DESeq dataset accordingly\n")
 dds <- DESeqDataSetFromMatrix(countData = counts_filtered, colData = metadata,
@@ -175,11 +175,11 @@ dds <- DESeq(object = dds, test = "Wald", sfType = "poscounts",
 
 
 # Sample quality assessment (QA)
-## Initializes a list where plots will be stored before printing
+# Initialise list where plots will be stored before printing
 cat("Assessing samples quality:\n")
 plot_list <- list()
 
-## Perfoms QA
+# Perfom QA
 cat("\tApplying blind variance stabilising transformation\n")
 blind_vst <- varianceStabilizingTransformation(dds, blind = TRUE,
                                                fitType = fit_type)
@@ -187,7 +187,7 @@ blind_vst <- varianceStabilizingTransformation(dds, blind = TRUE,
 # PCA plot
 cat("\tExtracting PCA data\n")
 pca_data <- plotPCA(blind_vst, intgroup = condition, returnData = TRUE)
-# Calculates % of variance explained by PC1 and PC2
+# Calculate % of variance explained by PC1 and PC2
 percent_var <- round(100 * attr(pca_data, "percentVar"))
 cat("\t\tPlotting PCA\n")
 tmp <- ggplot(data = pca_data, aes(x = PC1, y = PC2,
@@ -247,7 +247,7 @@ cat("\tExtracting count data\n")
 select <- order(rowMeans(counts(dds, normalized = TRUE)),
                 decreasing = TRUE)[1:20]
 cat("\t\tPlotting counts heatmap\n")
-# Creates a table that will be used for heatmap annotations
+# Create table that will be used for heatmap annotations
 annot_col <- as.data.frame(colData(dds)[, condition])
 rownames(annot_col) <- colData(dds)[, "Sample"]
 colnames(annot_col) <- condition
@@ -269,12 +269,12 @@ rm(tmp)
 # ggplot2 version of DESeq2 code. See Love et al., 2014
 cat("Assessing DESeq fit:\n")
 cat("\tExtracting dispersion estimates\n")
-# Extracts strictly positive baseMean
+# Extract strictly positive baseMean
 to_keep <- mcols(dds)$baseMean > 0
 basemeans <- mcols(dds)$baseMean[to_keep]
-# Extracts dispersion estimates
+# Extract dispersion estimates
 disp <- mcols(dds)$dispGeneEst[to_keep]
-# Sets lower bound of y-axis
+# Set lower bound of y-axis
 ymin <- 10^floor(log10(min(disp[disp > 0], na.rm = TRUE)) - 0.1)
 
 cat("\tCalculating fitting estimator\n")
@@ -290,7 +290,7 @@ tmp <- ggplot() + geom_point(aes(x = basemeans, y = pmax(disp, ymin),
                 labels = trans_format("log10", math_format(10^.x))) +
   scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
                 labels = trans_format("log10", math_format(10^.x))) +
-  # Draws a circle over outliers
+  # Draw a circle over outliers
   (if (!is.null(dispersions(dds))) {
                                     geom_point(aes(x = basemeans,
                                                    y = dispersions(dds)[to_keep],
@@ -301,7 +301,7 @@ tmp <- ggplot() + geom_point(aes(x = basemeans, y = pmax(disp, ymin),
                                                               1, 20),
                                                stroke = ifelse(mcols(dds)$dispOutlier[to_keep],
                                                                2, 1))}) +
-  # Draws fitted model
+  # Draw fitted model
   (if (!is.null(mcols(dds)$dispFit)) {
     geom_point(aes(x = basemeans, y = mcols(dds)$dispFit[to_keep],
                    color = "red"),
@@ -341,11 +341,11 @@ cooks <- stack(as.data.frame(log10(assays(dds)[["cooks"]])))
 
 cat("\tPlotting Cook's distances\n")
 tmp <- ggplot(data = cooks, aes(x = ind, y = values)) +
-  # Draws dashed whiskers
+  # Draw dashed whiskers
   geom_boxplot(linetype = "dashed", coef = 20) +
-  # Draws grey boxes
+  # Draw grey boxes
   geom_boxplot(fill = "grey", coef = 0, outlier.shape = NA) +
-  # Draws hinges
+  # Draw hinges
   stat_boxplot(geom = "errorbar", aes(ymin = after_stat(ymax)),
                coef = 20, width = 0.3) +
   stat_boxplot(geom = "errorbar", aes(ymax = after_stat(ymin)),
@@ -381,15 +381,15 @@ plot_list <- c(plot_list, list(tmp))
 rm(tmp)
 
 
-# Creates a contrast variable in a DESeq2 style;
-# displaying it in log is mainly for debugging purpose
+# Create contrast variable in a DESeq2 style; displaying it in log is mainly
+# for debugging purpose
 contrast <- paste(condition, target, "vs", control, sep = "_")
 cat("Current DESeq2 contrast is <", contrast, ">\n", sep = "")
 
 cat("Extracting DE results for this contrast\n")
-## Tests for a log fold change of log2(threshold); if threshold is
-## negative/null/missing, log2(threshold) is set to 0 (= no statistical
-## test on LFC)
+# Test for a log fold change of log2(threshold); if threshold is
+# negative/null/missing, log2(threshold) is set to 0 (= no statistical
+# test on LFC)
 res <- results(object = dds, name = contrast, lfcThreshold = log2(threshold),
                altHypothesis = "greaterAbs", alpha = alpha, filterFun = ihw,
                independentFiltering = filter, pAdjustMethod = "BH",
@@ -505,16 +505,16 @@ rm(tmp)
 
 # Volcano plot of shrunken LFC and adjusted pvalues
 cat("Preparing data for volcano plot\n")
-# Creates a copy of data
+# Create copy of data
 volcano <- suppressWarnings(as.data.table(res[order(res$padj), ],
                                           keep.rownames = "Geneid"))
-# Adds a column about differential expression and sorts genes
+# Add column about differential expression and sort genes
 volcano[, is_de := "Not DE"]
 volcano[shrunken_log2FoldChange >= log2(threshold) & padj < alpha,
         is_de := "Up-regulated"]
 volcano[shrunken_log2FoldChange <= -log2(threshold) & padj < alpha,
         is_de := "Down-regulated"]
-# Adds a column for labels for DEG
+# Add a column for labels for DEG
 volcano[volcano[, is_de != "Not DE"], label := volcano[is_de != "Not DE",
                                                        Geneid]]
 cat("\tCreating volcano plot\n")
@@ -534,13 +534,13 @@ tmp <- ggplot(data = volcano, aes(x = shrunken_log2FoldChange,
                      breaks = c("Up-regulated",
                                 "Down-regulated",
                                 "Not DE")) +
-  # Adds labels
+  # Add labels
   geom_text_repel(aes(label = label), size = 3, na.rm = TRUE) +
-  # Adds an horizontal line for p-value threshold and a legend
+  # Add horizontal line for p-value threshold and a legend
   geom_hline(yintercept = -log10(alpha), col = "red", linetype = 2) +
   geom_text(x = -Inf, y = -log10(alpha), label = "p = 0.05",
             color = "red", hjust = 1.1) +
-  # Adds vertical lines for log2FoldChange thresholds if different from 0
+  # Add vertical lines for log2FoldChange thresholds if different from 0
   geom_vline(xintercept = c(-log2(threshold), log2(threshold)),
              col = "red", linetype = 2) +
   geom_text(x = -log2(threshold), y = -Inf,
@@ -590,8 +590,7 @@ final <- suppressWarnings(as.data.table(res[order(res$padj), ],
 cat("Finding missing genes if there are any\n")
 missing <- !(cts$Geneid %in% rownames(counts_filtered))
 
-# Adds missing genes to final table
-# (removed before because they're lowly expressed)
+# Add missing genes to final table (removed before because lowly expressed)
 if (any(missing)) {
   cat("\tAdding missing genes to result table\n")
   unexpressed_genes <- as.data.table(matrix(data = NA, ncol = ncol(final),
@@ -617,7 +616,7 @@ fwrite(x = deg_final, file = deg_table, quote = FALSE, sep = "\t",
 cat("\tDEG table saved in <", deg_table, ">\n", sep = "")
 
 
-# Prints all previous plots in a pdf
+# Print all previous plots in a pdf
 cat("Saving plots\n")
 pdf(file = plots_pdf, width = 9, height = 7, onefile = TRUE, title = plots_pdf)
 for (i in seq_along(plot_list)) {

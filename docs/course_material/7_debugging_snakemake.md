@@ -1,3 +1,5 @@
+# Designing and debugging Snakemake workflows
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**

@@ -1,7 +1,7 @@
 site_name: Reproducible and Scalable Research with Snakemake
 nav:
     - Home: index.md
-    - Precourse preparations: precourse.md
+    - Precourse instructions: precourse.md
     - Course schedule: course_schedule.md
     - Course material:
       - General guidelines: course_material/1_guidelines.md
@@ -24,13 +24,25 @@ theme:
     - content.code.copy
     - navigation.top
     - navigation.footer
+  theme:
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: lucide/moon
+        name: Switch to light mode
 
 extra:
   version:
     provider: mike
   consent:
     title: Cookie consent
-    description: >- 
+    description: >-
       We use cookies to recognize your repeated visits and preferences, as well
       as to measure the effectiveness of our trainig material and whether users
       find what they're searching for. With your consent, you're helping us to
@@ -39,7 +51,7 @@ extra:
       matomo: Matomo Analytics
 
 copyright: >
-  Copyright &copy; 2021-2025 SIB Swiss Institute of Bioinformatics -
+  Copyright &copy; 2021-2026 SIB Swiss Institute of Bioinformatics -
   <a href="#__consent">Change cookie settings</a>
 
 # Repository

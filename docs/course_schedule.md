@@ -1,3 +1,5 @@
+# Course schedule
+
 | Session        | Start    | End      | Topic                                                    |
 |--------------- |--------- |--------- |--------------------------------------------------------- |
 | Session 1      | 9:00     | 09:45    | Introduction to workflow management systems              |

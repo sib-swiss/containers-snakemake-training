@@ -1,3 +1,5 @@
+# Optimising Snakemake runs
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
@@ -25,6 +27,9 @@ This series of exercises focuses on how to improve the workflow that you develop
 
 ??? tip "Development and back-up"
     During this session, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
+
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
 
 ### Using non-file parameters and config files
 
@@ -183,7 +188,7 @@ If you develop a large workflow, you are bound to encounter some cluttering prob
     ??? info "More on modules"
         It enables combination and re-use of rules in the same workflow and between workflows. This is done with the `module` statement, similarly to Python `import`. See the [official documentation](https://snakemake.readthedocs.io/en/v9.11.6/snakefiles/modularization.html#modules) for more explanations
 
-In this course, you will only use the second level of modularisation. Briefly, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefile containing rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefile in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
+**In this course, you will only use the second level of modularisation**. Briefly, the idea is to write a main Snakefile in `workflow/Snakefile`, to place the other snakefile containing rules in the subfolder `workflow/rules` (these 'sub-Snakefile' should end with `.smk`, the recommended file extension of Snakemake) and to tell Snakemake to import the modular snakefile in the main Snakefile with the `include: <path/to/snakefile.smk>` syntax.
 
 
 **Exercise:** Move your current Snakefile into the subfolder `workflow/rules` and rename it to `read_mapping.smk`. Then create a new Snakefile in `workflow/` and import `read_mapping.smk` in it using the `include` syntax. You should also move the importation of the config file from the modular Snakefile to the main one.

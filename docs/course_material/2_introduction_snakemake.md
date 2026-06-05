@@ -1,3 +1,5 @@
+# Introduction to Snakemake
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
@@ -18,6 +20,9 @@ It is advised to implement your code in a directory called `workflow` (you will 
 ## Exercises
 
 This series of exercises will bear no biological meaning, on purpose: it is designed to explain the fundamentals of Snakemake.
+
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
 
 ### Creating a basic rule
 

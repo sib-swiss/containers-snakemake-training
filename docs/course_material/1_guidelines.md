@@ -1,3 +1,5 @@
+# General guidelines
+
 ## Course goal
 
 Throughout this course, you will build and refine a workflow to process bulk RNA-seq data. This includes trimming reads, aligning them to a reference genome, performing Quality Controls (QC), counting mapped reads, and identifying differentially expressed genes (DEGs). By the end of the course, you will have constructed a complete, functional workflow with commonly used Snakemake features. You will also have gained experience running the workflow both locally and on a High Performance Computing (HPC) environment. This workflow will be a useful reference for implementing your own workflows in the future.
@@ -46,7 +48,7 @@ If something is not clear at any point, please call us and we will do our best t
 ## Computing environment
 
 !!! warning "Development and computation"
-    You can develop and write your scripts in a distant folder (using an `ssh` connection via VScode, **recommended**) or locally (if you do so, you will need to copy them on the server with `scp` before running them), but remember that **all computation should be performed on the server, so don't forget to log in!**.
+    You can develop and write your scripts in a distant folder (using an `ssh` connection via VS Code, **recommended**) or locally (if you do so, you will need to copy them on the server with `scp` before running them), but remember that **all computation should be performed on the server, so don't forget to log in!**
 
 !!! bug "`Error: Command not found`"
     If you try to run a command and get an error such as `Command 'snakemake' not found`, you are probably in the wrong conda environment:

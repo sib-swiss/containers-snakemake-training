@@ -17,6 +17,13 @@ sudo add-apt-repository -y ppa:apptainer/ppa
 sudo apt update
 sudo apt install -y apptainer
 
+echo "Setting up Apptainer profile in AppArmor" >> server_setup.log
+apptainer_path=`which apptainer`
+# Set up apptainer profile in app armor to prevent permission issues
+sed -i "s|APPTAINER_PATH|$apptainer_path|" setup_scripts/apptainer_profile.txt # I use the pipe as separator because apptainer_path contains slashes, which messes up sed 
+sudo cp setup_scripts/apptainer_profile.txt /etc/apparmor.d/apptainer
+sudo systemctl reload apparmor
+
 # Install SLURM
 echo "Installing SLURM" >> server_setup.log
 sudo apt install -y slurmd slurmctld
@@ -60,3 +67,5 @@ echo "Creating Snakemake environment"
 sudo /opt/miniforge3/bin/conda env create -y -f conda/snakemake_course.yaml
 echo "Setup complete!" >> server_setup.log
 
+# Activate snakemake environment when logging in
+sudo cp setup_scripts/conda_auto_activate.sh /etc/profile.d/conda_auto_activate.sh

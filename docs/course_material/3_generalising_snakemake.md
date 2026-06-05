@@ -1,3 +1,5 @@
+# Generalising Snakemake usage
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
@@ -53,6 +55,9 @@ At the end of this series of exercises, your workflow should look like this:
   ![backbone_rulegraph](../assets/images/backbone_rulegraph.png)
   <figcaption>Workflow rulegraph at <br>the end of the session</figcaption>
 </figure>
+
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
 
 ### Downloading data and setting up folder structure
 
@@ -110,7 +115,7 @@ In this part, you will download the data and start building the directory struct
 
 For now, the main thing to remember is that **code** should go into the **`workflow` subfolder**  and the **rest** is mostly **input/output files**. The only exception is the **`config` subfolder**, but it will be [explained later](4_optimising_snakemake.md#config-files). All **output files** generated in the workflow should be stored under **`results/`**.
 
-Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VScode terminal:
+Let's download the data, uncompress them and build the first part of the directory structure. Make sure you are connected to server, then run this in your VS Code terminal:
 ```sh linenums="1"
 wget https://containers-snakemake-training.s3.eu-central-1.amazonaws.com/snakemake_rnaseq.tar.gz  # Download data
 tar -xvf snakemake_rnaseq.tar.gz  # Uncompress archive
@@ -118,7 +123,7 @@ rm snakemake_rnaseq.tar.gz  # Delete archive
 cd snakemake_rnaseq/  # Start developing in new folder
 ```
 
-In ` snakemake_rnaseq/`, you should see two subfolders:
+In `snakemake_rnaseq/`, you should see two subfolders:
 
 * `data/`, which contains data to analyse
 * `resources/`, which contains retrieved resources, here assembly, genome indices and annotation file of _S. cerevisiae_. It may also contain small resources delivered along with the workflow
@@ -189,20 +194,17 @@ To solve this problem, Snakemake can use package managers (more on this [later](
 
 **Exercise:**
 
-* Complete the atropos command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)
-    * You can find information on how to use `atropos` and its parameters with `atropos trim -h` or you can look at the tip below
+* Complete the `atropos` command given above with parameters to specify inputs (files to trim) and outputs (trimmed files)
+    * .fastq files to trim are located in `data/`
+    * Paths of files to trim (_i.e._ input files, in FASTQ format) are specified with the parameters `-pe1` (first read) and `-pe2` (second read)
+    * Paths of trimmed files (_i.e._ output files, also in FASTQ format) are specified with the parameters `-o` (first read) and `-p` (second read)
 * Implement a rule containing your command to trim reads contained in a .fastq files
     * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
     * The container image can be found at `https://depot.galaxyproject.org/singularity/atropos%3A1.1.32--py312hf67a6ed_2`
 
-??? tip "atropos inputs and outputs"
-    * .fastq files to trim are located in `data/`
-    * Paths of files to trim (_i.e._ input files, in FASTQ format) are specified with the parameters `-pe1` (first read) and `-pe2` (second read)
-    * Paths of trimmed files (_i.e._ output files, also in FASTQ format) are specified with the parameters `-o` (first read) and `-p` (second read)
-
 ??? success "Answer"
     This is one way of writing this rule, but definitely not the only way (this is true for all the rules presented in these exercises):
-    ```python linenums="1" hl_lines="2-7 12-15 18 19"
+    ```python linenums="1" hl_lines="1 8-15 20"
     rule fastq_trim:
         """
         This rule trims paired-end reads to improve their quality. Specifically, it removes:
@@ -240,7 +242,7 @@ To solve this problem, Snakemake can use package managers (more on this [later](
     snakemake -c 1 -p --sdm=apptainer results/highCO2_sample1/highCO2_sample1_atropos_trimmed_1.fastq
     ```
 
-    * You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the snakemake command used to execute the workflow!
+    * You don't need to ask for the two outputs of the rule: asking only for one will still trigger execution, but the workflow will complete without errors if and only if **both** outputs are present. Like with [intermediary files](2_introduction_snakemake.md#chaining-rules), this property also helps reducing the number of targets to write in the Snakemake command used to execute the workflow!
     * Do not forget to add `--sdm=apptainer`, otherwise Snakemake will not pull the image and the command will be executed in the default environment (which will most likely lead to a crash). Don't worry if the first execution is somewhat slow: Snakemake has to download the image. The next ones will be much faster as the images are cached
 
 ### Creating a rule to map trimmed reads onto a reference genome
@@ -276,21 +278,17 @@ hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal
 
 **Exercise:**
 
-* Complete the HISAT2 command given above with parameters to specify inputs and outputs
-    * You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)
-        * You can find more information on how to use HISAT2 and its parameters with `hisat2 -h` or you can look at the tip below
-* Implement a rule containing your command to map trimmed reads contained in .fastq files
-    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
-    * The container image can be found at `https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6`
-
-??? tip "HISAT2 inputs and outputs"
+* Complete the HISAT2 command given above with parameters to specify inputs and outputs. You will need 2 inputs, 2 outputs (in 2 different formats) and the genome indices mentioned above (should they be considered as inputs?)
     * Paths of trimmed files (_i.e._ input files) are specified with the parameters `-1` (first read) and `-2` (second read)
     * Basename of genome indices (binary format) is specified with the parameter `-x`. The files have a shared name of `resources/genome_indices/Scerevisiae_index`, which is the value you need to use for `-x`
     * Path of mapped reads files (_i.e._ output file, in SAM format) is specified with the parameter `-S` (do not forget the .sam extension at the end of the filename)
     * Path of mapping report (_i.e._ output file, in text format) is specified with the parameter `--summary-file`
+* Implement a rule containing your command to map trimmed reads contained in .fastq files
+    * You will need a rule name, and the `input`, `output`, `container` and `shell` directives
+    * The container image can be found at `https://depot.galaxyproject.org/singularity/hisat2%3A2.2.1--hdbdd923_6`
 
 ??? success "Answer"
-    ```python linenums="1"
+    ```python linenums="1" hl_lines="5-12 16-17"
     rule read_mapping:
         """
         This rule maps trimmed reads of a fastq onto a reference assembly.
@@ -452,7 +450,7 @@ rule reads_quantification_genes:
 
 It would be interesting to know what is happening when featureCounts runs. This is where the `log` directive comes into play!
 
-**(Optional) Exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 27-30 of the presentation (available [here](#material)) for information on this directive.
+**Optional exercise:** If you have time, add the `log` directive to the rule. Don't forget to update the directive values to match the ones you used in your previous rules. You can check out slides 27-30 of the presentation (available [here](#material)) for information on this directive.
 
 ??? tip "Logs"
     * The `log` directive must contain the same `wildcards` as the `output` directive, here `sample`
@@ -550,7 +548,7 @@ It would be interesting to know what is happening when featureCounts runs. This 
     \\============================================================================//
     ```
 
-**(Optional) Exercise:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
+**Optional exercise:** If you have time, check Snakemake's log in `.snakemake/log/`. Is everything as you expected, especially wildcard values, input and output names...?
 
 ??? success "Answer"
     You can check the logs with:
@@ -568,7 +566,7 @@ You have now implemented and run the main steps of the workflow. It is always a 
 ??? tip "Creating a DAG"
     * Try to follow the official recommendations on workflow structure, which states that images are supposed to go in the `images/` subfolder
         * `images/` is not automatically created by Snakemake because it isn't handled as part of an actual run, so you need to create it beforehand. You did this when you set up the [workflow structure](#downloading-data-and-setting-up-folder-structure)
-    * If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the snakemake command to force the execution of all jobs
+    * If you already computed all outputs of the workflow, steps in the DAG will have dotted lines. To visualise the DAG before running the workflow, add `-F/--forceall` to the `snakemake` command to force the execution of all jobs
         * You can also use `-f <target>` to show fewer jobs
 
 ??? tip "The `dot` command"

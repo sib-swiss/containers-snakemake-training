@@ -1,6 +1,8 @@
+# Precourse instructions
+
 ## Background knowledge
 
-As is stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20251010_SNAKE), we expect participants to have a basic understanding of working with the command line on UNIX-based systems and a a good understanding of Docker and Apptainer/Singularity containers.
+As stated in the course prerequisites at the [announcement web page](https://www.sib.swiss/training/course/20260610_INSNAK), we expect participants to have a basic understanding of working with the command line on UNIX-based systems and a good understanding of Docker and Apptainer/Singularity containers.
 
 ### UNIX
 
@@ -14,29 +16,41 @@ If you don't have experience with Docker or Apptainer containers, or if you are 
 
 ### OS and terminal
 
-If you are using a UNIX or UNIX-like OS (_e.g_ MacOS), you already have a terminal readily usable for the course. If you are working with Windows, although Windows Powershell is suitable for that, we strongly recommend to install a UNIX or 'UNIX-like' terminal. You can get this by using [MobaXterm](https://mobaxterm.mobatek.net/ "get MobaXterm") or [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install) (recommended solution).
+During the course exercises you will be interacting with Snakemake through the command line. If you are using a UNIX or UNIX-like OS (_e.g_ MacOS), you already have a terminal readily usable for the course. If you are working with Windows, although Windows Powershell is suitable for that, we strongly recommend to install a UNIX or 'UNIX-like' terminal. You can get this by using [MobaXterm](https://mobaxterm.mobatek.net/ "get MobaXterm") or [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install) (recommended solution).
 
 ### Code editor
 
-You should have a modern code editor installed. During the course, we can give only limited help for installation and set-up issues, so we will only "officially" support [VScode](https://code.visualstudio.com/download). If you are already very familiar with another combination of modern code editor/command line interface, feel free to use it, but know that support for this will be limited.
+You should have a modern code editor installed. During the course, we can give only limited help for installation and set-up issues, so we will only "officially" support [VS Code](https://code.visualstudio.com/download). If you are already very familiar with another combination of modern code editor/command line interface, feel free to use it, but know that support for this will be limited.
 
-!!! note "Other required installations"
-    In addition to VScode, you would need to have followed the instructions to set up the `remote-ssh` extension:
+!!! info "Additional requirements"
+    Besides VS Code, make sure you have completed the setup for the `Remote-SSH` extension:
 
-    * [OpenSSH compatible client](https://code.visualstudio.com/docs/remote/troubleshooting#_installing-a-supported-ssh-client): this is usually pre-installed on your OS. You can check whether the command `ssh` exists by typing it in a terminal
-    * [Remote-SSH extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh): to install it, open VSCode and click on the extensions icon (four squares) on the left side of the window. Search for `Remote-SSH` and click on `Install`
+    * [OpenSSH compatible client](https://code.visualstudio.com/docs/remote/troubleshooting#_installing-a-supported-ssh-client): A compatible SSH client is required and is usually pre-installed on most operating systems. To verify that it is available, open a terminal and run `ssh`.
+    * [Remote-SSH extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh): Install the Remote-SSH extension in VS Code. Open VS Code then open the **Extensions** view (the four-square icon in the Activity Bar), search for **Remote - SSH**, and click **Install**.
 
-### SSH connections
+??? warning "Additional Windows requirement"
+    If you are working on Windows, we recommend to install the [WSL extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) to make file management easier.
+
+### Snakemake
+
+You don't need to install Snakemake on your local machine as you will be using a version we installed on the remote server. However, if you want to have a look before the course, you can find installation instructions [here](https://snakemake.readthedocs.io/en/v9.11.6/getting_started/installation.html). Note that Snakemake does not natively run on Windows and requires WSL.
+
+### SSH connection to a server
 
 In addition to your local computer, you will be working on an Amazon Web Services ([AWS](https://aws.amazon.com/)) Elastic Cloud (EC2) [server](https://aws.amazon.com/ec2/). This Ubuntu server behaves like a 'normal' remote server, and can be approached through [`ssh`](https://man7.org/linux/man-pages/man1/ssh.1.html). If you are enrolled in the course, you have access to a shared document containing instruction to retrieve your username and private ssh key, granting you access to a personal home directory on the server.
 
 !!! danger "Server availability"
-    Please note that, for cost reasons, the server will be **started the morning of the course** (or the evening before, at the earliest), and will be **stopped the day after the course ends**, so you will not be able to connect before or after these dates. Likewise, if you need to retrieve data from the server, please do it before it is stopped.
+    Please note that, for cost reasons, the server will be **started at 8:00 on the morning of the course** and will be **stopped at 18:00 on the day after the course ends**, so you will not be able to connect before or after these dates. Likewise, if you need to retrieve data from the server, please do it before it is stopped.
+
+!!! info "Help with SSH connection"
+    The trainers will be available between **8:30 and 9:00 on the morning of the course** to help with technical set-up and troubleshooting.
 
 ??? tip "If you want to know more about `ssh`"
     If you are not familiar with `ssh`, you can check the [Heidelberg University tutorial](https://zah.uni-heidelberg.de/it-guide/ssh-tutorial-linux) for information on how to set it up and use it.
 
-Here are instructions on how to use VScode to connect with SSH to a remote server. First, place the `key_username.pem` file in the proper folder:
+#### VS Code instructions
+
+Here are instructions on how to use VS Code to connect with SSH to a remote server. First, place the `key_username.pem` file in the proper folder:
 
 === "Windows"
     Open a PowerShell terminal, `cd` to the directory where you have stored your private key (`key_username.pem` file) and move it to `~\.ssh`:
@@ -53,7 +67,7 @@ Here are instructions on how to use VScode to connect with SSH to a remote serve
 
 Then:
 
-* Open VScode and click on the green or blue button in the bottom left corner
+* Open VS Code and click on the green or blue button in the bottom left corner
 * Select `Connect to Host...` and then `Configure SSH Hosts...`
 * Specify a location for the SSH config file (preferably the same directory as where your keys are stored): `~/.ssh/config`
 * A skeleton config file will be provided. Edit it, so it looks like this (replace `username` with your username, and make sure the IP address in `HostName` match what the one given in the shared document):
@@ -62,7 +76,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~\.ssh\key_username.pem
         ```
         Note: if you are working with the Windows SSH executable (for example `C:\WINDOWS\System32\OpenSSH\ssh.exe`), you may have to use the full path of the key file instead of a relative one in `IdentityFile`:
@@ -73,7 +87,7 @@ Then:
         ```
         Host sib_course_remote
             User username
-            HostName 18.195.137.58
+            HostName 52.57.40.7
             IdentityFile ~/.ssh/key_username.pem
         ```
 
@@ -85,12 +99,12 @@ Finally:
 
 #### Video tutorial
 
-You can find a video tutorial to configure SSH connections in VScode below:
+You can find below a video tutorial showing how to configure SSH connections in VS Code:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/cOopQQIL8JU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-??? info "If you are not working with VScode"
-    If you are not working with VScode, you can login to the remote server with the following command in a terminal:
+??? info "If you are not working with VS Code"
+    If you are not working with VS Code, you can login to the remote server with the following command in a terminal:
     ```sh
-    ssh -i key_username.pem username@18.195.137.58
+    ssh -i key_username.pem username@52.57.40.7
     ```
     If you want to edit files directly on the server, you can mount a directory with `sshfs`.

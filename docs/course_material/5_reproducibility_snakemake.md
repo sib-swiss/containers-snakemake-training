@@ -1,3 +1,5 @@
+# Being reproducible with Snakemake
+
 ## Learning outcomes
 
 **After having completed this chapter you will be able to:**
@@ -26,6 +28,9 @@ In this series of exercises, you will create the last two rules of the workflow.
 
 ??? tip "Development and back-up"
     During this session as well, you will modify your Snakefile quite heavily, so it may be a good idea to make back-ups from time to time (with `cp` or a simple copy/paste) or use a versioning system. As a general rule, if you have a doubt on the code you are developing, do not hesitate to make a back-up beforehand.
+
+!!! failure "Important"
+    This part should be done **on the remote server** that has Snakemake installed. If you haven't set up a VS Code SSH connection to the server yet, you can find instructions [here](../precourse.md#ssh-connection-to-a-server). If you encounter an error such as `Command 'snakemake' not found`, see [here](1_guidelines#computing-environment) for help.
 
 ### Creating a rule to gather read counts
 
@@ -105,7 +110,7 @@ def get_gene_counts(wildcards):
             for sample in config['samples']]
 ```
 ??? warning "Snakemake wildcards vs Python f-strings"
-    This input function is pure Python code: in the return statement, `{sample}` isn't a wildcard, it is an f-string variable! This shows that you can natively use basic Python elements in a workflow: Snakemake will still be able understand them. This is because Snakemake was built on top of Python.
+    This input function is pure Python code: in the return statement, **`{sample}` isn't a wildcard, it is an f-string variable**! This shows that you can natively use basic Python elements in a workflow: Snakemake will still be able understand them. This is because Snakemake was built on top of Python.
 
 This function will loop over the list of samples in the config file and replace `{sample}` with the current sample name of the iteration to create a string which is the output path from the rule `reads_quantification_genes` of said sample. Then, it will aggregate all the paths in a list and return this list.
 
@@ -169,11 +174,10 @@ wget https://raw.githubusercontent.com/sib-swiss/containers-snakemake-training/m
 Or you can copy it from here:
 
 ??? tip "Click here to see a nice Python script!"
-    ```python linenums="1" hl_lines="7" title="count_table.py"
-    '''
+    ```python linenums="1" hl_lines="6" title="count_table.py"
+    """
     Merge gene counts from all samples of an assembly into a single table.
-    '''
-
+    """
 
     import os
     import pandas as pd  # Non built-in package
@@ -185,53 +189,76 @@ Or you can copy it from here:
     STR_TO_REMOVE = '_genes_read_quantification.tsv'
 
 
-    # Functions
+    # Function to read and clean gene quantification table
     def import_clean(table):
+        """
+        Import and clean a gene quantification table from a single sample.
+
+        Parameters:
+        -----------
+        table: str
+          Path to the TSV quantification file for a single sample.
+
+        Returns:
+        --------
+        pd.DataFrame
+          Cleaned DataFrame indexed by Geneid, containing only read counts,
+          sorted by chromosome and start position.
+        """
+
         print(f'Importing and cleaning quantification data from <{table}>')
         reads = pd.read_csv(table, sep='\t', comment='#')
         reads.rename(columns={reads.columns[-1]: 'Reads_quant'}, inplace=True)
+
         print('Sorting <gene> table by Chromosome then Start position')
-        # New columns are simpler and will be used to properly reorder the table
+        # New columns are simpler and will be used to properly reorder table
         print('\tCreating temporary columns')
         # Get unique Chr ID using a set
         reads['Chr_new'] = reads['Chr'].apply(lambda x: ''.join(set(x.split(';'))))
         # Select start of the first exon
         reads['Start_new'] = reads['Start'].apply(lambda x: int(x.split(';')[0]))
+
         print('\tSorting table')
-        reads.sort_values(['Chr_new', 'Start_new'], ascending=[True, True],
-                          inplace=True)
+        reads.sort_values(
+            ['Chr_new', 'Start_new'], ascending=[True, True], inplace=True
+        )
+
         print('\tRemoving temporary columns')
         reads.drop(['Chr_new', 'Start_new'], axis='columns', inplace=True)
         final_table = reads[FIELDS].set_index('Geneid', drop=True)
+
         return final_table
 
 
     # Main code execution
     if __name__ == '__main__':
-
+        # Encase everything into with statemetn to redirect log messages
         with open(snakemake.log[0], 'w') as logfile:
-
-            # Redirect everything from the script to Snakemake log
+            # Redirect everything from script to Snakemake log
             sys.stderr = sys.stdout = logfile
 
-            print('Getting data from snakemake')
+            print('Getting data from Snakemake')
             list_of_files = snakemake.input
             count_table = snakemake.output.table
 
+            print('Creating output folder')
             output_dir = os.path.dirname(count_table)
             os.makedirs(output_dir, exist_ok=True)
 
             print(f'Initialising global table with <{list_of_files[0]}>')
             total_table = import_clean(list_of_files[0])
 
+            print('Processing remaining tables')
             for file in list_of_files[1:]:
                 print(f'\tAdding data from <{file}>')
                 tmp_table = import_clean(file)
                 total_table = pd.concat([total_table, tmp_table], axis=1)
 
             print('Renaming columns')
-            column_titles = [os.path.basename(x).replace(STR_TO_REMOVE, '')
-                             for x in list_of_files]
+            column_titles = [
+                os.path.basename(x).replace(STR_TO_REMOVE, '')
+                for x in list_of_files
+            ]
             total_table.columns = column_titles
 
             print(f'Saving final table in <{count_table}>')
@@ -258,7 +285,7 @@ If you remember the presentation, there are two directives that you can use to r
 
     1. The script length:
 
-        If we open the script in a text editor or run `wc -l workflow/scripts/count_table.py`, we see that it is 67 lines long. It is also quite complex, with function definitions, loops... This favours the `script` directive, as it's better to use `run` with short and simple code.
+        If we open the script in a text editor or run `wc -l workflow/scripts/count_table.py`, we see that it is 89 lines long. It is also quite complex, with function definitions, loops... This favours the `script` directive, as it's better to use `run` with short and simple code.
 
     1. The use of external packages (packages that are not included in a default Python installation):
 
@@ -298,7 +325,7 @@ If you remember the presentation, there are two directives that you can use to r
 
 Given the presence of a non-default package in the script, we need to find a solution to make it accessible inside the rule. The easiest way to do that is to create a rule-specific conda environment. In Snakemake, you can do this by providing an environment config file (in YAML format) to the rule with the `conda` directive.
 
-**(Optional) Exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how environment files look and work, you can check out slides 4-10 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
+**Optional exercise:** If you have time, you can create your own config file for the environment using the tip on 'Environment features' below. If you need a reminder on how environment files look and work, you can check out slides 4-10 of the presentation (available [here](#material)). Otherwise, you can directly skip to the answer.
 
 ??? tip "Environment features"
     * Environment `name` is `py3.12`
@@ -548,7 +575,7 @@ Now, all that is left is running the workflow, check its outputs and visualise i
     snakemake -c 1 --containerize > Dockerfile
     ```
 
-**(Optional) Exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
+**Optional exercise:** If you had to re-run the entire workflow from scratch, what command would you use?
 
 ??? success "Answer"
     You can re-run the whole workflow with:
