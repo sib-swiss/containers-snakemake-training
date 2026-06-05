@@ -50,6 +50,7 @@ echo "alias Squeue='squeue --user=\$USER --format=\"%11u %12i %10j %4Q %8q %3t %
 # Start SLURM service and make node ready to receive jobs
 echo "Starting SLURM" >> server_setup.log
 sudo systemctl start slurmd
+sudo systemctl start slurmctld
 sudo scontrol update nodename=localhost state=idle
 
 # Install miniforge in /opt/miniforge3
