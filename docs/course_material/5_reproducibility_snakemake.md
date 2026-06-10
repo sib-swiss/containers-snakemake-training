@@ -591,10 +591,10 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 ??? success "Answer"
     You can get the DAG with:
     ```
-    snakemake -c 1 -p -F --dag | dot -T png > images/total_dag.png
+    snakemake -c 1 -p -F --dag | dot -T png > images/final_dag.png
     ```
 
     You should get the following DAG (open the picture in a new tab to zoom in):
     <figure align="center">
-      <img src="../../../assets/images/total_dag.png" width="100%"/>
+      <img src="../../../assets/images/final_dag.png" width="100%"/>
     </figure>
