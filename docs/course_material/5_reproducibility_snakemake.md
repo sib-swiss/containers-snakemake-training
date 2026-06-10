@@ -596,5 +596,5 @@ Now, all that is left is running the workflow, check its outputs and visualise i
 
     You should get the following DAG (open the picture in a new tab to zoom in):
     <figure align="center">
-      <img src="../../../assets/images/final_dag.png" width="100%"/>
+      <img src="../assets/images/final_dag.png" width="100%"/>
     </figure>

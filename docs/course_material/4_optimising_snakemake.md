@@ -397,7 +397,7 @@ But there is an even better solution! At the moment, samples are defined as a li
     snakemake -c 1 -F -p --dag | dot -Tpng > images/all_samples_dag.png
     ```
     <p align="center">
-      <img src="../../../assets/images/all_samples_dag.png"/>
+      <img src="../assets/images/all_samples_dag.png"/>
     </p>
 
     If needed, open the picture in a new tab to zoom in. Then, you can generate the filegraph with:
@@ -405,7 +405,7 @@ But there is an even better solution! At the moment, samples are defined as a li
     snakemake -c 1 -F -p --filegraph | dot -Tpng > images/all_samples_filegraph.png
     ```
     <p align="center">
-      <img src="../../../assets/images/all_samples_filegraph.png" width="50%"/>
+      <img src="../assets/images/all_samples_filegraph.png" width="50%"/>
     </p>
     You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is the rule implemented in the supplementary exercise below.
 
