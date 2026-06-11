@@ -11,6 +11,12 @@
 
 ## Material
 
+**General introduction:**
+
+[:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/1_general_introduction_snakemake.pdf){: .md-button }
+
+**Introduction to Snakemake:**
+
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/2_introduction_snakemake.pdf){: .md-button }
 
 ## Structuring a workflow
