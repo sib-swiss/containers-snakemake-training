@@ -407,7 +407,7 @@ But there is an even better solution! At the moment, samples are defined as a li
     <p align="center">
       <img src="../assets/images/all_samples_filegraph.png" width="50%"/>
     </p>
-    You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is the rule implemented in the supplementary exercise below.
+    You probably noticed that these two figures have an extra rule, `fastq_qc_sol4`. It is implemented in a supplementary exercise using additional concepts that you can find [here](7_debugging_snakemake.md#using-an-output-directory-the-fastqc-example).
 
 ### Optimising resource usage in a workflow by multithreading
 
