@@ -1023,10 +1023,10 @@
     <span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;resources/genome_indices/Scerevisiae_index&#39;</span>
 <span class="n">shell</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="hll"><span class="sd">hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
+<span class="hll"><span class="sd">    hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \</span>
 </span><span class="sd">    -x {params.index} \  # Parameter was replaced here</span>
 <span class="sd">    -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2&gt;&gt; {log}</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 </code></pre></div></td></tr></table></div></p>
 </li>
 <li>
@@ -1042,10 +1042,10 @@
     <span class="n">annotations</span> <span class="o">=</span> <span class="s1">&#39;resources/Scerevisiae.gtf&#39;</span>
 <span class="n">shell</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \</span>
+<span class="sd">    featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \</span>
 <span class="hll"><span class="sd">    -B -C --largestOverlap --verbose -F GTF \</span>
 </span><span class="sd">    -a {params.annotations} -o {output.gene_level} {input.bam_once_sorted} &amp;&gt;&gt; {log}  # Parameter was replaced here</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 </code></pre></div></td></tr></table></div></p>
 </li>
 </ul>
