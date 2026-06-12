@@ -1,0 +1,16 @@
+executor: cluster-generic
+cluster-generic-submit-cmd: 
+  mkdir -p slurm_logs/{rule} &&
+  sbatch
+    --cpus-per-task={threads}
+    --mem={resources.mem_mb}
+    --job-name={rule}-{wildcards}
+    --output=slurm_logs/{rule}/{rule}-{wildcards}.log
+    --export=ALL
+    --chdir=$PWD
+cluster-generic-cancel-cmd: scancel
+jobs: 2
+software-deployment-method: 
+  - conda
+  - apptainer
+printshellcmds: True
