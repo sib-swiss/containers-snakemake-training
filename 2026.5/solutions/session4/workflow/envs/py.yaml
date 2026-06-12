@@ -1,8 +1,0 @@
-# Environment file to perform data processing with Python
-name: py3.12
-channels:
-    - conda-forge
-    - bioconda
-dependencies:
-    - python >= 3.12
-    - pandas == 2.2.3
