@@ -29,7 +29,6 @@ rule count_table:
     script:
         '../scripts/count_table.py'
 
-
 rule differential_expression:
     '''
     This rule detects DEGs and plots control graphs (PCA, heatmaps...).

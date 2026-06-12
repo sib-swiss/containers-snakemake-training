@@ -134,7 +134,6 @@ rule fastq_qc_sol4:
         echo "Results saved in <results/{wildcards.sample}/fastqc_reports/>" >> {log}
         '''
 
-
 rule read_mapping:
     '''
     This rule maps trimmed reads of a fastq onto a reference assembly.
