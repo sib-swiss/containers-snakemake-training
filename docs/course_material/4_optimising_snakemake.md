@@ -80,9 +80,11 @@ rule get_header:
     params:
         index = 'resources/genome_indices/Scerevisiae_index'
     shell:
-        'hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
+        '''
+	hisat2 --dta --fr --no-mixed --no-discordant --time --new-summary --no-unal \
         -x {params.index} \  # Parameter was replaced here
-        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}'
+        -1 {input.trim1} -2 {input.trim2} -S {output.sam} --summary-file {output.report} 2>> {log}
+	'''
     ```
 
     * `reads_quantification_genes`:
@@ -90,9 +92,11 @@ rule get_header:
     params:
         annotations = 'resources/Scerevisiae.gtf'
     shell:
-        'featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
+        '''
+	featureCounts -t exon -g gene_id -s 2 -p --countReadPairs \
         -B -C --largestOverlap --verbose -F GTF \
-        -a {params.annotations} -o {output.gene_level} {input.bam_once_sorted} &>> {log}'  # Parameter was replaced here
+        -a {params.annotations} -o {output.gene_level} {input.bam_once_sorted} &>> {log}  # Parameter was replaced here
+	'''
     ```
 
 But doing this only shifted the problem: now, hard-coded paths are in `params` instead of `shell`. This is better, but not by much! Luckily, there is an even better way to handle parameters: instead of hard-coding parameter values in the Snakefile, Snakemake can use parameters (and values) defined in config files.
