@@ -12,7 +12,21 @@
 
 ## Material
 
+**Course presentation:**
+
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/4_optimising_snakemake.pdf){: .md-button }
+
+**Course video:**
+
+<iframe style="width:100%;aspect-ratio:16/9;"
+  src="https://www.youtube-nocookie.com/embed/VCJF58BBqJg"
+  title="Decorating and optimising a Snakemake workflow"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  referrerpolicy="strict-origin-when-cross-origin"
+  loading="lazy"
+  allowfullscreen>
+</iframe>
 
 ## Snakefile from previous session
 

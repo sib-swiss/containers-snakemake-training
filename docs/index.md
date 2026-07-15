@@ -25,6 +25,7 @@ This course is partly inspired by the [Carpentries Docker course](https://carpen
 ## Material
 
 * This website
+* Youtube playlist of the [course videos](https://www.youtube.com/playlist?list=PLADYLo_jM1VY)
 * Zoom meeting (through mail)
 * Shared document (through mail)
 

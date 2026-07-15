@@ -11,7 +11,21 @@
 
 ## Material
 
+**Course presentation:**
+
 [:fontawesome-solid-file-pdf: Download the presentation](../assets/pdf/3_generalising_snakemake.pdf){: .md-button }
+
+**Course video:**
+
+<iframe style="width:100%;aspect-ratio:16/9;"
+  src="https://www.youtube-nocookie.com/embed/xdjXI3dbRls"
+  title="Making a more general-purpose Snakemake workflow"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  referrerpolicy="strict-origin-when-cross-origin"
+  loading="lazy"
+  allowfullscreen>
+</iframe>
 
 ## Advice and reminders
 
