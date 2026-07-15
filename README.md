@@ -1,10 +1,10 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/sib-swiss/containers-snakemake-training)
-[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.14499130-blue)](https://doi.org/10.5281/zenodo.14499130)
+[![DOI](https://zenodo.org/badge/691556045.svg)](https://zenodo.org/badge/latestdoi/691556045)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 
 # Reproducible and Scalable Research with Snakemake and Software Containers
 
-* Website is hosted at [https://sib-swiss.github.io/containers-snakemake-training/latest/](https://sib-swiss.github.io/containers-snakemake-training/latest/)
+* Website is hosted at <https://sib-swiss.github.io/containers-snakemake-training/latest/>
 
 * Please refer to [issues](https://github.com/sib-swiss/containers-snakemake-training/issues) for improvements/bugs for course material or the website
 
@@ -19,34 +19,50 @@
 
 ## How to host the website locally?
 
-Once you have cloned the repo, you can host it on your local browser. The website is generated with [MkDocs](https://www.mkdocs.org/), with the [Material](https://squidfunk.github.io/mkdocs-material/) theme.
+Once you have cloned the repo, you can host it on your local browser. The website is generated with [Zensical](https://zensical.org/), a modern static site generator built on the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme, and configured entirely through the existing `mkdocs.yml` (Zensical reads it natively, no config changes required).
 
 * Clone the repository:
-	```bash
-	git clone https://github.com/sib-swiss/containers-snakemake-training.git
-	```
 
-* Install MkDocs:
-	```bash
-	pip install mkdocs
-	```
+    ```bash
+    git clone https://github.com/sib-swiss/containers-snakemake-training.git
+    ```
 
-* And Material:
-	```bash
-	pip install mkdocs-material
-	```
+* Create and activate a virtual environment (recommended):
+
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+
+* Install Zensical:
+
+    ```bash
+    pip install zensical
+    ```
 
 * Make sure you are in the repository directory and type:
-	```bash
-	mkdocs serve
-	```
 
-The website will be hosted on your local browser at [http://localhost:8000/](http://localhost:8000/).
+    ```bash
+    zensical serve
+    ```
+
+The website will be hosted on your local browser at <http://localhost:8000/>.
+
+> **Note:** Zensical is under active development. Plugin support is currently a subset of the MkDocs plugin ecosystem, with full parity planned for upcoming releases. If you rely on custom plugins in `mkdocs.yml`, check [Zensical's compatibility notes](https://zensical.org/docs/community/faqs/?h=compati#compatibility-and-transition) before switching.
 
 ## How to generate a github page?
 
-For an automatically generated github page, you can run:
+Zensical does not ship a `gh-deploy` shortcut like MkDocs did. Instead, see [Zensical's publishing guide](https://zensical.org/docs/publish-your-site/) for a ready-to-use GitHub Actions workflow that builds the site with `zensical build --clean` and deploys it to GitHub Pages on every push.
 
-```sh
-mkdocs gh-deploy
+This repository publishes multiple versions of the course material (e.g. `latest/`, `2023.10/`), which requires a versioning tool on top of the base publishing setup. Zensical integrates with a [fork of `mike`](https://zensical.org/docs/setup/versioning/) (the versioning tool originally built for MkDocs) as a bridge solution until native versioning support lands. To publish a new version:
+
+```
+mike deploy --push --update-aliases <version> latest
+mike set-default --push latest
+```
+
+Note that `mike`'s Zensical fork isn't on PyPI yet — it must be installed directly from GitHub:
+
+```
+pip install git+https://github.com/squidfunk/mike.git
 ```
